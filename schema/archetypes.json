@@ -1,0 +1,164 @@
+{
+  "archetypes": {
+    "merger_arb": {
+      "name": "Merger Arbitrage",
+      "base_rates": {
+        "friendly_definitive": 0.94,
+        "strategic_buyer_bonus": "+2-3%",
+        "hostile": 0.38
+      },
+      "adjustments": {
+        "third_party_veto": -1,
+        "doj_ftc_lawsuit": -2,
+        "spread_below_2.5": "KILL"
+      },
+      "position": {
+        "max_size": 0.03,
+        "kelly": 0.25,
+        "skew": "negative"
+      },
+      "entry_timing": "Immediate after announcement",
+      "kill_screens": ["hostile_deal", "merger_spread"]
+    },
+    
+    "pdufa": {
+      "name": "PDUFA / FDA Binary",
+      "base_rates": {
+        "post_nda": 0.92,
+        "with_adcom_positive": 0.97,
+        "crl_resub_manufacturing": [0.60, 0.70],
+        "crl_resub_efficacy": [0.30, 0.40]
+      },
+      "therapeutic_area_loa": {
+        "hematology": 0.26,
+        "rare_disease": 0.25,
+        "infectious_disease": 0.19,
+        "cns_neurology": 0.08,
+        "oncology_all": 0.05,
+        "solid_tumor": 0.04
+      },
+      "position": {
+        "max_size": 0.015,
+        "kelly": 0.25,
+        "skew": "negative",
+        "note": "Reduced from 2% in v3.6 due to 2.7x rejection/approval asymmetry"
+      },
+      "entry_timing": "Pre-catalyst",
+      "red_flags": [
+        "Single-arm studies without comparator",
+        "Trend toward significance language",
+        "Emphasis on secondary endpoints",
+        "Per protocol analysis (not ITT)",
+        "First novel mechanism",
+        "Missed primary endpoint"
+      ]
+    },
+    
+    "activist": {
+      "name": "Activist Campaigns",
+      "base_rates": {
+        "post_upc_overall": 0.53,
+        "tier_1": 0.83,
+        "tier_2": 0.80,
+        "tier_3": 0.40,
+        "settlement_rate": 0.92
+      },
+      "tier_definitions": {
+        "tier_1": ["Elliott", "Starboard", "ValueAct", "Pershing Square"],
+        "tier_2": ["Trian", "Icahn", "Third Point"],
+        "tier_3": ["First-time activists", "Small funds"]
+      },
+      "tier_bonus": {
+        "tier_1": 1.0,
+        "tier_2": 0.5,
+        "tier_3": 0
+      },
+      "position": {
+        "max_size": 0.06,
+        "kelly": 0.25,
+        "skew": "negative"
+      },
+      "entry_timing": "On 13D filing",
+      "avg_settlement_days": 16.5
+    },
+    
+    "spinoff": {
+      "name": "Spin-offs",
+      "base_rates": {
+        "year_1": "Underperformance common",
+        "year_2": "Peak outperformance",
+        "parent_prep_6mo_plus": "+50% first-year returns"
+      },
+      "entry_timing": {
+        "optimal_window_days": [30, 60],
+        "rationale": "Forced index selling creates -2.4% to -3.7% underperformance in first 5 days",
+        "exception": "Immediate S&P 500 inclusion"
+      },
+      "position": {
+        "max_size": 0.08,
+        "kelly": 0.50,
+        "skew": "positive"
+      }
+    },
+    
+    "liquidation": {
+      "name": "Liquidations",
+      "base_rates": {
+        "spac_at_discount": 0.99,
+        "cef": 0.95,
+        "orderly_corporate": [0.80, 0.95],
+        "biotech": 0.35
+      },
+      "position": {
+        "max_size": 0.10,
+        "kelly": 0.50,
+        "skew": "positive"
+      },
+      "entry_timing": "At discount to NAV/trust",
+      "kill_screens": ["altman_z_score"]
+    },
+    
+    "insider": {
+      "name": "Insider Clusters",
+      "base_rates": {
+        "cluster_3_plus_2_weeks": [0.65, 0.70],
+        "distressed_context": 0.70,
+        "conviction_no_distress": 0.55
+      },
+      "position": {
+        "max_size": 0.05,
+        "kelly": 0.25,
+        "skew": "negative"
+      },
+      "entry_timing": "On cluster detection",
+      "kill_screens": ["beneish_m_score"]
+    },
+    
+    "legislative": {
+      "name": "Legislative Catalysts",
+      "base_rates": {
+        "primary_beneficiaries": "Low (often priced in)",
+        "secondary_beneficiaries": "Higher (overlooked)",
+        "state_ballot": "Binary (threshold risk)"
+      },
+      "beneficiary_penalty": {
+        "primary_obvious": -1.5,
+        "secondary_overlooked": 0,
+        "macro_sensitive": -1.0
+      },
+      "position": {
+        "max_size": 0.02,
+        "kelly": 0.25,
+        "skew": "negative"
+      },
+      "entry_timing": "3-6 months pre-passage",
+      "kill_screens": ["macro_conflict"],
+      "red_flags": [
+        "Obvious beneficiary status",
+        "Rate sensitivity conflicts",
+        "Commodity exposure conflicts",
+        "2-4 year implementation timeline"
+      ]
+    }
+  }
+}

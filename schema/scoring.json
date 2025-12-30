@@ -1,0 +1,49 @@
+{
+  "filters": {
+    "catalyst": {
+      "max_points": 2,
+      "question": "Defined event with known timeline?"
+    },
+    "mispricing": {
+      "max_points": 2,
+      "question": "Gap between price and fair value?"
+    },
+    "noise_survival": {
+      "max_points": 2,
+      "question": "Can survive volatility until catalyst?"
+    },
+    "downside_floor": {
+      "max_points": 2,
+      "question": "Asset value if thesis fails?"
+    },
+    "risk_reward": {
+      "max_points": 2,
+      "scoring": "3:1 = 2pts, 2:1 = 1pt"
+    },
+    "info_half_life": {
+      "max_points": 1,
+      "question": "Edge persists through catalyst?"
+    }
+  },
+  "adjustments": {
+    "activist": {
+      "tier_1": 1.0,
+      "tier_2": 0.5
+    },
+    "legislative": {
+      "obvious_beneficiary": -1.5,
+      "macro_sensitive": -1.0
+    },
+    "merger": {
+      "third_party_veto": -1,
+      "doj_ftc_lawsuit": -2
+    }
+  },
+  "thresholds": {
+    "buy": 8.25,
+    "conditional": [6.5, 8.24],
+    "pass": 6.5
+  },
+  "max_score": 11,
+  "note": "Base score from filters (max 11), then apply archetype adjustments"
+}

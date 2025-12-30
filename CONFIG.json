@@ -1,0 +1,22 @@
+{
+  "account": {
+    "size": 25000,
+    "currency": "USD"
+  },
+  "risk": {
+    "max_loss_per_trade": 0.02,
+    "max_positions": 10,
+    "kellner_rule": "Max 2% portfolio loss per trade"
+  },
+  "regime": {
+    "vix": null,
+    "vix_level": null,
+    "vix_action": null,
+    "hy_oas_bps": null,
+    "credit_condition": null,
+    "correlation_elevated": false,
+    "last_updated": null
+  },
+  "framework_version": "3.6",
+  "notes": "Update regime daily via 'regime' skill"
+}

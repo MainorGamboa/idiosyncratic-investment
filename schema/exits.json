@@ -1,0 +1,96 @@
+{
+  "info_parity": {
+    "signals": {
+      "media": {
+        "threshold": "2+ mainstream articles",
+        "description": "When idea becomes mainstream with significant media coverage"
+      },
+      "iv": {
+        "threshold": "Options IV > 2x average",
+        "description": "Implied volatility spike indicates market awareness"
+      },
+      "price": {
+        "threshold": ">50% move toward target",
+        "description": "Price has captured majority of expected move"
+      }
+    },
+    "logic": {
+      "watch": {
+        "weighted_sum": "<2",
+        "action": "Continue monitoring, no action needed"
+      },
+      "exit_50_percent": {
+        "weighted_sum": ">=2",
+        "action": "Exit 50% of position, reduce exposure"
+      },
+      "full_exit": {
+        "weighted_sum": ">=3",
+        "action": "Exit full position, edge has dissipated"
+      }
+    },
+    "weights_by_archetype": {
+      "merger_arb": {
+        "media": 1.0,
+        "iv": 1.0,
+        "price": 1.0
+      },
+      "pdufa": {
+        "media": 0.5,
+        "iv": 1.5,
+        "price": 1.0
+      },
+      "activist": {
+        "media": 1.0,
+        "iv": 0.5,
+        "price": 1.0
+      },
+      "spinoff": {
+        "media": 0.5,
+        "iv": 1.0,
+        "price": 1.5
+      },
+      "liquidation": {
+        "media": 0.5,
+        "iv": 0.5,
+        "price": 1.5
+      },
+      "insider": {
+        "media": 1.0,
+        "iv": 1.0,
+        "price": 1.0
+      },
+      "legislative": {
+        "media": 1.0,
+        "iv": 1.0,
+        "price": 1.0
+      }
+    }
+  },
+  "hard_exits": {
+    "cockroach_rule": {
+      "triggers": [
+        "First regulatory delay",
+        "Financing wobble",
+        "Board dissent"
+      ],
+      "action": "EXIT immediately",
+      "rationale": "First cockroach indicates more problems ahead"
+    },
+    "finerman_corollary": {
+      "trigger": "Deal breaks",
+      "action": "Sell first, revisit later",
+      "rationale": "Don't rationalize holding a broken thesis"
+    },
+    "ma_200": {
+      "trigger": "Price below 200-day MA",
+      "action": "Defensive posture",
+      "rationale": "Long-term trend has turned, tighten stops"
+    },
+    "thesis_break": {
+      "trigger": "Core thesis invalidated",
+      "action": "EXIT regardless of price",
+      "rationale": "When reason for holding changes, exit immediately"
+    }
+  },
+  "note": "Check hard exits BEFORE info parity. Hard exits override all other considerations."
+}

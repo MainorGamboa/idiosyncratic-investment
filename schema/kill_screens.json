@@ -1,0 +1,64 @@
+{
+  "kill_screens": {
+    "beneish_m_score": {
+      "id": "KS-001",
+      "name": "Beneish M-Score",
+      "threshold": -1.78,
+      "operator": ">",
+      "fail_condition": "M-Score > -1.78",
+      "rationale": "High manipulation probability",
+      "applies_to": ["all"],
+      "how_to_check": "Calculate from financials or use screening tool"
+    },
+    
+    "altman_z_score": {
+      "id": "KS-002",
+      "name": "Altman Z-Score",
+      "threshold": 1.81,
+      "operator": "<",
+      "fail_condition": "Z-Score < 1.81",
+      "rationale": "High bankruptcy probability",
+      "applies_to": ["all"],
+      "how_to_check": "Calculate from financials or use screening tool"
+    },
+    
+    "hostile_deal": {
+      "id": "KS-003",
+      "name": "Hostile Deal",
+      "threshold": true,
+      "operator": "==",
+      "fail_condition": "Deal is hostile/unsolicited",
+      "rationale": "38% completion vs 82% friendly",
+      "applies_to": ["merger_arb"],
+      "how_to_check": "Check deal announcement, target board response"
+    },
+    
+    "merger_spread": {
+      "id": "KS-004",
+      "name": "Merger Spread Too Narrow",
+      "threshold": 2.5,
+      "operator": "<",
+      "fail_condition": "Spread < 2.5%",
+      "rationale": "Historical return only 0.9%",
+      "applies_to": ["merger_arb"],
+      "how_to_check": "(deal_price - current_price) / current_price"
+    },
+    
+    "macro_conflict": {
+      "id": "KS-005",
+      "name": "Macro Conflict",
+      "threshold": true,
+      "operator": "==",
+      "fail_condition": "Rate/commodity sensitivity conflicts with legislative thesis",
+      "rationale": "Enphase/Albemarle pattern - macro overwhelms legislative tailwind",
+      "applies_to": ["legislative"],
+      "examples": [
+        {"ticker": "ENPH", "conflict": "Rate sensitivity negated IRA benefits"},
+        {"ticker": "ALB", "conflict": "Lithium price exposure overwhelmed legislative tailwind"}
+      ],
+      "how_to_check": "Identify company's macro sensitivities, check if they conflict with thesis"
+    }
+  },
+  
+  "logic": "Any kill screen fail = automatic PASS. Check ALL applicable screens BEFORE scoring."
+}

@@ -1,0 +1,16 @@
+{
+  "events": [],
+  "_example_structure": {
+    "id": "EVT-YYYY-NNN",
+    "type": "pdufa|merger|activist|spinoff|liquidation|insider|legislative",
+    "ticker": "SYMBOL",
+    "catalyst": "Description of the catalyst event",
+    "date": "YYYY-MM-DD",
+    "date_type": "hard|soft",
+    "archetype": "archetype_name",
+    "status": "tracking|active|completed|cancelled",
+    "notes": "Additional context or observations",
+    "linked_idea": "WL-TICKER-NNN or null"
+  },
+  "_instructions": "Add new catalyst events here. Use 'scan' skill to populate from external sources. Remove _example_structure and _instructions before first real event."
+}
