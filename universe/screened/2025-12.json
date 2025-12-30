@@ -1,0 +1,340 @@
+{
+  "screened_ideas": [
+    {
+      "date": "2025-12-30",
+      "ticker": "TVTX",
+      "company": "Travere Therapeutics",
+      "archetype": "pdufa",
+      "event_id": "EVT-2026-002",
+      "kill_screens_passed": false,
+      "failed_screens": [
+        {
+          "screen": "Beneish M-Score",
+          "value": -1.15,
+          "threshold": -1.78,
+          "operator": "<=",
+          "result": "FAIL - Indicates potential earnings manipulation"
+        },
+        {
+          "screen": "Altman Z-Score",
+          "value": 1.01,
+          "threshold": 1.81,
+          "operator": ">=",
+          "result": "FAIL - Company in financial distress zone"
+        }
+      ],
+      "result": "PASS",
+      "reason": "Failed kill screens: M-Score -1.15 (manipulation risk) and Z-Score 1.01 (bankruptcy risk)"
+    },
+    {
+      "date": "2025-12-30",
+      "ticker": "RNA",
+      "company": "Avidity Biosciences",
+      "archetype": "merger_arb",
+      "event_id": "EVT-2026-008",
+      "kill_screens_passed": false,
+      "failed_screens": [
+        {
+          "screen": "Beneish M-Score",
+          "value": 8.32,
+          "threshold": -1.78,
+          "operator": "<=",
+          "result": "FAIL - Indicates potential earnings manipulation"
+        },
+        {
+          "screen": "Merger Spread",
+          "value": "0.24%",
+          "threshold": "2.5%",
+          "operator": ">=",
+          "result": "FAIL - Spread too narrow, historical return only 0.9%"
+        }
+      ],
+      "passed_screens": [
+        {
+          "screen": "Altman Z-Score",
+          "value": 23.11,
+          "threshold": 1.81,
+          "operator": ">=",
+          "result": "PASS - Strong financial health"
+        },
+        {
+          "screen": "Hostile Deal",
+          "value": false,
+          "threshold": "Must not be hostile",
+          "result": "PASS - Friendly deal, boards unanimously approved"
+        }
+      ],
+      "result": "PASS",
+      "reason": "Failed kill screens: M-Score 8.32 (manipulation risk) and merger spread 0.24% (too narrow, <2.5% threshold)",
+      "deal_details": {
+        "acquirer": "Novartis",
+        "deal_price": "$72.00",
+        "current_price": "$71.83",
+        "spread": "0.24%",
+        "deal_value": "$12B",
+        "expected_close": "H1 2026",
+        "regulatory_status": "FTC early termination granted Dec 17, 2025"
+      }
+    },
+    {
+      "date": "2025-12-30",
+      "ticker": "CMCSA",
+      "company": "Comcast Corporation",
+      "archetype": "spinoff",
+      "event_id": "EVT-2026-012",
+      "kill_screens_passed": false,
+      "failed_screens": [
+        {
+          "screen": "Altman Z-Score",
+          "value": 1.53,
+          "threshold": 1.81,
+          "operator": ">=",
+          "result": "FAIL - Below distress threshold",
+          "caveat": "IMPORTANT: Altman Z-Score designed for manufacturing firms, not applicable to telecom/media. May be false positive."
+        }
+      ],
+      "passed_screens": [
+        {
+          "screen": "Beneish M-Score",
+          "value": -2.79,
+          "threshold": -1.78,
+          "operator": "<=",
+          "result": "PASS - No manipulation concerns"
+        }
+      ],
+      "result": "PASS",
+      "reason": "Failed Z-Score kill screen (1.53 < 1.81). NOTE: Z-Score not designed for telecom/media companies - likely false positive given Piotroski F-Score of 9, strong ROE 24%, and healthy financials",
+      "framework_note": "Potential framework limitation: Altman Z-Score may need industry-specific thresholds or exclusions for non-manufacturing sectors",
+      "countervailing_evidence": {
+        "piotroski_f_score": 9,
+        "roe": "24.19%",
+        "debt_to_equity": 1.02,
+        "interest_coverage": "5.3x",
+        "market_cap": "$108B",
+        "financial_health": "Strong cash flow, debt well covered"
+      },
+      "spinoff_details": {
+        "spinco": "Versant Media Group",
+        "record_date": "2025-12-16",
+        "distribution_date": "2026-01-02",
+        "regular_trading_begins": "2026-01-05",
+        "distribution_ratio": "1 Versant share per 25 Comcast shares",
+        "tax_treatment": "Tax-free to shareholders"
+      }
+    },
+    {
+      "date": "2025-12-30",
+      "ticker": "AKRO",
+      "company": "Akero Therapeutics",
+      "archetype": "merger_arb",
+      "event_id": "EVT-2026-009",
+      "kill_screens_passed": "N/A",
+      "result": "COMPLETED",
+      "reason": "Deal already closed on December 9, 2025. No longer an arbitrage opportunity.",
+      "deal_details": {
+        "acquirer": "Novo Nordisk",
+        "deal_price": "$54.00",
+        "current_price": "$54.65",
+        "deal_value": "$4.7B upfront + $0.5B CVR",
+        "announcement_date": "2025-10-09",
+        "close_date": "2025-12-09",
+        "status": "CLOSED - AKRO is now wholly-owned subsidiary of Novo Nordisk",
+        "delisted": "Yes - no longer trading on Nasdaq",
+        "cvr_terms": "$6 per share upon EFX regulatory approval for MASH by June 30, 2031"
+      },
+      "note": "Stock trading at $54.65 reflects $54 deal price plus CVR value. Deal completed before analysis could be performed."
+    },
+    {
+      "date": "2025-12-30",
+      "ticker": "AQST",
+      "company": "Aquestive Therapeutics",
+      "archetype": "pdufa",
+      "event_id": "EVT-2026-001, EVT-2026-003",
+      "kill_screens_passed": false,
+      "failed_screens": [
+        {
+          "screen": "Altman Z-Score",
+          "value": -5.39,
+          "threshold": 1.81,
+          "operator": ">=",
+          "result": "SEVERE FAIL - Extreme financial distress, well below critical threshold"
+        }
+      ],
+      "passed_screens": [],
+      "result": "PASS",
+      "reason": "Failed Z-Score kill screen (-5.39 << 1.81). Extreme financial distress with high bankruptcy probability. Z-Score below -1.0 indicates severe risk.",
+      "additional_red_flags": {
+        "piotroski_f_score": 1,
+        "negative_equity": "-$72.59M",
+        "book_value_per_share": "-$0.73",
+        "free_cash_flow_ttm": "-$50.02M",
+        "net_loss_ttm": "-$65.04M",
+        "cash_burn_rate": "Very high - burning through cash rapidly",
+        "current_ratio": 3.5,
+        "net_cash_position": "$20.28M"
+      },
+      "pdufa_details": {
+        "product_1": "AQST-109 (epinephrine)",
+        "pdufa_date_1": "2026-01-06",
+        "review_type_1": "Standard",
+        "product_2": "Anaphylm (epinephrine sublingual film)",
+        "pdufa_date_2": "2026-01-31",
+        "review_type_2": "Priority",
+        "indication": "Emergency treatment of severe allergic reactions/anaphylaxis",
+        "adcom_status": "Not required - FDA confirmed no Advisory Committee needed",
+        "commercial_readiness": "Preparing for Q1 2026 launch if approved"
+      },
+      "framework_note": "Despite promising product (first oral epinephrine) and imminent PDUFA decisions, severe financial distress disqualifies. Z-Score of -5.39 is catastrophic."
+    },
+    {
+      "date": "2025-12-30",
+      "ticker": "ASND",
+      "company": "Ascendis Pharma",
+      "archetype": "pdufa",
+      "event_id": "EVT-2026-004",
+      "kill_screens_passed": false,
+      "failed_screens": [
+        {
+          "screen": "Beneish M-Score",
+          "value": -1.1,
+          "threshold": -1.78,
+          "operator": "<=",
+          "result": "FAIL - Indicates potential earnings manipulation"
+        }
+      ],
+      "passed_screens": [
+        {
+          "screen": "Altman Z-Score",
+          "value": 5.23,
+          "threshold": 1.81,
+          "operator": ">=",
+          "result": "PASS - Strong financial health (improved from 1.74 distress in Oct 2025)"
+        }
+      ],
+      "result": "PASS",
+      "reason": "Failed M-Score kill screen (-1.1 > -1.78 threshold). However, this may be false positive given company just achieved first quarterly operating profit in Q3 2025.",
+      "framework_note": "Potential false positive: M-Score concern may reflect rapid transition from development-stage to profitable commercial company rather than manipulation",
+      "countervailing_evidence": {
+        "z_score_improvement": "Improved from 1.74 (distress, Oct 2025) to 5.23 (strong, Dec 2025)",
+        "q3_2025_milestone": "First quarterly operating profit (€11M)",
+        "revenue_growth": "€214M Q3 2025 vs €58M Q3 2024 (4x growth)",
+        "commercial_products": "YORVIPATH (€143M), SKYTROFA (€51M)",
+        "cash_position": "€539M ($585M)",
+        "market_cap": "$12.83B (large-cap)",
+        "current_ratio": 1.03,
+        "net_loss_improving": "€61M Q3 2025 vs €99M Q3 2024 (38% improvement)"
+      },
+      "pdufa_details": {
+        "product": "TransCon CNP (navepegritide)",
+        "pdufa_date": "2026-02-28",
+        "pdufa_date_note": "Extended from Nov 30, 2025 due to major amendment (post-marketing study protocol)",
+        "review_type": "Priority",
+        "indication": "Achondroplasia (rare disease - dwarfism)",
+        "clinical_data": "Significantly higher growth velocity at Week 52 vs placebo, improved limb alignment",
+        "publication": "Pivotal ApproaCH Trial published in JAMA Pediatrics Nov 2025",
+        "market_opportunity": "Third commercial product for company"
+      },
+      "investment_thesis_if_screens_passed": "Profitable rare disease company ($214M quarterly revenue) with two commercial products, strong balance sheet, and third product PDUFA in Feb 2026. Recent inflection to profitability. Large-cap biotech with sustained revenue growth."
+    },
+    {
+      "date": "2025-12-30",
+      "ticker": "ALDX",
+      "company": "Aldeyra Therapeutics",
+      "archetype": "pdufa",
+      "event_id": "EVT-2026-005",
+      "kill_screens_passed": "INCOMPLETE",
+      "result": "INCOMPLETE ANALYSIS",
+      "reason": "Unable to obtain Beneish M-Score and Altman Z-Score from public sources. Cannot verify kill screens without these metrics.",
+      "framework_limitation": "M-Score and Z-Score not readily available for all small-cap biotech companies. May require manual calculation from SEC filings or premium data services.",
+      "available_financial_data": {
+        "total_assets": "$84.96M",
+        "total_equity": "$49.25M (positive)",
+        "cash": "$75.30M",
+        "total_debt": "$15.54M",
+        "debt_to_equity": 0.32,
+        "quick_ratio": 5.6,
+        "current_ratio": 2.72,
+        "roe": "-64.31% (unprofitable)",
+        "net_cash_position": "$59.75M",
+        "cash_runway": "Through 2027",
+        "eps_ttm": "-$0.73"
+      },
+      "financial_assessment": "Mixed: Strong liquidity and low leverage, but unprofitable with negative ROE. Not in severe distress but not financially strong either.",
+      "pdufa_details": {
+        "product": "Reproxalap",
+        "pdufa_date": "2026-03-16",
+        "pdufa_date_note": "Extended from Dec 16, 2025 after FDA requested Clinical Study Report from field trial",
+        "review_type": "Complete Class 2 Response (3rd NDA submission)",
+        "indication": "Dry eye disease",
+        "clinical_data_concern": "Field trial did not meet primary endpoint, but company says supportive of activity",
+        "regulatory_history": "Two prior Complete Response Letters (CRLs) - Nov 2023 and April 2025",
+        "fda_label_status": "FDA shared draft label in early Dec; awaiting final labeling requests by Feb 16, 2026",
+        "market_opportunity": "Large dry eye disease market, but competitive"
+      },
+      "red_flags": {
+        "regulatory_setbacks": "Two prior CRLs - FDA stated April 2025 NDA 'failed to demonstrate efficacy'",
+        "failed_field_trial": "Most recent field trial missed primary endpoint",
+        "third_attempt": "This is 3rd NDA submission - persistence or futility?",
+        "execution_risk": "If approved, limited cash ($75M) for commercial launch vs. competitors"
+      },
+      "recommendation": "Manual review required. Calculate M-Score and Z-Score from 10-Q filings before proceeding. High regulatory risk given two CRLs and failed field trial."
+    },
+    {
+      "date": "2025-12-30",
+      "ticker": "GSK",
+      "company": "GlaxoSmithKline plc",
+      "archetype": "pdufa",
+      "event_id": "EVT-2026-007",
+      "kill_screens_passed": true,
+      "passed_screens": [
+        {
+          "screen": "Beneish M-Score",
+          "value": -2.87,
+          "threshold": -1.78,
+          "operator": "<=",
+          "result": "PASS - Low manipulation risk"
+        },
+        {
+          "screen": "Altman Z-Score",
+          "value": 1.86,
+          "threshold": 1.81,
+          "operator": ">=",
+          "result": "PASS - Barely passes, in 'grey zone' (1.81-2.99)"
+        }
+      ],
+      "result": "WATCHLIST",
+      "watchlist_file": "universe/watchlist/GSK.md",
+      "next_step": "Run 'score' skill to complete analysis",
+      "framework_fit_warning": "⚠️ PASSES KILL SCREENS BUT QUESTIONABLE FRAMEWORK FIT",
+      "framework_concerns": {
+        "market_cap": "$98B (mega-cap)",
+        "catalyst_materiality": "Orphan drug approval immaterial to company this size",
+        "expected_impact": "1-3% upside on approval, 0-1% downside on rejection",
+        "idiosyncratic_fit": "NO - Large-cap with diversified pipeline, not event-driven special situation",
+        "better_suited_for": "Long-term fundamental investors, not catalyst traders"
+      },
+      "financial_summary": {
+        "market_cap": "$98B",
+        "q3_revenue": "$11.5B (+10% YoY)",
+        "operating_profit_growth": "+11%",
+        "cash_from_operations": "£2.5B/quarter",
+        "free_cash_flow": "£1.2B/quarter",
+        "net_debt": "£14.4B",
+        "debt_to_equity": 1.10,
+        "interest_coverage": "13.1x",
+        "credit_quality": "Investment grade (S&P/Moody's rated)"
+      },
+      "pdufa_details": {
+        "product": "Linerixibat",
+        "pdufa_date": "2026-03-24",
+        "indication": "Cholestatic pruritus in primary biliary cholangitis (PBC)",
+        "mechanism": "IBAT inhibitor (first-in-class)",
+        "designation": "Orphan drug",
+        "phase_3_trial": "GLISTEN - positive results (n=238)",
+        "market_size": "Small - rare disease (PBC affects ~200K globally)",
+        "peak_sales_estimate": "Likely <$500M (orphan indication)"
+      },
+      "assessment": "First company to PASS both kill screens. However, mega-cap size makes single orphan drug approval immaterial. Doesn't fit idiosyncratic framework targeting underappreciated catalysts in smaller companies."
+    }
+  ]
+}

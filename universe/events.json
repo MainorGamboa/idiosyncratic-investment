@@ -116,15 +116,16 @@
       "id": "EVT-2026-009",
       "type": "merger",
       "ticker": "AKRO",
-      "catalyst": "Novo Nordisk acquisition of Akero Therapeutics expected to close",
-      "date": "2026-06-30",
-      "date_type": "soft",
+      "catalyst": "Novo Nordisk acquisition of Akero Therapeutics - COMPLETED",
+      "date": "2025-12-09",
+      "date_type": "hard",
       "archetype": "merger_arb",
-      "status": "tracking",
-      "notes": "$4.7B acquisition, $54/share. MASH treatment focus. Expected close in 2026",
+      "status": "completed",
+      "notes": "$4.7B acquisition, $54/share + $6 CVR. MASH treatment focus. Deal closed Dec 9, 2025. AKRO delisted, now Novo subsidiary.",
       "linked_idea": null,
-      "source": "PwC M&A outlook",
-      "discovered_date": "2025-12-30"
+      "source": "PwC M&A outlook, Akero IR",
+      "discovered_date": "2025-12-30",
+      "close_date": "2025-12-09"
     },
     {
       "id": "EVT-2026-010",
