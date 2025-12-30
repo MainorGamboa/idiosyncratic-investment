@@ -1,3 +1,8 @@
+---
+name: review
+description: Generate weekly review report summarizing active trades, closed trades, pass decisions, regime changes, and lessons learned. Use at end of each week, month, or after significant market events.
+---
+
 # Review Skill
 
 ## Purpose

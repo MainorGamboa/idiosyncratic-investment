@@ -1,3 +1,8 @@
+---
+name: search
+description: Find similar trades by tags or text query. Enables precedent-based decision making and pattern recognition. Use before scoring new ideas, during post-mortems, or when researching pattern effectiveness.
+---
+
 # Search Skill
 
 ## Purpose

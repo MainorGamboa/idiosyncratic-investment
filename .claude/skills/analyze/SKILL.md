@@ -1,3 +1,8 @@
+---
+name: analyze
+description: Run a ticker through full framework analysis from kill screens through scoring. Creates watchlist file with complete evaluation. Use when analyzing a new investment idea, when an event is triggered, or when revisiting a watchlist item.
+---
+
 # Analyze Skill
 
 ## Purpose

@@ -1,3 +1,8 @@
+---
+name: close
+description: Close position and create post-mortem. Calculates returns, writes lessons learned, updates precedents index. Use when exit signal triggered, catalyst occurred, thesis invalidated, or stop loss hit.
+---
+
 # Close Skill
 
 ## Purpose

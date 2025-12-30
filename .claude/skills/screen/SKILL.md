@@ -1,3 +1,8 @@
+---
+name: screen
+description: Apply kill screens only for quick pass/fail check. Faster than full analyze. Use for quick validation of new ideas, batch screening of multiple tickers, or pre-filtering before deeper analysis.
+---
+
 # Screen Skill
 
 ## Purpose

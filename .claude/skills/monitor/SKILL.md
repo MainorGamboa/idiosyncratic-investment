@@ -1,3 +1,8 @@
+---
+name: monitor
+description: Update all active trades with current data and check exit signals. Evaluates info parity signals and hard exit triggers. Use daily as part of morning routine, or when significant market moves occur.
+---
+
 # Monitor Skill
 
 ## Purpose

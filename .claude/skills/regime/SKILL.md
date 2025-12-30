@@ -1,3 +1,8 @@
+---
+name: regime
+description: Check market regime via VIX and credit spreads. Updates CONFIG.json with regime state and recommended actions. Use daily before market open, after significant market moves, or before opening new positions.
+---
+
 # Regime Skill
 
 ## Purpose

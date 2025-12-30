@@ -1,3 +1,8 @@
+---
+name: scan
+description: Find new catalyst events from external sources like FDA calendar, SEC filings, activist 13Ds. Populates events.json with upcoming catalysts. Use weekly to maintain catalyst calendar or after major news.
+---
+
 # Scan Skill
 
 ## Purpose

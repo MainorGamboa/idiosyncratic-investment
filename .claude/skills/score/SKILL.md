@@ -1,3 +1,8 @@
+---
+name: score
+description: Complete 6-filter scoring to generate BUY/CONDITIONAL/PASS decision. Updates watchlist with complete scoring breakdown. Use after analyze skill has created watchlist file and kill screens have passed.
+---
+
 # Score Skill
 
 ## Purpose

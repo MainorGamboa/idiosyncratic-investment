@@ -1,3 +1,8 @@
+---
+name: open
+description: Open new position from scored idea. Calculates position sizing, creates active trade JSON with monitoring plan. Use after score skill returns BUY decision or CONDITIONAL decision with confirmation.
+---
+
 # Open Skill
 
 ## Purpose
