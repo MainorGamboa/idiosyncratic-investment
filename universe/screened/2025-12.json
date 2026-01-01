@@ -335,6 +335,96 @@
         "peak_sales_estimate": "Likely <$500M (orphan indication)"
       },
       "assessment": "First company to PASS both kill screens. However, mega-cap size makes single orphan drug approval immaterial. Doesn't fit idiosyncratic framework targeting underappreciated catalysts in smaller companies."
+    },
+    {
+      "date": "2025-12-30",
+      "ticker": "ALNY",
+      "company": "Alnylam Pharmaceuticals, Inc.",
+      "archetype": "pdufa",
+      "event_id": "EVT-2026-018",
+      "kill_screens_passed": true,
+      "passed_screens": [
+        {
+          "screen": "Beneish M-Score",
+          "value": -2.60,
+          "threshold": -1.78,
+          "operator": "<=",
+          "result": "PASS - Low manipulation risk",
+          "source": "SEC XBRL FY2023/FY2024; computed"
+        },
+        {
+          "screen": "Altman Z-Score",
+          "value": 6.13,
+          "threshold": 1.81,
+          "operator": ">=",
+          "result": "PASS - Strong financial health",
+          "source": "SEC XBRL FY2024 + Stooq price; computed"
+        }
+      ],
+      "result": "WATCHLIST",
+      "watchlist_file": "universe/watchlist/ALNY.md",
+      "next_step": "Run 'score' skill to complete analysis",
+      "notes": "M-Score and Z-Score computed using SEC XBRL data (FY2023/FY2024) and Stooq price. LVGI uses total liabilities as a proxy for debt due to missing debt tags."
+    },
+    {
+      "date": "2025-12-30",
+      "ticker": "LUV",
+      "company": "Southwest Airlines Co.",
+      "archetype": "activist",
+      "event_id": "EVT-2026-029",
+      "kill_screens_passed": true,
+      "passed_screens": [
+        {
+          "screen": "Beneish M-Score",
+          "value": -2.58,
+          "threshold": -1.78,
+          "operator": "<=",
+          "result": "PASS - Low manipulation risk",
+          "source": "SEC XBRL FY2023/FY2024; computed with operating cost proxies"
+        },
+        {
+          "screen": "Altman Z-Score",
+          "value": 2.03,
+          "threshold": 1.81,
+          "operator": ">=",
+          "result": "PASS - Grey zone, but above distress threshold",
+          "source": "SEC XBRL FY2024 + Stooq price; computed"
+        }
+      ],
+      "result": "WATCHLIST",
+      "watchlist_file": "universe/watchlist/LUV.md",
+      "next_step": "Run 'score' skill to complete analysis",
+      "notes": "M-Score uses OperatingCostsAndExpenses as a proxy for COGS and SG&A due to airline reporting. Total liabilities derived as LiabilitiesAndStockholdersEquity minus StockholdersEquity."
+    },
+    {
+      "date": "2025-12-30",
+      "ticker": "SPGI",
+      "company": "S&P Global Inc.",
+      "archetype": "spinoff",
+      "event_id": "EVT-2026-023",
+      "kill_screens_passed": true,
+      "passed_screens": [
+        {
+          "screen": "Beneish M-Score",
+          "value": -2.44,
+          "threshold": -1.78,
+          "operator": "<=",
+          "result": "PASS - Low manipulation risk",
+          "source": "SEC XBRL FY2022/FY2023; computed"
+        },
+        {
+          "screen": "Altman Z-Score",
+          "value": 5.10,
+          "threshold": 1.81,
+          "operator": ">=",
+          "result": "PASS - Strong financial health",
+          "source": "SEC XBRL FY2023 + Stooq price; computed"
+        }
+      ],
+      "result": "WATCHLIST",
+      "watchlist_file": "universe/watchlist/SPGI.md",
+      "next_step": "Run 'score' skill to complete analysis",
+      "notes": "FY2023 is the latest 10-K in SEC XBRL at time of pull."
     }
   ]
 }
