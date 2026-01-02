@@ -73,6 +73,26 @@
         "tier_2": 0.5,
         "tier_3": 0
       },
+      "sourcing": {
+        "frequency": "daily",
+        "primary_sources": [
+          "SEC EDGAR 13D filings (sec.gov/cgi-bin/browse-edgar)",
+          "13D Monitor (13dmonitor.com)",
+          "Activist Insight (activistinsight.com)"
+        ],
+        "tracking_criteria": {
+          "tier_1": "Track ALL filings immediately (Elliott, Starboard, ValueAct, Pershing Square)",
+          "tier_2": "Track if stake >7.5% or board demands (Trian, Icahn, Third Point)",
+          "tier_3": "Track only if turnaround/sale process announced"
+        },
+        "event_triggers": [
+          "Initial 13D filing with stake >5%",
+          "13D amendment with board demands",
+          "Standstill expiration dates",
+          "Proxy contest announcements"
+        ],
+        "target_pipeline": "Maintain 8-12 active activist events (balanced with other archetypes)"
+      },
       "position": {
         "max_size": 0.06,
         "kelly": 0.25,

@@ -20,6 +20,6 @@
     "alerts": [],
     "last_updated": "2026-01-02T14:30:00Z"
   },
-  "framework_version": "3.6",
-  "notes": "Update regime daily via 'regime' skill"
+  "framework_version": "3.7",
+  "notes": "Update regime daily via 'regime' skill. v3.7 changes: Market cap ceiling ($50B), industry Z-Score adjustments, PDUFA financial screens, enhanced activist sourcing."
 }

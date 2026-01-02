@@ -16,10 +16,38 @@
       "name": "Altman Z-Score",
       "threshold": 1.81,
       "operator": "<",
-      "fail_condition": "Z-Score < 1.81",
+      "fail_condition": "Z-Score < threshold",
       "rationale": "High bankruptcy probability",
       "applies_to": ["all"],
-      "how_to_check": "Calculate from financials or use screening tool"
+      "how_to_check": "Calculate from financials or use screening tool",
+      "industry_adjustments": {
+        "telecom_media": {
+          "threshold": 1.5,
+          "rationale": "Z-Score designed for manufacturing. Telecom/media have asset-light models with negative working capital by design. Use Piotroski F-Score and debt service metrics as validation.",
+          "validation_required": ["piotroski_f_score >= 7", "interest_coverage >= 3x"]
+        },
+        "biotech_pharma": {
+          "threshold": 1.5,
+          "rationale": "R&D-heavy companies have lower working capital ratios and negative earnings during development. Evaluate cash runway instead.",
+          "validation_required": ["cash_runway >= 18_months", "net_cash_position > 0"]
+        },
+        "software_saas": {
+          "threshold": 2.0,
+          "rationale": "Negative working capital is normal for subscription models with deferred revenue. High margins support debt servicing.",
+          "validation_required": ["gross_margin >= 60%", "revenue_growth >= 20%"]
+        },
+        "utilities": {
+          "threshold": 2.5,
+          "rationale": "High leverage is normal and serviceable due to regulated cash flows.",
+          "validation_required": ["interest_coverage >= 2.5x", "regulated_revenue >= 80%"]
+        },
+        "financials_banks": {
+          "threshold": null,
+          "rationale": "Z-Score formula inapplicable. Use Tier 1 Capital Ratio (>8%), NPL ratio (<3%), and regulatory capital requirements.",
+          "alternative_metrics": ["tier_1_capital_ratio", "npl_ratio", "texas_ratio"]
+        }
+      },
+      "implementation_note": "When company's industry requires adjusted threshold, use both: (1) Adjusted threshold for Z-Score, (2) Validation metrics to confirm financial health. Example: CMCSA Z-Score 1.53 fails standard 1.81 but passes telecom 1.5 AND has Piotroski 9 + interest coverage 5.3x."
     },
     
     "hostile_deal": {
@@ -57,8 +85,95 @@
         {"ticker": "ALB", "conflict": "Lithium price exposure overwhelmed legislative tailwind"}
       ],
       "how_to_check": "Identify company's macro sensitivities, check if they conflict with thesis"
+    },
+
+    "market_cap_ceiling": {
+      "id": "KS-006",
+      "name": "Market Cap Ceiling",
+      "threshold": 50000000000,
+      "operator": ">",
+      "fail_condition": "Market cap > threshold",
+      "rationale": "Framework targets underappreciated special situations. Mega-caps ($50B+) are widely-analyzed institutional plays with lower opportunity density and reduced insider edge.",
+      "applies_to": ["all"],
+      "archetype_overrides": {
+        "merger_arb": {
+          "threshold": 100000000000,
+          "rationale": "More liquid markets support larger positions"
+        },
+        "legislative": {
+          "threshold": 75000000000,
+          "rationale": "Legislative impact often requires scale"
+        }
+      },
+      "how_to_check": "Get latest market cap from financial data provider (Yahoo Finance, SEC filing, or calculate shares_outstanding * current_price)"
+    },
+
+    "pdufa_financial_health": {
+      "id": "KS-007",
+      "name": "PDUFA Financial Health",
+      "fail_condition": "Any sub-screen fails",
+      "rationale": "PDUFA candidates need runway to survive approval delays, commercialization costs, and potential clinical failure. Generic Z-Score misses biotech-specific risks.",
+      "applies_to": ["pdufa"],
+      "screens": [
+        {
+          "metric": "cash_runway_months",
+          "threshold": 18,
+          "operator": "<",
+          "fail_condition": "Cash runway < 18 months",
+          "rationale": "Need 18+ months to cover (1) PDUFA delay, (2) CRL resubmission, or (3) pivot to alternative program",
+          "calculation": "cash_and_equivalents / (abs(operating_cash_flow_ttm) / 12)"
+        },
+        {
+          "metric": "debt_to_equity",
+          "threshold": 0.75,
+          "operator": ">",
+          "fail_condition": "Debt/Equity > 0.75",
+          "rationale": "High leverage limits strategic flexibility if approval delayed or rejected",
+          "calculation": "total_debt / shareholders_equity",
+          "note": "Ignore if equity is negative (auto-fail on Z-Score anyway)"
+        },
+        {
+          "metric": "gross_margin_pct",
+          "threshold": 50,
+          "operator": "<",
+          "fail_condition": "Gross margin < 50%",
+          "rationale": "Need 50%+ gross margin to support SG&A and commercialization costs post-approval",
+          "applies_when": "company has revenue (commercial products)",
+          "note": "Skip for pure-play development companies with no revenue"
+        },
+        {
+          "metric": "net_cash_position",
+          "threshold": 0,
+          "operator": "<",
+          "fail_condition": "Net debt position (debt > cash)",
+          "rationale": "Net debt signals distress and limited financial flexibility",
+          "calculation": "cash_and_equivalents - total_debt"
+        }
+      ],
+      "how_to_check": "Extract from latest 10-Q or 10-K. Calculate cash runway using operating cash flow burn rate.",
+      "critical_note": "ALL sub-screens must pass. Any single fail = automatic PASS decision.",
+      "examples": {
+        "pass": {
+          "ticker": "Example biotech",
+          "cash": "$200M",
+          "burn_rate": "$10M/month",
+          "runway": "20 months",
+          "debt_equity": 0.2,
+          "net_cash": "$150M",
+          "result": "PASS - All metrics within thresholds"
+        },
+        "fail": {
+          "ticker": "AQST",
+          "cash": "$20.28M",
+          "burn_rate": "$4.17M/month",
+          "runway": "4.9 months",
+          "debt_equity": null,
+          "net_cash": "$20.28M",
+          "result": "FAIL - Runway 4.9mo << 18mo threshold. Z-Score -5.39 already failed."
+        }
+      }
     }
   },
-  
+
   "logic": "Any kill screen fail = automatic PASS. Check ALL applicable screens BEFORE scoring."
 }

@@ -199,13 +199,55 @@ Flag high-priority events for investigation:
 - **State Ballot Measures:** ballotpedia.org
 - **Regulatory Calendars:** Federal Register for comment periods
 
+### Enhanced Activist Sourcing
+
+**Primary Sources**
+1. **SEC 13D Filings** — sec.gov/cgi-bin/browse-edgar
+   - Form type: SC 13D, SC 13D/A (amendments)
+   - Search: Recent filings from past 24 hours
+   - Filter: Minimum stake >5% (13D threshold)
+
+2. **13D Monitor** — 13dmonitor.com
+   - Tracks all activist campaigns in real-time
+   - Pre-filtered by activist tier
+   - Includes settlement updates
+
+3. **Activist Insight** — activistinsight.com
+   - Campaign tracking and activist fund databases
+   - Settlement probabilities
+
+**Secondary Sources (check weekly):**
+4. **Whale Wisdom** — whalewisdom.com
+   - 13F filings show activist stake building (45-day lag)
+   - Useful for pre-13D detection
+
+5. **Hedge Fund 13F Analysis**
+   - Track positions of Tier 1/2 activists
+   - Look for new concentrated positions (>3% of portfolio)
+
+**Tier-Specific Tracking:**
+- **Tier 1** (Elliott, Starboard, ValueAct, Pershing Square): Track ALL filings immediately
+- **Tier 2** (Trian, Icahn, Third Point): Track if stake >7.5% or board demands made
+- **Tier 3** (Others): Only track if multiple red flags present (turnaround, sale process)
+
+**Event Creation Criteria:**
+- 13D filing with stake >5% from Tier 1/2 activist
+- 13D amendment announcing board demands or settlement discussions
+- Standstill agreement expiration dates (like Elliott/Southwest 2026-04-01)
+- Proxy contest announcement (definitive governance catalyst)
+
+**Priority Flags:**
+- **High Priority:** Tier-1 activist + stake >10% + explicit demands
+- **Medium Priority:** Tier-2 activist + settlement discussions
+- **Low Priority:** Tier-3 activist or passive stake increases
+
 ## Scan Frequency Recommendations
 
 | Archetype | Frequency | Reason |
 |-----------|-----------|--------|
 | PDUFA | Weekly | Dates rarely change once set |
 | Merger Arb | Daily | Deals announced frequently |
-| Activist | Daily | 13D filings can be immediate catalysts |
+| Activist | **Daily** | **13D filings are immediate catalysts; Tier-1 activists create 10-20% moves** |
 | Spin-off | Monthly | Long lead times |
 | Legislative | Monthly | Bill schedules months in advance |
 

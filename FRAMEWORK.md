@@ -1,4 +1,4 @@
-# IDIOSYNCRATIC TRADING FRAMEWORK v3.6
+# IDIOSYNCRATIC TRADING FRAMEWORK v3.7
 
 *Catalyst-Driven Special Situations | 7 Archetypes | Backtest-Validated*
 
@@ -21,10 +21,27 @@ Binary gates. Any fail = automatic PASS.
 | Screen | Fail Condition | Applies To |
 |--------|----------------|------------|
 | Beneish M-Score | > -1.78 | All |
-| Altman Z-Score | < 1.81 | All |
+| Altman Z-Score | < threshold (industry-adjusted) | All |
+| **Market Cap Ceiling** | **> $50B (base), $100B (merger), $75B (legislative)** | **All** |
 | Hostile Deal | Yes | Merger Arb |
 | Merger Spread | < 2.5% | Merger Arb |
-| Macro Conflict | Rate/commodity conflicts with thesis | Legislative |
+| Macro Conflict | Rate/commodity conflicts | Legislative |
+| **PDUFA Financial Health** | **Cash runway <18mo, D/E >0.75, or net debt** | **PDUFA** |
+
+### Industry-Specific Z-Score Adjustments
+
+The Altman Z-Score was designed for manufacturing companies. Adjust thresholds by sector:
+
+| Industry | Threshold | Rationale |
+|----------|-----------|-----------|
+| Manufacturing (default) | 1.81 | Original Altman formula |
+| Telecom/Media | 1.5 | Asset-light, negative working capital by design |
+| Biotech/Pharma | 1.5 | R&D-heavy, evaluate cash runway separately |
+| Software/SaaS | 2.0 | Negative working capital normal (deferred revenue) |
+| Utilities | 2.5 | High leverage normal due to regulated cash flows |
+| Financials/Banks | N/A | Use Tier 1 Capital Ratio, NPL ratio instead |
+
+**Validation Required:** When using adjusted threshold, confirm with secondary metrics (Piotroski F-Score, interest coverage, cash position).
 
 ---
 

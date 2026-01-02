@@ -82,10 +82,15 @@ Skills are implemented as Claude Code skills in `.codex/skills/` (note: skills a
 
 ### Kill Screens (Binary Gates)
 - **ANY fail = automatic PASS**. Stop immediately.
+- **New in v3.7:**
+  - Market cap ceiling: $50B base, $100B merger arb, $75B legislative
+  - Z-Score industry adjustments: Telecom/biotech 1.5, software 2.0, utilities 2.5
+  - PDUFA financial health: 18+ month cash runway, D/E <0.75, net cash position
 - Screens vary by archetype (see `schema/kill_screens.json`):
-  - All: M-Score > -1.78, Z-Score < 1.81
+  - All: M-Score > -1.78, Z-Score < threshold (industry-adjusted), Market cap ceiling
   - Merger Arb: Hostile deal, Spread < 2.5%
   - Legislative: Macro conflict
+  - PDUFA: Financial health screens (cash runway, leverage, net cash)
 
 ### Scoring Thresholds
 - **BUY**: ≥8.25 (backtest win rate 68%)
@@ -142,6 +147,7 @@ Skills fetch external data via web search and APIs:
 - **All decisions must be traceable**: Every trade file contains entry_thesis, scoring_breakdown, exit_plan.
 - **Precedents are searchable**: The `search` skill uses `precedents/index.json` to find similar past trades by tags.
 - **PASS decisions are logged**: Even ideas that fail kill screens or score below 6.5 are logged in `trades/passed/` for learning.
+- **Activist sourcing is daily**: Check SEC 13D filings, 13D Monitor, and activist tracker sites daily to maintain 8-12 active events
 
 ## Regime-Aware Behavior
 
