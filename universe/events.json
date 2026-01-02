@@ -406,6 +406,54 @@
       "linked_idea": null,
       "source": "User report: Event-Driven Alpha: Strategic Catalyst Outlook (H1 2026)",
       "discovered_date": "2025-12-30"
+    },
+    {
+      "id": "EVT-2026-030",
+      "type": "activist",
+      "ticker": "LULU",
+      "catalyst": "Elliott Management $1B stake with CEO replacement proposal",
+      "date": "2026-01-02",
+      "date_type": "soft",
+      "archetype": "activist",
+      "status": "tracking",
+      "notes": "Tier-1 activist. Elliott acquired $1B+ stake (Dec 18, 2025) and proposed CEO candidate. High-priority campaign targeting leadership change.",
+      "linked_idea": null,
+      "source": "CNBC, SEC 13D filing",
+      "discovered_date": "2026-01-02",
+      "priority": "high",
+      "tier": "tier_1"
+    },
+    {
+      "id": "EVT-2026-031",
+      "type": "activist",
+      "ticker": "CWAN",
+      "catalyst": "Starboard Value 5% stake as company reviews strategic options",
+      "date": "2025-12-13",
+      "date_type": "hard",
+      "archetype": "activist",
+      "status": "tracking",
+      "notes": "Tier-1 activist. Starboard revealed 5% stake (Dec 13, 2025) as Clearwater Analytics reviews strategic options. Potential sale process or operational improvements.",
+      "linked_idea": null,
+      "source": "CNBC, SEC 13D filing",
+      "discovered_date": "2026-01-02",
+      "priority": "medium",
+      "tier": "tier_1"
+    },
+    {
+      "id": "EVT-2026-032",
+      "type": "activist",
+      "ticker": "BILL",
+      "catalyst": "Starboard Value 8% stake in Bill Holdings",
+      "date": "2025-12-01",
+      "date_type": "soft",
+      "archetype": "activist",
+      "status": "tracking",
+      "notes": "Tier-1 activist. Starboard took hefty 8% stake in Bill Holdings (payment software company). Potential operational improvements or strategic alternatives.",
+      "linked_idea": null,
+      "source": "Nasdaq, SEC 13D filing",
+      "discovered_date": "2026-01-02",
+      "priority": "medium",
+      "tier": "tier_1"
     }
   ]
 }
