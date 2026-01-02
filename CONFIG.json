@@ -3,6 +3,14 @@
     "size": 25000,
     "currency": "USD"
   },
+  "broker": {
+    "provider": "ibkr",
+    "mode": "paper",
+    "host": "127.0.0.1",
+    "port": 4002,
+    "client_id": 7,
+    "account": "YOUR_PAPER_ACCOUNT_ID"
+  },
   "risk": {
     "max_loss_per_trade": 0.02,
     "max_positions": 10,

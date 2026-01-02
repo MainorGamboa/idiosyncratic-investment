@@ -33,6 +33,8 @@ Close position and create post-mortem. Moves trade to closed/, calculates outcom
 ### Step 1: Load Active Trade
 Read `trades/active/{TRADE_ID}.json`
 
+(Optional) Execute IBKR exit: `python scripts/ibkr_paper.py close {ticker} --order-type {MKT|LMT} --limit {price}`
+
 ### Step 2: Calculate Outcome
 ```javascript
 gross_return_pct = (exit_price - entry_price) / entry_price

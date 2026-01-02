@@ -132,7 +132,10 @@ Create `trades/active/{TRADE_ID}.json`:
 }
 ```
 
-### Step 5: Link to Event (if applicable)
+### Step 5: (Optional) Execute Paper Trade
+To place the order in IBKR: `python scripts/ibkr_paper.py place {ticker} {action} {shares} --order-type {MKT|LMT} --limit {price}`
+
+### Step 6: Link to Event (if applicable)
 If there's a linked event in `universe/events.json`, update the event's `linked_idea` field.
 
 ## Output

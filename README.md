@@ -80,6 +80,37 @@ idiosyncratic/
 → Adds outcome + post-mortem
 ```
 
+## IBKR Paper Trading (Optional)
+
+Execute paper trades via the official IBKR API (`ibapi`).
+
+**Setup:** `pip install -r requirements.txt`
+
+**Configure:** Update `CONFIG.json` broker section with your paper account ID, or use env vars:
+- `IBKR_HOST` (default `127.0.0.1`)
+- `IBKR_PORT` (default `4002` for paper)
+- `IBKR_CLIENT_ID` (default `7`)
+- `IBKR_ACCOUNT` (your paper account ID)
+
+*Tip: Create `CONFIG.local.json` with your account ID to avoid committing credentials (already in .gitignore).*
+
+**Usage:**
+```bash
+# Place order
+python scripts/ibkr_paper.py place SRPT BUY 30 --order-type LMT --limit 125.5
+
+# Close position
+python scripts/ibkr_paper.py close SRPT
+
+# Check positions
+python scripts/ibkr_paper.py positions
+
+# Get quote
+python scripts/ibkr_paper.py quote SRPT
+```
+
+Skills (`/open`, `/monitor`, `/close`) include optional IBKR execution steps.
+
 ## Key Files
 
 | File | Purpose |

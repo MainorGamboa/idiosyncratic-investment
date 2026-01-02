@@ -25,6 +25,8 @@ Update all active trades with current data, check exit signals.
 ### Step 1: Load Active Trades
 Read all files in `trades/active/`
 
+(Optional) Reconcile IBKR positions: `python scripts/ibkr_paper.py positions`
+
 ### Step 2: For Each Trade
 
 #### A. Get Current Data
