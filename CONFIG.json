@@ -9,13 +9,16 @@
     "kellner_rule": "Max 2% portfolio loss per trade"
   },
   "regime": {
-    "vix": null,
-    "vix_level": null,
-    "vix_action": null,
-    "hy_oas_bps": null,
-    "credit_condition": null,
+    "vix": 14.94,
+    "vix_level": "<15",
+    "vix_action": "Normal operations",
+    "hy_oas_bps": 284,
+    "hy_oas_baseline": 284,
+    "credit_condition": "tight",
+    "credit_action": "Favorable for credit-sensitive strategies",
     "correlation_elevated": false,
-    "last_updated": null
+    "alerts": [],
+    "last_updated": "2026-01-02T14:30:00Z"
   },
   "framework_version": "3.6",
   "notes": "Update regime daily via 'regime' skill"
