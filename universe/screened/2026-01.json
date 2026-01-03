@@ -329,6 +329,105 @@
       },
       "framework_limitation_note": "SPGI reinforces mega-cap boundary issue (same as HON, FDX). At $158.24B, this is the largest spinoff analyzed. Mobility representing only 11% of revenue further reduces catalyst materiality. Framework designed for smaller, underappreciated situations.",
       "notes": "RE-ANALYSIS: Previously screened 2025-12-30 with 7.5 CONDITIONAL score. Distribution targeted late 2026 (Oct-Nov). Framework fit WEAK due to mega-cap size, small spinoff percentage (11%), and 8-month-old announcement. This is an institutional play tracked by all major funds, not an idiosyncratic opportunity. Lowest priority among all spinoffs analyzed."
+    },
+    {
+      "date": "2026-01-02",
+      "ticker": "AQST",
+      "company": "Aquestive Therapeutics, Inc.",
+      "archetype": "pdufa",
+      "event_id": "EVT-2026-001",
+      "additional_event_id": "EVT-2026-003",
+      "kill_screens_passed": false,
+      "failed_screens": [
+        {
+          "screen": "Altman Z-Score",
+          "value": -5.39,
+          "threshold": 1.5,
+          "operator": ">=",
+          "result": "SEVERE FAIL - Z-Score of -5.39 << 1.5 biotech-adjusted threshold, indicates extreme financial distress",
+          "source": "Framework schema (kill_screens.json line 166-173)",
+          "severity": "critical",
+          "context": "Z-Score below zero indicates severe distress. AQST's -5.39 is catastrophic even for biotech."
+        },
+        {
+          "screen": "PDUFA Financial Health - Debt/Equity",
+          "value": "Unknown (likely >0.75)",
+          "threshold": 0.75,
+          "operator": "<",
+          "result": "LIKELY FAIL - Multiple sources cite 'formidable debt-to-equity challenge' and 'debt-ridden balance sheet'",
+          "source": "Web search / financial analysis",
+          "severity": "high"
+        },
+        {
+          "screen": "PDUFA Financial Health - Cash Runway",
+          "value_months": "15-25",
+          "threshold_months": 18,
+          "operator": ">=",
+          "result": "BORDERLINE - Company guidance says cash funds 'through launch and into 2027' (~15-21 months from Q3 2025)",
+          "source": "Q3 2025 earnings release / financial analysis",
+          "severity": "medium",
+          "calculation": "Cash $129.1M / monthly burn $5.1M = ~25 months (calculated), but company guidance suggests 15-21 months"
+        }
+      ],
+      "passed_screens": [
+        {
+          "screen": "Market Cap Ceiling",
+          "value": 788000000,
+          "threshold": 50000000000,
+          "operator": "<",
+          "result": "PASS - $788M well below $50B threshold",
+          "source": "Yahoo Finance"
+        },
+        {
+          "screen": "Net Cash Position",
+          "value": 84100000,
+          "threshold": 0,
+          "operator": ">",
+          "result": "PASS - Net cash $84.1M (Cash $129.1M - Debt $45M)",
+          "source": "Q3 2025 earnings / debt refinancing press release"
+        }
+      ],
+      "result": "PASS",
+      "reason": "Failed Altman Z-Score kill screen with catastrophic -5.39 score. Additionally failed PDUFA financial health screens for debt/equity ratio. Even with $85M equity raise in August 2025, company remains in severe financial distress.",
+      "pass_decision_file": "trades/passed/AQST-20260102-PASS.json",
+      "financial_summary": {
+        "market_cap": "$788M",
+        "current_price": "$6.46",
+        "cash_q3_2025": "$129.1M",
+        "total_debt": "$45M+ (13.5% senior notes due 2028)",
+        "q3_revenue": "$12.8M",
+        "q3_net_loss": "$15.4M",
+        "fy2025_ebitda_loss_guidance": "$47-51M",
+        "recent_financing": "$85M equity offering closed Aug 15, 2025",
+        "analyst_consensus": "Strong Buy (6 analysts) with $8.83 target (+36.7%)"
+      },
+      "pdufa_details": {
+        "catalyst_1": "FDA decision on AQST-109 (epinephrine) - Jan 6, 2026",
+        "catalyst_2": "FDA decision on Anaphylm (epinephrine sublingual film) - Jan 31, 2026",
+        "days_to_catalyst": 4,
+        "no_adcom_required": true,
+        "base_approval_rate": "92% post-NDA",
+        "market_size": "$8B epinephrine market"
+      },
+      "framework_assessment": "Exemplar case of why financial kill screens exist. Despite 92% PDUFA approval rate, stellar analyst support (+37% upside), and no AdCom requirement, the Z-Score of -5.39 disqualifies AQST. Even with approval, commercialization costs strain balance sheet. CRL would likely trigger dilutive financing or bankruptcy. Principal debt repayments start June 2026 (6 months post-PDUFA), creating time pressure. Framework prioritizes capital preservation over catalyst quality.",
+      "lessons_learned": [
+        "Z-Score -5.39 overrides all bullish factors (92% approval rate, analyst consensus)",
+        "PDUFA financial health screens caught the risk that generic Z-Score flagged",
+        "$85M equity raise in Aug 2025 insufficient to cure balance sheet distress",
+        "13.5% debt cost with June 2026 principal repayments creates existential timeline pressure",
+        "Analysts can be bullish (Strong Buy, +37%) while framework screens show unacceptable risk"
+      ],
+      "tags": [
+        "pdufa",
+        "biotech",
+        "kill_screen_fail",
+        "z_score_catastrophic",
+        "financial_distress",
+        "high_debt",
+        "cash_runway_borderline",
+        "january_2026_catalyst"
+      ],
+      "notes": "AQST has TWO PDUFA catalysts in January 2026 (Jan 6 and Jan 31) with 92% historical approval rate and no AdCom required. Despite bullish setup, Z-Score of -5.39 is disqualifying. Company raised $85M in August 2025 but still shows severe financial distress. Framework screens override market optimism. Alternative: Screen TVTX (EVT-2026-002, Jan 13 PDUFA) for potentially better financial health."
     }
   ]
 }

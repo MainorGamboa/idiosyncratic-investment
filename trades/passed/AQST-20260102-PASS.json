@@ -1,0 +1,135 @@
+{
+  "trade_id": "PASS-2026-001",
+  "ticker": "AQST",
+  "company": "Aquestive Therapeutics, Inc.",
+  "archetype": "pdufa",
+  "decision_date": "2026-01-02",
+  "decision": "PASS",
+  "reason": "Failed kill screens",
+
+  "event_context": {
+    "event_ids": ["EVT-2026-001", "EVT-2026-003"],
+    "catalyst_1": "FDA decision on AQST-109 (epinephrine) - PDUFA Jan 6, 2026",
+    "catalyst_2": "FDA decision on Anaphylm (epinephrine sublingual film) - PDUFA Jan 31, 2026",
+    "days_to_catalyst": 4
+  },
+
+  "market_data": {
+    "price_at_decision": 6.46,
+    "market_cap_millions": 788,
+    "analyst_consensus": "Strong Buy (6 analysts)",
+    "price_target": 8.83,
+    "implied_upside_pct": 36.7
+  },
+
+  "kill_screen_results": {
+    "passed": false,
+    "failures": [
+      {
+        "screen": "Altman Z-Score",
+        "threshold": 1.5,
+        "actual": -5.39,
+        "status": "FAIL",
+        "severity": "critical",
+        "note": "Z-Score of -5.39 indicates severe financial distress, well below biotech-adjusted threshold of 1.5"
+      },
+      {
+        "screen": "PDUFA Financial Health - Debt/Equity",
+        "threshold": 0.75,
+        "actual": "Unknown (likely >0.75)",
+        "status": "LIKELY FAIL",
+        "severity": "high",
+        "note": "Multiple sources cite 'formidable debt-to-equity challenge' and 'debt-ridden balance sheet'"
+      },
+      {
+        "screen": "PDUFA Financial Health - Cash Runway",
+        "threshold_months": 18,
+        "actual_months": "15-25",
+        "status": "BORDERLINE",
+        "severity": "medium",
+        "note": "Company guidance says cash funds 'through launch and into 2027' (~15-21 months from Q3 2025). Conservative calculation shows 25 months, but company guidance suggests lower end."
+      }
+    ],
+    "passes": [
+      {
+        "screen": "Market Cap Ceiling",
+        "threshold_millions": 50000,
+        "actual_millions": 788,
+        "status": "PASS"
+      },
+      {
+        "screen": "Net Cash Position",
+        "threshold": 0,
+        "actual_millions": 84.1,
+        "calculation": "Cash $129.1M - Debt $45M",
+        "status": "PASS"
+      }
+    ]
+  },
+
+  "financial_summary": {
+    "cash_and_equivalents_millions": 129.1,
+    "total_debt_millions": 45.0,
+    "debt_details": "13.5% senior secured notes due 2028, principal repayment starts June 2026",
+    "q3_2025_revenue_millions": 12.8,
+    "q3_2025_net_loss_millions": 15.4,
+    "fy2025_ebitda_loss_guidance_millions": "47-51",
+    "quarterly_burn_millions": "~12-15",
+    "recent_financing": "$85M equity offering closed Aug 15, 2025"
+  },
+
+  "thesis_assessment": {
+    "bull_case": "92% PDUFA approval rate post-NDA; no AdCom required (positive signal); $8B epinephrine market; sublingual film novel delivery mechanism could gain market share; analysts bullish with $8.83 target (+37% upside)",
+    "bear_case": "Severe financial distress (Z-Score -5.39); high debt burden with 13.5% interest rate; principal repayments start June 2026 (just 6 months post-PDUFA); cash runway borderline; even with approval, commercialization costs could strain balance sheet; CRL would likely trigger dilutive financing or bankruptcy",
+    "framework_view": "Financial kill screens exist precisely for this scenario. Even with 92% base approval rate, the 8% rejection risk combined with -5.39 Z-Score creates unacceptable downside. Company may not survive a CRL or delayed approval. Framework prioritizes capital preservation."
+  },
+
+  "lessons_learned": [
+    "Z-Score -5.39 is disqualifying regardless of catalyst quality or approval odds",
+    "PDUFA financial health screens caught the risk: cash runway, debt/equity, and financial distress",
+    "Company raised $85M in August 2025 but still shows severe balance sheet stress",
+    "13.5% debt with principal repayments starting June 2026 creates time pressure",
+    "Analysts bullish (Strong Buy, +37% upside) but framework screens override market optimism"
+  ],
+
+  "alternative_plays": {
+    "note": "If seeking PDUFA exposure in January 2026, consider EVT-2026-002 (TVTX) which may have better financial health metrics",
+    "action": "Screen TVTX separately for comparison"
+  },
+
+  "tags": [
+    "pdufa",
+    "biotech",
+    "z_score_fail",
+    "financial_distress",
+    "high_debt",
+    "cash_runway_borderline",
+    "kill_screen_fail",
+    "january_2026_pdufa"
+  ],
+
+  "sources": [
+    {
+      "type": "10-Q",
+      "period": "Q3 2025 (Sept 30, 2025)",
+      "url": "https://www.sec.gov/Archives/edgar/data/1398733/000139873325000028/aqst-20250930.htm"
+    },
+    {
+      "type": "Press Release",
+      "title": "Q3 2025 Earnings",
+      "date": "2025-11-05",
+      "url": "https://investors.aquestive.com/news-releases/news-release-details/aquestive-therapeutics-reports-third-quarter-2025-financial"
+    },
+    {
+      "type": "Press Release",
+      "title": "$85M Equity Offering",
+      "date": "2025-08-14",
+      "url": "https://investors.aquestive.com/news-releases/news-release-details/aquestive-therapeutics-announces-pricing-85-million-underwritten"
+    },
+    {
+      "type": "Analysis",
+      "title": "AQST Financial Health Analysis",
+      "url": "https://dcfmodeling.com/blogs/health/aqst-financial-health"
+    }
+  ]
+}
