@@ -112,7 +112,11 @@
       "entry_timing": {
         "optimal_window_days": [30, 60],
         "rationale": "Forced index selling creates -2.4% to -3.7% underperformance in first 5 days",
-        "exception": "Immediate S&P 500 inclusion"
+        "exception": "Immediate S&P 500 inclusion",
+        "volume_signal": {
+          "pattern": "Volume decline to <1.5x 20-day average + price stabilization",
+          "rationale": "Signals forced selling exhaustion vs. continued distribution"
+        }
       },
       "position": {
         "max_size": 0.08,
@@ -150,7 +154,15 @@
         "kelly": 0.25,
         "skew": "negative"
       },
-      "entry_timing": "On cluster detection",
+      "entry_timing": {
+        "base_signal": "On cluster detection",
+        "volume_overlay": {
+          "threshold": "2x 20-day average",
+          "rationale": "Insiders buy during quiet periods. Volume surge signals market discovery",
+          "max_wait_days": 90,
+          "note": "Not a scored filter. Used only for timing execution on scored ideas ≥8.25"
+        }
+      },
       "kill_screens": ["beneish_m_score"]
     },
     

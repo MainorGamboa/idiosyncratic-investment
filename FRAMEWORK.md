@@ -76,6 +76,17 @@ The Altman Z-Score was designed for manufacturing companies. Adjust thresholds b
 | Insider | 65-70% cluster | 5% | On cluster |
 | Legislative | Low (primary) | 2% | 3-6 mo pre |
 
+### Volume Timing Overlays (Not Scored)
+
+Volume does NOT affect scoring but optimizes entry execution for 2 archetypes:
+
+| Archetype | Signal | Usage |
+|-----------|--------|-------|
+| **Insider** | Volume >2x 20-day avg | Score ≥8.25 → Wait for surge (max 90 days) |
+| **Spin-off** | Volume <1.5x avg + price stable | Confirms forced selling exhaustion |
+
+**Explicitly NOT used for:** Merger Arb, PDUFA, Liquidation, Activist, Legislative
+
 ---
 
 ## 4. Position Sizing

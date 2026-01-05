@@ -42,6 +42,26 @@ Open new position from scored idea. Creates active trade JSON with position sizi
 - If 6.5 <= score < 8.25 → WARNING "Conditional score, confirm before proceeding"
 - If score >= 8.25 → Proceed
 
+### Step 1.5: Check Volume Timing (Insider/Spinoff Only)
+
+**For Insider archetype:**
+- If score ≥8.25 AND days_since_cluster < 90:
+  - Fetch 20-day average volume from Stooq: `https://stooq.com/q/d/l/?s={ticker}.us&i=d`
+  - Calculate current volume vs 20-day average
+  - If current volume < 2x average: **WARN** "Consider waiting for volume confirmation (2x 20-day avg). Max wait: 90 days from cluster."
+  - If current volume ≥ 2x average: Proceed with entry
+- Reference: `schema/archetypes.json` → insider → entry_timing → volume_overlay
+
+**For Spinoff archetype:**
+- If days_since_spin in [30, 60]:
+  - Fetch 20-day average volume from Stooq
+  - Check if current volume <1.5x average AND price has stabilized
+  - If volume still elevated: **WARN** "Volume suggests continued forced selling. Consider waiting."
+  - If volume normalized: Proceed with entry
+- Reference: `schema/archetypes.json` → spinoff → entry_timing → volume_signal
+
+**For all other archetypes:** Skip volume check (not applicable)
+
 ### Step 2: Calculate Position Size
 Reference: `schema/archetypes.json` and `CONFIG.json`
 
