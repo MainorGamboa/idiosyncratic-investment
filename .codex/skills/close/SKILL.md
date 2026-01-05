@@ -33,7 +33,20 @@ Close position and create post-mortem. Moves trade to closed/, calculates outcom
 ### Step 1: Load Active Trade
 Read `trades/active/{TRADE_ID}.json`
 
-(Optional) Execute IBKR exit: `python scripts/ibkr_paper.py close {ticker} --order-type {MKT|LMT} --limit {price}`
+### Step 1b: Place Exit Order
+
+**See TECHNICAL_SPEC.md §10 for complete order execution logic.**
+
+**Order type:** Market order (immediate execution required)
+- Rationale: Exit signals demand immediate action, slippage acceptable
+- Time in force: IOC (Immediate or Cancel)
+
+**Execution** (if using IBKR paper):
+```bash
+python scripts/ibkr_paper.py close {ticker} --order-type MKT
+```
+
+Market orders ensure execution when exit signal triggered (cockroach, thesis break, info parity).
 
 ### Step 2: Calculate Outcome
 ```javascript
@@ -106,10 +119,22 @@ Add outcome and post_mortem sections:
 }
 ```
 
-### Step 5: Move to Closed
-```bash
-mv trades/active/{TRADE_ID}.json trades/closed/{TRADE_ID}.json
-```
+### Step 5: Move to Closed with Outcome Classification
+
+**See TECHNICAL_SPEC.md §15.2 for complete file organization.**
+
+Determine outcome and move to appropriate directory:
+- If `gross_return_pct > 0` → Move to `trades/closed/wins/{TRADE_ID}.md`
+- If `gross_return_pct <= 0` → Move to `trades/closed/losses/{TRADE_ID}.md`
+
+**Why .md not .json?**
+Post-mortems are narrative documents (human-readable), so use Markdown.
+
+Convert JSON to Markdown format:
+- Start with JSON frontmatter (---  metadata ---)
+- Body contains narrative post-mortem, what worked/didn't work, lessons
+
+This organization enables better learning from outcomes (wins vs losses patterns).
 
 ### Step 6: Update Precedents Index
 Add tags to `precedents/index.json`:
@@ -126,6 +151,32 @@ Add tags to `precedents/index.json`:
 
 ### Step 7: Update Event (if linked)
 If trade was linked to an event, update event status to "completed" in `universe/events.json`.
+
+### Step 8: Write Log Entry
+
+Append to `logs/close/YYYY-MM-DD.log`:
+
+```json
+{
+  "timestamp": "2025-01-05T17:00:00Z",
+  "skill": "close",
+  "trade_id": "TRD-20250105-SRPT-PDUFA",
+  "ticker": "SRPT",
+  "archetype": "pdufa",
+  "outcome": "WIN",
+  "metrics": {
+    "return_pct": 0.394,
+    "return_usd": 1485,
+    "hold_days": 37,
+    "entry_price": 125.50,
+    "exit_price": 175.00,
+    "thesis_correct": true
+  },
+  "data_sources": ["IBKR exit order"],
+  "execution_time_ms": 2100,
+  "notes": "Catalyst occurred (PDUFA approval). Market order executed. Post-mortem complete."
+}
+```
 
 ## Output
 ```json

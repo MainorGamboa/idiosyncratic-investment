@@ -201,6 +201,29 @@ Create `journal/reviews/{YYYY-WNN}.md`:
 *Next review: 2025-01-20*
 ```
 
+### Step 6: Write Log Entry
+
+Append to `logs/review/YYYY-MM-DD.log`:
+
+```json
+{
+  "timestamp": "2025-01-05T20:00:00Z",
+  "skill": "review",
+  "review_period": "2025-01-01 to 2025-01-05",
+  "outcome": "COMPLETE",
+  "metrics": {
+    "active_trades": 3,
+    "closed_trades": 1,
+    "win_rate": 0.68,
+    "avg_return": 0.123,
+    "trades_reviewed": 4
+  },
+  "data_sources": ["trades/active/*", "trades/closed/wins/*", "trades/closed/losses/*"],
+  "execution_time_ms": 2800,
+  "notes": "Weekly review generated. Framework performing as expected."
+}
+```
+
 ## Output
 ```json
 {

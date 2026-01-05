@@ -26,9 +26,24 @@ Run a ticker through the full framework analysis, from kill screens through scor
 ## Process
 
 ### Step 1: Gather Context
-- Current price
-- Market cap
-- Sector
+
+**Data Source Strategy** (see TECHNICAL_SPEC.md §2.1):
+
+**Price data** (from CONFIG.json data_sources.price_priority):
+1. Try IBKR paper account: `http://127.0.0.1:4002` (real-time)
+2. If fails → Stooq: `stooq.com/q/d/l/?s={ticker}.us&i=d` (15min delay)
+3. If fails → Yahoo Finance (fallback)
+4. If all fail → Log error to `logs/analyze/YYYY-MM-DD.log`, notify user, halt
+
+**Financials** (from CONFIG.json data_sources.financials_priority):
+1. SEC API: `data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json`
+2. If fails → Manual calculation from 10-Q/10-K
+3. If fails → Third-party screening tools
+
+Gather:
+- Current price (with fallback)
+- Market cap (shares outstanding × price)
+- Sector/industry
 - Relevant dates
 
 ### Step 2: Run Kill Screens
@@ -40,6 +55,27 @@ For the archetype, check ALL applicable kill screens:
 - Legislative: Macro conflict
 
 **If ANY kill screen fails → PASS. Stop here.**
+
+### Step 2b: Data Validation & Anomaly Detection
+
+**See TECHNICAL_SPEC.md §2.2 for complete validation protocols.**
+
+**M-Score validation:**
+- Expected range: -2 to +2
+- If M-Score > 10 OR < -10:
+  - Flag as suspicious: "M-Score {value} outside expected range"
+  - Try alternative data source
+  - If all sources show anomaly, log and notify user
+
+**Price validation:**
+- If price < $0.10 OR price_change > 50% in 1 day:
+  - Cross-check all sources (IBKR, Stooq, Yahoo)
+  - If all sources agree → Accept data
+  - If sources conflict → Alert user, use most recent verified price
+
+**Z-Score borderline handling:**
+- Strict enforcement: 1.79 < 1.81 threshold = FAIL (no tolerance band)
+- Log exact values for reference
 
 ### Step 3: Create Watchlist File
 If screens pass, create `universe/watchlist/{TICKER}.md`:
@@ -84,6 +120,31 @@ Update `universe/screened/{YYYY-MM}.json`:
   "result": "watchlist"
 }
 ```
+
+### Step 5: Write Log Entry
+
+Append to `logs/analyze/YYYY-MM-DD.log`:
+
+```json
+{
+  "timestamp": "2025-01-05T14:30:00Z",
+  "skill": "analyze",
+  "ticker": "SRPT",
+  "archetype": "pdufa",
+  "outcome": "PASS",
+  "metrics": {
+    "m_score": -2.1,
+    "z_score": 2.5,
+    "market_cap": 4500000000,
+    "kill_screens_passed": true
+  },
+  "data_sources": ["IBKR", "SEC API"],
+  "execution_time_ms": 2150,
+  "notes": "All kill screens passed. Watchlist file created."
+}
+```
+
+Log all executions for pattern analysis and debugging.
 
 ## Output
 ```json

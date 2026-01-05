@@ -130,6 +130,26 @@ Flag high-priority events for investigation:
 - Tier-1 activist 13D filing
 - Spin-off from S&P 500 parent
 
+### Step 4: Write Log Entry
+
+Append to `logs/scan/YYYY-MM-DD.log`:
+
+```json
+{
+  "timestamp": "2025-01-05T08:00:00Z",
+  "skill": "scan",
+  "outcome": "COMPLETE",
+  "metrics": {
+    "new_events_found": 5,
+    "sources_checked": ["FDA DAF", "SEC 13D filings", "web search"],
+    "events_added": 5
+  },
+  "data_sources": ["accessdata.fda.gov", "sec.gov"],
+  "execution_time_ms": 4200,
+  "notes": "Weekly scan completed. 5 new catalyst events added to events.json."
+}
+```
+
 ## Output
 ```json
 {

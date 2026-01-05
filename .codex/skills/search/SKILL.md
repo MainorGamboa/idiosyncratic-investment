@@ -73,6 +73,26 @@ Sort by:
 2. Outcome relevance (positive/negative)
 3. Date (most recent first)
 
+### Step 7: Write Log Entry
+
+Append to `logs/search/YYYY-MM-DD.log`:
+
+```json
+{
+  "timestamp": "2025-01-05T18:00:00Z",
+  "skill": "search",
+  "query": "pdufa_approval positive_adcom",
+  "outcome": "SUCCESS",
+  "metrics": {
+    "results_found": 3,
+    "tags_searched": ["pdufa_approval", "positive_adcom"]
+  },
+  "data_sources": ["precedents/index.json"],
+  "execution_time_ms": 450,
+  "notes": "Found 3 precedents matching query."
+}
+```
+
 ## Output
 ```json
 {

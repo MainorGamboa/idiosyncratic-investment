@@ -1,0 +1,13 @@
+{
+  "alerts": [],
+  "metadata": {
+    "created": "2025-01-05",
+    "version": "1.0",
+    "description": "Active alerts requiring user action. Acknowledged alerts archived to alerts_archive.json"
+  },
+  "priority_levels": {
+    "immediate": "Must act now (exit signals, cockroach, stop loss, regime change)",
+    "daily_digest": "Check once per day (monitoring updates, P&L summaries)",
+    "weekly_review": "Check end of week (framework calibration, performance metrics)"
+  }
+}

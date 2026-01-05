@@ -104,6 +104,52 @@ None applicable
 Score 8.5 exceeds threshold 8.25. High conviction setup.
 ```
 
+## Scoring Edge Cases & Autonomy
+
+**See TECHNICAL_SPEC.md §1.2 for complete agent autonomy guidelines.**
+
+**Auto-decide (with explanation):**
+- Score 8.2 (just below 8.25 threshold) → Auto-classify as **CONDITIONAL**
+  - Rationale: Close enough to warrant user review, not auto-PASS
+- Score 8.25 exactly → **BUY** (meets threshold)
+
+**Ask user:**
+- Score exactly at threshold with unusual archetype combination
+- Scoring drift >1.0 point from previous scoring of same ticker
+
+**Decision thresholds:**
+- ≥ 8.25 → BUY (backtest win rate 68%)
+- 6.5-8.24 → CONDITIONAL (requires confirmation)
+- < 6.5 → PASS (backtest win rate 29%)
+
+### Step 5: Write Log Entry
+
+Append to `logs/score/YYYY-MM-DD.log`:
+
+```json
+{
+  "timestamp": "2025-01-05T15:45:00Z",
+  "skill": "score",
+  "ticker": "SRPT",
+  "archetype": "pdufa",
+  "outcome": "BUY",
+  "metrics": {
+    "final_score": 8.5,
+    "base_score": 8.5,
+    "adjustments": 0,
+    "catalyst": 2.0,
+    "mispricing": 1.5,
+    "noise_survival": 2.0,
+    "downside_floor": 1.5,
+    "risk_reward": 1.5,
+    "info_half_life": 0.0
+  },
+  "data_sources": ["watchlist file", "market data"],
+  "execution_time_ms": 1200,
+  "notes": "Strong catalyst clarity, solid fundamentals. BUY decision."
+}
+```
+
 ## Output
 ```json
 {

@@ -6,6 +6,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is an idiosyncratic trading system for catalyst-driven special situations investing. The system uses a structured framework with 7 archetypes (Merger Arb, PDUFA, Activist, Spin-off, Liquidation, Insider, Legislative), kill screens, scoring filters, and exit protocols. All logic is codified in JSON schemas and executed through Claude Code skills.
 
+## Technical Specification Reference
+
+This file (CLAUDE.md) provides **agent operational guidelines** for Claude Code skills. For detailed technical implementation specifications, refer to:
+
+- **TECHNICAL_SPEC.md**: Authoritative technical reference covering agent autonomy model, data management, error handling, order execution, logging, and advanced features
+- **FRAMEWORK.md**: Human-readable framework rules and decision logic
+- **schema/*.json**: Machine-executable rules (archetypes, kill screens, scoring, exits)
+
+**Relationship:**
+- CLAUDE.md = "How Claude should behave and what to do"
+- TECHNICAL_SPEC.md = "How the system works technically"
+- FRAMEWORK.md = "Why we make these decisions"
+- schema/*.json = "Precise rules and thresholds"
+
 ## Core Architecture
 
 ### Data Flow & Decision Pipeline
@@ -20,26 +34,41 @@ The system separates **data** (JSON) from **narrative** (Markdown):
 
 ### Directory Structure & Purpose
 
+**NOTE:** See "File Organization" section below for complete directory structure with new v1.0 organization.
+
 ```
 schema/              # Authoritative rules (DO NOT modify without user approval)
 ├── archetypes.json  # 7 archetypes: base rates, position sizing, entry timing
 ├── kill_screens.json # Binary pass/fail gates (M-Score, Z-Score, etc.)
 ├── scoring.json     # 6 filters (max 11 pts) + archetype adjustments
-└── exits.json       # Info parity signals + hard exit triggers
+├── exits.json       # Info parity signals + hard exit triggers
+└── CHANGELOG.md     # Framework version history
 
 universe/            # What you're tracking
 ├── events.json      # Upcoming catalyst calendar
+├── events_archive.json # Past catalysts
 ├── watchlist/       # Ideas under investigation (*.md files)
 └── screened/        # Monthly kill screen results log
 
-trades/              # Decision traces (all JSON)
-├── active/          # Current positions with exit plans
-├── closed/          # Completed trades with post-mortems
-└── passed/          # Documented PASS decisions (for learning)
+trades/              # Decision traces
+├── active/          # Current positions with exit plans (JSON)
+├── closed/
+│   ├── wins/       # Profitable trades (MD post-mortems)
+│   └── losses/     # Losing trades (MD post-mortems)
+├── conditional/    # CONDITIONAL scores user declined (JSON)
+└── passed/         # Failed kill screens / PASS scores (JSON)
 
 precedents/          # Searchable pattern library
 ├── index.json       # Tag → trade_id mappings
 └── patterns.md      # Named patterns from closed trades
+
+logs/                # Execution logs by skill
+├── screen/, analyze/, score/, open/, monitor/, close/
+├── regime/, search/, scan/, review/
+└── Format: YYYY-MM-DD.log
+
+alerts.json          # Active alerts requiring action
+alerts_archive.json  # Acknowledged alerts
 ```
 
 ### Key Constraints
@@ -48,6 +77,130 @@ precedents/          # Searchable pattern library
 2. **IDs link everything**: Trades reference event IDs; precedents reference trade IDs.
 3. **Decision traces compound**: Even PASS decisions are logged in `trades/passed/` for future learning.
 4. **Schema is authoritative**: `FRAMEWORK.md` is human-readable, but `schema/*.json` files are the machine-executable truth.
+
+## Agent Autonomy Model
+
+**Core Principles** (see TECHNICAL_SPEC.md §1.1-1.2 for full details):
+
+1. **Ask-first over fail-safe**: When uncertain, interrupt for clarification rather than defaulting conservatively
+2. **Context-aware precedents**: Suggest similar past decisions only when factors match (therapeutic area, approval pathway, activist tier, etc.)
+3. **Fresh evaluation over consistency**: Always re-score with current data, but track why decisions changed
+4. **Cross-checking over trust**: Validate suspicious data across multiple sources automatically
+5. **Graduated responses**: Use thresholds and confidence levels rather than binary decisions
+
+### Interruption Guidelines
+
+**Always ask user:**
+- Kill screen violations (if agent confidence low or ambiguous case)
+- Exit signals at exact threshold (weighted_sum = 2.0)
+- Cockroach ambiguity (precedents unclear, severity uncertain)
+- High-stakes decisions (kill screen overrides, forced exits)
+
+**Auto-decide (with explanation):**
+- Scoring edge cases (8.2 → CONDITIONAL)
+- Data source fallbacks (IBKR fails → use Stooq)
+- Borderline metrics that are strict but not extreme
+
+**Suggest (don't wait for user):**
+- Next skill in workflow ("Run 'score TICKER' to complete analysis")
+- Position adjustments on regime change ("VIX >30, consider reducing merger arb")
+- Re-scoring when material news detected
+
+## Data Management
+
+**See TECHNICAL_SPEC.md §2 for complete data source strategy and validation protocols.**
+
+### Data Source Strategy (Graceful Degradation)
+
+**Price Data:**
+1. Try IBKR paper account (real-time)
+2. If fails → Stooq (delayed 15min)
+3. If fails → Yahoo Finance
+4. If all fail → Log error, notify user, halt operation
+
+**Financials (Kill Screens):**
+1. SEC API (preferred - pre-calculated aggregated data)
+2. Manual calculation from raw 10-Q/10-K
+3. Third-party screening tools (fallback)
+
+**Event Data:**
+- PDUFA dates: `accessdata.fda.gov/scripts/cder/daf/`
+- Activist 13Ds: `sec.gov/cgi-bin/browse-edgar`
+- Merger announcements: Web search, SEC 8-K filings
+- Legislative: Manual entry
+
+### Data Validation Rules
+
+**Always validate:**
+- M-Score expected range: -2 to +2 (flag if >10 or <-10, try alternative source)
+- Price anomalies: >50% moves in 1 day, prices <$0.10 (cross-check all sources)
+- Z-Score expected range: -5 to +10 (flag extreme outliers)
+
+**Cross-checking protocol:**
+- **Always cross-check**: Price anomalies, outlier financial metrics, conflicting data (>5% difference)
+- **Single source acceptable**: Normal-range metrics, consistent with historical data
+
+**Borderline handling:**
+- Z-Score 1.79 vs threshold 1.81 = FAIL (strict enforcement, no tolerance band)
+- M-Score exactly -1.78 = PASS (meets threshold)
+
+## Order Execution
+
+**See TECHNICAL_SPEC.md §10 for complete order execution logic.**
+
+### Entry Orders
+- **Default**: Limit order at bid/ask midpoint
+- **Rationale**: Better price, acceptable risk of no fill for non-urgent entries
+- **Time in force**: DAY
+
+**Retry logic:**
+1. Wait 30 minutes if not filled
+2. Adjust limit to new midpoint
+3. If price moved >5% away, cancel and mark "missed entry"
+
+### Exit Orders
+- **Always**: Market orders (immediate execution required)
+- **Rationale**: Exit signals demand immediate action, slippage acceptable
+- **Time in force**: IOC (Immediate or Cancel)
+
+## Logging & Alerts
+
+**See TECHNICAL_SPEC.md §12, §14 for complete logging and alerting specifications.**
+
+### Logging Structure
+
+Per-skill logs with dates for easy navigation:
+```
+logs/screen/YYYY-MM-DD.log
+logs/analyze/YYYY-MM-DD.log
+logs/score/YYYY-MM-DD.log
+logs/monitor/YYYY-MM-DD.log
+logs/open/YYYY-MM-DD.log
+logs/close/YYYY-MM-DD.log
+logs/regime/YYYY-MM-DD.log
+logs/search/YYYY-MM-DD.log
+logs/scan/YYYY-MM-DD.log
+logs/review/YYYY-MM-DD.log
+```
+
+**Log entry format:**
+- Timestamp, skill, ticker, outcome
+- Key metrics (M-Score, Z-Score, score, position size, etc.)
+- Data sources used
+- Execution time
+- Notes (why it passed/failed, context)
+
+### Alert System
+
+**Active alerts**: `alerts.json`
+**Archived alerts**: `alerts_archive.json`
+
+**Priority levels:**
+- **Immediate**: Exit signals (≥2.0), cockroach, stop loss hit, regime change
+- **Daily digest**: Monitoring updates (no action needed), P&L summaries
+- **Weekly review**: Framework calibration, performance metrics
+
+**Alert persistence**: Write to `alerts.json` + console output. User acknowledges via skill/command, acknowledged alerts archived.
 
 ## Working with Skills
 
@@ -117,29 +270,113 @@ These weights are in `schema/exits.json` under `info_parity.weights_by_archetype
 
 ## Framework Version & State
 
-- **Framework Version**: 3.6 (December 2024, backtest-validated)
+- **Framework Version**: 1.0 (January 2025, v1 launch)
+  - Reset from v3.7 pre-release to v1.0 production
+  - See `schema/CHANGELOG.md` for version history
 - **Account Size**: Set in `CONFIG.json` (default $25,000)
 - **Regime State**: Updated daily via `regime` skill
   - VIX levels: <20 (normal), 20-30 (elevated), >30 (sustained crisis)
   - HY OAS: Widening >100bp triggers merger arb reduction
 
+## File Organization
+
+**See TECHNICAL_SPEC.md §15, §21 for complete file system structure.**
+
+### Trade ID Format
+
+**Standard format**: `TRD-YYYYMMDD-TICKER-ARCHETYPE`
+
+Examples:
+- `TRD-20250105-SRPT-PDUFA`
+- `TRD-20250110-ABBV-ACTIVIST`
+- `TRD-20250115-TRUP-SPINOFF`
+
+Benefits: Readable without opening, sortable by date, grep-friendly
+
+### Directory Structure
+
+```
+trades/
+├── active/              # Current positions
+│   └── TRD-YYYYMMDD-TICKER-ARCH.json
+├── closed/
+│   ├── wins/           # Profitable trades (post-mortems)
+│   │   └── TRD-YYYYMMDD-TICKER-ARCH.md
+│   └── losses/         # Losing trades (post-mortems)
+│       └── TRD-YYYYMMDD-TICKER-ARCH.md
+├── conditional/        # CONDITIONAL scores user declined
+│   └── TRD-YYYYMMDD-TICKER-ARCH.json
+└── passed/            # Failed kill screens or PASS scores
+    └── YYYY-MM-DD-TICKER-ARCH.json
+
+universe/
+├── events.json        # Upcoming catalysts
+├── events_archive.json # Past catalysts
+├── watchlist/         # Ideas under investigation
+│   └── TICKER.md
+└── screened/          # Monthly kill screen results
+    └── YYYY-MM.json
+
+precedents/
+├── index.json         # Tag → trade_id mappings
+└── patterns.md        # Named patterns
+
+logs/
+├── screen/           # Kill screen logs
+├── analyze/          # Analysis logs
+├── score/            # Scoring logs
+├── open/             # Position opening logs
+├── monitor/          # Monitoring logs
+├── close/            # Closing logs
+├── regime/           # Regime update logs
+├── search/           # Search logs
+├── scan/             # Scanning logs
+└── review/           # Review logs
+
+alerts.json           # Active alerts
+alerts_archive.json   # Acknowledged alerts
+```
+
 ## Important Files
 
 | File | Purpose | Update Frequency |
 |------|---------|------------------|
+| `TECHNICAL_SPEC.md` | Technical implementation reference | Rarely (major updates) |
 | `FRAMEWORK.md` | Human-readable framework rules | Rarely (framework updates) |
+| `CLAUDE.md` | Agent operational guidelines (this file) | Rarely (agent behavior) |
 | `CONFIG.json` | Account size, risk params, regime state | Daily (regime), rarely (config) |
 | `schema/*.json` | Machine-readable rules | Rarely (framework updates) |
+| `schema/CHANGELOG.md` | Framework version history | Each version update |
 | `universe/events.json` | Upcoming catalyst calendar | Weekly via `scan` skill |
 | `precedents/patterns.md` | Named patterns from experience | After closing trades |
+| `alerts.json` | Active alerts requiring action | Real-time by skills |
 
 ## Data Sources & Integration
 
-Skills fetch external data via web search and APIs:
-- **Price data**: Stooq (`stooq.com/q/d/l/?s={ticker}.us&i=d`)
-- **SEC filings**: `data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json`
-- **FDA catalysts**: `www.accessdata.fda.gov/scripts/cder/daf/`
-- **News/media**: Web search for mainstream coverage (info parity checks)
+**See TECHNICAL_SPEC.md §20 and "Data Management" section above for complete data source strategy.**
+
+Skills fetch external data with graceful degradation:
+
+**Price data** (priority order from CONFIG.json):
+1. IBKR paper account (real-time) - `127.0.0.1:4002`
+2. Stooq (15min delay) - `stooq.com/q/d/l/?s={ticker}.us&i=d`
+3. Yahoo Finance (fallback)
+
+**SEC filings**:
+- Primary: `data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json`
+- Fallback: Manual 10-Q/10-K parsing, third-party tools
+
+**FDA catalysts**:
+- `www.accessdata.fda.gov/scripts/cder/daf/`
+
+**News/media**:
+- Web search for mainstream coverage (info parity checks)
+- Mainstream outlets: WSJ, Bloomberg, FT, CNBC, Reuters, NYT Business
+
+**Cache policy** (from CONFIG.json):
+- Price data: 60 minutes
+- Financials: 90 days (invalidate on new filing/restatement)
+- Events: Manual refresh via `scan` skill
 
 ## Workflow Notes
 

@@ -41,14 +41,30 @@ Reference: `schema/kill_screens.json`
 **Legislative Only:**
 - Macro Conflict
 
-### Step 2: Run Each Screen
-For each applicable screen:
-1. Gather required data (financials, deal terms, etc.)
-2. Calculate or verify metric
-3. Compare to threshold
-4. If ANY screen fails → STOP and return FAIL
+### Step 2: Gather Data with Fallback
 
-### Step 3: Log Result
+**Data Source Strategy** (see TECHNICAL_SPEC.md §2.1):
+
+**Financials** (from CONFIG.json data_sources.financials_priority):
+1. SEC API: `data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json`
+2. If fails → Manual calculation from 10-Q/10-K
+3. If fails → Third-party screening tools
+4. If all fail → Log error, notify user, halt
+
+**Data Validation** (see TECHNICAL_SPEC.md §2.2):
+- M-Score expected range: -2 to +2 (flag if >10 or <-10, try alternative)
+- Z-Score expected range: -5 to +10 (flag extreme outliers)
+- Strict threshold enforcement: 1.79 < 1.81 = FAIL (no tolerance)
+
+### Step 3: Run Each Screen
+For each applicable screen:
+1. Gather required data (with fallback strategy above)
+2. Validate data for anomalies
+3. Calculate or verify metric
+4. Compare to threshold
+5. If ANY screen fails → STOP and return FAIL
+
+### Step 4: Log Result
 Update `universe/screened/{YYYY-MM}.json`:
 
 ```json
@@ -64,6 +80,30 @@ Update `universe/screened/{YYYY-MM}.json`:
   }
 }
 ```
+
+### Step 5: Write Log Entry
+
+Append to `logs/screen/YYYY-MM-DD.log`:
+
+```json
+{
+  "timestamp": "2025-01-05T11:20:00Z",
+  "skill": "screen",
+  "ticker": "SRPT",
+  "archetype": "pdufa",
+  "outcome": "PASS",
+  "metrics": {
+    "m_score": -2.1,
+    "z_score": 2.5,
+    "kill_screens_passed": true
+  },
+  "data_sources": ["SEC API"],
+  "execution_time_ms": 950,
+  "notes": "Quick screen passed. Ready for full analyze."
+}
+```
+
+Log every execution for audit trail and performance tracking.
 
 ## Output
 ```json

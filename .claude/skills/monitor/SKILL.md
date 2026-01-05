@@ -99,22 +99,63 @@ Add monitoring entry:
 }
 ```
 
-### Step 4: Generate Alerts
+### Step 4: Generate Alerts (if any triggered)
 
-Return alerts for any trades needing action:
+**See TECHNICAL_SPEC.md §14 for complete alerting specification.**
+
+If exit signals detected, write to `alerts.json`:
 
 ```json
 {
   "alerts": [
     {
-      "trade_id": "TRD-2025-001",
+      "id": "ALERT-{YYYYMMDDHHMMSS}",
+      "timestamp": "2025-01-05T14:30:00Z",
+      "priority": "immediate",
+      "type": "exit_signal",
+      "trade_id": "TRD-20250105-SRPT-PDUFA",
       "ticker": "SRPT",
-      "alert": "weighted_sum at 2.1 - consider 50% exit",
-      "current_price": 155.00,
-      "action_required": true
+      "message": "Info parity weighted sum = 2.1. Exit 50% recommended.",
+      "details": {
+        "current_price": 155.00,
+        "entry_price": 125.50,
+        "unrealized_gain_pct": 0.235,
+        "weighted_sum": 2.1,
+        "signals": {
+          "media": true,
+          "iv": true,
+          "price": false
+        }
+      },
+      "action_required": true,
+      "acknowledged": false
     }
-  ],
-  "all_trades_updated": true
+  ]
+}
+```
+
+**Alert Priority Levels:**
+- **immediate**: Exit signals (≥2.0), cockroach, stop loss, regime change
+- **daily_digest**: Monitoring updates, P&L summaries
+- **weekly_review**: Framework calibration, performance metrics
+
+### Step 5: Write Log Entry
+
+Append to `logs/monitor/YYYY-MM-DD.log`:
+
+```json
+{
+  "timestamp": "2025-01-05T09:30:00Z",
+  "skill": "monitor",
+  "outcome": "COMPLETE",
+  "metrics": {
+    "trades_monitored": 3,
+    "alerts_generated": 1,
+    "actions_required": 1
+  },
+  "data_sources": ["IBKR", "Yahoo Finance", "web search (news)"],
+  "execution_time_ms": 3200,
+  "notes": "1 exit signal detected (TRD-20250105-SRPT-PDUFA at weighted_sum 2.1)"
 }
 ```
 

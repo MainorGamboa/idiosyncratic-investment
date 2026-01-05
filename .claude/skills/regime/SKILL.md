@@ -99,6 +99,65 @@ If regime has shifted to elevated/high:
 - Suggest position size reductions
 - Suggest stop tightening
 
+### Step 7: Generate Alerts (if regime changed)
+
+If regime has shifted (VIX crosses threshold, credit spreads widen significantly), write to `alerts.json`:
+
+**See TECHNICAL_SPEC.md §14 for complete alerting specification.**
+
+```json
+{
+  "alerts": [
+    {
+      "id": "ALERT-{YYYY}{MM}{DD}{HH}{MM}{SS}",
+      "timestamp": "2025-01-05T09:00:00Z",
+      "priority": "immediate",
+      "type": "regime_change",
+      "message": "VIX crossed 30 threshold (current: 32). Review merger arb positions.",
+      "details": {
+        "vix": 32.0,
+        "vix_previous": 28.5,
+        "hy_oas": 485,
+        "hy_oas_baseline": 350,
+        "recommended_actions": [
+          "Pause all new merger arb positions",
+          "Review existing merger arb trades",
+          "Consider exiting lowest-conviction positions"
+        ]
+      },
+      "action_required": true,
+      "acknowledged": false
+    }
+  ]
+}
+```
+
+Alert only when regime crosses thresholds (VIX 20, 30 or HY OAS +100bp), not on daily updates within same regime.
+
+### Step 8: Write Log Entry
+
+Append to `logs/regime/YYYY-MM-DD.log`:
+
+```json
+{
+  "timestamp": "2025-01-05T09:00:00Z",
+  "skill": "regime",
+  "outcome": "COMPLETE",
+  "metrics": {
+    "vix": 18.5,
+    "vix_level": "15-20",
+    "hy_oas_bps": 340,
+    "credit_condition": "stable",
+    "regime_changed": false
+  },
+  "data_sources": ["Yahoo Finance (^VIX)", "FRED (BAMLH0A0HYM2)"],
+  "execution_time_ms": 850,
+  "notes": "Market regime normal. No alerts generated."
+}
+```
+
+Log every execution for historical regime tracking.
+
 ## Output
 ```json
 {

@@ -61,11 +61,21 @@ position_value = min(max_position_size, calculated_from_kelly)
 - Positive skew (Spin-off, Liquidation): 50% of Kelly
 
 ### Step 3: Generate Trade ID
-Format: `TRD-{YYYY}-{NNN}`
 
-Example: `TRD-2025-001`
+**See TECHNICAL_SPEC.md §15.1 for complete trade ID specification.**
 
-Find next available number by checking existing trade IDs in trades/active/ and trades/closed/.
+Format: `TRD-YYYYMMDD-TICKER-ARCHETYPE`
+
+Examples:
+- `TRD-20250105-SRPT-PDUFA`
+- `TRD-20250110-ABBV-ACTIVIST`
+- `TRD-20250115-TRUP-SPINOFF`
+
+Benefits:
+- Readable without opening file
+- Sortable by date
+- Grep-friendly
+- Self-documenting (ticker and archetype visible)
 
 ### Step 4: Create Active Trade File
 Create `trades/active/{TRADE_ID}.json`:
@@ -132,11 +142,58 @@ Create `trades/active/{TRADE_ID}.json`:
 }
 ```
 
-### Step 5: (Optional) Execute Paper Trade
-To place the order in IBKR: `python scripts/ibkr_paper.py place {ticker} {action} {shares} --order-type {MKT|LMT} --limit {price}`
+### Step 5: Place Entry Order
+
+**See TECHNICAL_SPEC.md §10 for complete order execution logic.**
+
+**Order type:** Limit order at bid/ask midpoint
+- Rationale: Better price, acceptable no-fill risk for non-urgent entries
+- Time in force: DAY
+
+**Process:**
+1. Get current bid/ask quotes for {ticker}
+2. Calculate midpoint: `(bid + ask) / 2`
+3. Place limit order at midpoint
+4. If not filled after 30 minutes:
+   - Check if price moved >5% from limit → Cancel, mark "missed entry"
+   - Otherwise → Adjust limit to new midpoint, retry
+
+**Execution** (if using IBKR paper):
+```bash
+python scripts/ibkr_paper.py place {ticker} BUY {shares} --order-type LMT --limit {midpoint_price}
+```
+
+Track order status and log entry price once filled.
 
 ### Step 6: Link to Event (if applicable)
 If there's a linked event in `universe/events.json`, update the event's `linked_idea` field.
+
+### Step 7: Write Log Entry
+
+Append to `logs/open/YYYY-MM-DD.log`:
+
+```json
+{
+  "timestamp": "2025-01-05T16:30:00Z",
+  "skill": "open",
+  "trade_id": "TRD-20250105-SRPT-PDUFA",
+  "ticker": "SRPT",
+  "archetype": "pdufa",
+  "outcome": "SUCCESS",
+  "metrics": {
+    "entry_price": 125.50,
+    "shares": 30,
+    "position_value": 3765,
+    "position_pct": 0.015,
+    "archetype_max_pct": 0.015,
+    "score": 8.5,
+    "binding_constraint": "archetype_cap"
+  },
+  "data_sources": ["IBKR quotes", "CONFIG.json"],
+  "execution_time_ms": 1850,
+  "notes": "BUY decision executed. Limit order filled at midpoint."
+}
+```
 
 ## Output
 ```json

@@ -28,6 +28,19 @@
     "alerts": [],
     "last_updated": "2026-01-02T14:30:00Z"
   },
-  "framework_version": "3.7",
-  "notes": "Update regime daily via 'regime' skill. v3.7 changes: Market cap ceiling ($50B), industry Z-Score adjustments, PDUFA financial screens, enhanced activist sourcing."
+  "framework_version": "1.0",
+  "schema_format_version": "1.0",
+  "data_sources": {
+    "price_priority": ["ibkr_paper", "stooq", "yahoo_finance"],
+    "financials_priority": ["sec_api", "manual_calculation", "third_party"],
+    "cache_policy": {
+      "price_duration_minutes": 60,
+      "financials_duration_days": 90
+    }
+  },
+  "alerts": {
+    "active_alerts_file": "alerts.json",
+    "archive_file": "alerts_archive.json"
+  },
+  "notes": "v1.0 launch. Framework reset from v3.7 pre-release. See TECHNICAL_SPEC.md for implementation details."
 }
