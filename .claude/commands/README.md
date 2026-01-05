@@ -18,13 +18,33 @@ This directory contains slash commands to automate common skill execution workfl
 - Displays alerts and P&L
 - **When**: Intraday or after significant market moves
 
+### Discovery & Research
+
+**`/discover`** - Find new catalyst events
+- Scans FDA PDUFA calendar, SEC 13D filings, merger announcements
+- Updates universe/events.json with new catalysts
+- Displays newly discovered opportunities by archetype
+- Prompts to analyze promising tickers
+- **When**: Weekly to maintain 8-12 active catalyst events
+
 ### Analysis & Entry
 
-**`/analyze-idea TICKER`** - Full analysis pipeline
+**`/analyze-idea TICKER`** - Analysis pipeline (no position opening)
 - Kill screens → Analyze → Score
 - Displays recommendation (BUY/CONDITIONAL/PASS)
-- Prompts to open position if BUY
-- **When**: New idea discovered or catalyst triggered
+- Prompts to open position if BUY (but doesn't auto-open)
+- **When**: Want to analyze without committing to open position yet
+
+**`/new-trade TICKER`** - Complete end-to-end workflow
+- Kill screens → Analyze → Score → Open position
+- Auto-opens if BUY (≥8.25), asks confirmation if CONDITIONAL
+- Creates active trade in trades/active/
+- **When**: Ready to go from idea to position in one command
+
+**`/open-position TICKER`** - Open position from scored watchlist
+- Opens position from already-analyzed ticker
+- Requires existing watchlist file with score
+- **When**: Already ran `/analyze-idea`, now ready to open position
 
 ### Exit & Close
 
@@ -50,21 +70,40 @@ This directory contains slash commands to automate common skill execution workfl
 4. **Fail-fast**: Stop immediately on kill screen failures
 5. **Traceable**: All decisions logged to appropriate directories
 
-## Typical Daily Workflow
+## Typical Workflows
 
+### Daily Workflow
 ```
 Morning:
   /daily                    # Update regime + monitor positions
 
 During market hours:
-  /analyze-idea TICKER      # New opportunity discovered
+  /new-trade TICKER         # New opportunity → open position
   /quick-check              # After significant market moves
 
 End of day:
   /close-trade TRADE_ID     # If exit signal triggered
+```
 
-End of week:
-  /weekly-review            # Friday/Sunday routine
+### Weekly Workflow
+```
+Sunday evening or Friday after close:
+  /weekly-review            # Generate review + scan catalysts
+  /discover                 # Find new opportunities for the week
+```
+
+### New Idea Workflows
+
+**Option 1: Cautious (analyze first, decide later)**
+```
+/analyze-idea TICKER        # Just analyze and score
+# Review the thesis and score...
+/open-position TICKER       # Open if you like it
+```
+
+**Option 2: Aggressive (go from idea to position)**
+```
+/new-trade TICKER           # Complete workflow: analyze → open
 ```
 
 ## Manual Skill Invocation

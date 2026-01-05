@@ -27,7 +27,36 @@ The workflow automation system uses Claude Code slash commands to chain skills t
 
 ## Automated Workflows
 
-### 1. Daily Morning Routine (`/daily`)
+### 1. Discovery Workflow (`/discover`)
+
+```
+START
+  │
+  └─► scan skill ─────────► Find new catalysts
+                             │
+                             ├─► FDA PDUFA calendar
+                             ├─► SEC 13D filings (activists)
+                             ├─► Merger announcements (8-K)
+                             ├─► Spin-off announcements
+                             └─► Legislative developments
+                             │
+                             ▼
+                        Update universe/events.json
+                             │
+                             ▼
+                        Display new events by archetype
+                             │
+                             ▼
+                        Prompt: "Analyze TICKER?"
+                             │
+                             └─ YES ──► /analyze-idea TICKER or /new-trade TICKER
+```
+
+**Output**: Updated events.json, list of new catalysts to investigate
+
+---
+
+### 2. Daily Morning Routine (`/daily`)
 
 ```
 START
@@ -45,7 +74,7 @@ START
 
 ---
 
-### 2. New Idea Analysis (`/analyze-idea TICKER`)
+### 3. Analysis Only (`/analyze-idea TICKER`)
 
 ```
 START: TICKER provided
@@ -74,11 +103,90 @@ START: TICKER provided
   └─► Display final score and recommendation
 ```
 
-**Output**: Watchlist file, scored analysis, optional active trade
+**Output**: Watchlist file, scored analysis (NO position opened automatically)
+
+**Use when**: Want to analyze without committing to open position yet
 
 ---
 
-### 3. Quick Status Check (`/quick-check`)
+### 4. Complete Trade Workflow (`/new-trade TICKER`)
+
+```
+START: TICKER provided
+  │
+  ├─► screen skill ────► Kill screens (M-Score, Z-Score, etc.)
+  │                       │
+  │                       ├─ FAIL ──► Log to trades/passed/
+  │                       │            EXIT WORKFLOW
+  │                       │
+  │                       └─ PASS ──► Continue
+  │
+  ├─► analyze skill ───► Full analysis + watchlist creation
+  │                       (universe/watchlist/TICKER.md)
+  │
+  ├─► score skill ─────► 6-filter scoring
+  │                       │
+  │                       ├─ <6.5 (PASS) ──► Log to trades/passed/
+  │                       │                   EXIT WORKFLOW
+  │                       │
+  │                       ├─ 6.5-8.24 (CONDITIONAL) ──► Ask user confirmation
+  │                       │                              │
+  │                       │                              ├─ NO ──► Log to trades/conditional/
+  │                       │                              │          EXIT WORKFLOW
+  │                       │                              │
+  │                       │                              └─ YES ──► Continue to open
+  │                       │
+  │                       └─ ≥8.25 (BUY) ──► Auto-proceed to open
+  │
+  ├─► open skill ──────► Create position
+  │                       │
+  │                       ├─► Calculate position size (Kellner + Kelly)
+  │                       ├─► Create trades/active/TRD-*.json
+  │                       ├─► Submit limit order (bid/ask midpoint)
+  │                       └─► Display trade confirmation
+  │
+  └─► Display summary ─► Trade ID, size, entry, exit plan
+```
+
+**Output**: Active trade in trades/active/, entry order submitted
+
+**Use when**: Ready to go from idea to open position in one command
+
+---
+
+### 5. Open Position from Watchlist (`/open-position TICKER`)
+
+```
+START: TICKER provided
+  │
+  ├─► Check watchlist ─► Verify universe/watchlist/TICKER.md exists
+  │                       │
+  │                       └─ NOT FOUND ──► Error: "Run /analyze-idea first"
+  │                                         EXIT WORKFLOW
+  │
+  ├─► Read score ──────► Get score from watchlist file
+  │                       │
+  │                       ├─ <6.5 ──► Error: "PASS score, cannot open"
+  │                       │            EXIT WORKFLOW
+  │                       │
+  │                       ├─ 6.5-8.24 (CONDITIONAL) ──► Ask user confirmation
+  │                       │                              │
+  │                       │                              └─ NO ──► EXIT WORKFLOW
+  │                       │
+  │                       └─ ≥8.25 (BUY) ──► Proceed
+  │
+  ├─► open skill ──────► Create position (same as /new-trade)
+  │
+  └─► Display summary ─► Trade ID, size, entry, exit plan
+```
+
+**Output**: Active trade in trades/active/, entry order submitted
+
+**Use when**: Already analyzed with `/analyze-idea`, now ready to open
+
+---
+
+### 6. Quick Status Check (`/quick-check`)
 
 ```
 START
@@ -96,7 +204,7 @@ START
 
 ---
 
-### 4. Weekly Review (`/weekly-review`)
+### 7. Weekly Review (`/weekly-review`)
 
 ```
 START
@@ -116,7 +224,7 @@ START
 
 ---
 
-### 5. Close Position (`/close-trade TRADE_ID`)
+### 8. Close Position (`/close-trade TRADE_ID`)
 
 ```
 START: TRADE_ID provided
@@ -147,7 +255,10 @@ START: TRADE_ID provided
 /daily
 
 # During market hours (new idea discovered)
-/analyze-idea SRPT
+/new-trade SRPT              # Go from idea → position
+# OR
+/analyze-idea SRPT           # Just analyze first
+/open-position SRPT          # Open later if you like it
 
 # Afternoon (exit signal triggered)
 /close-trade TRD-20250105-SRPT-PDUFA
@@ -160,16 +271,20 @@ START: TRADE_ID provided
 
 ```bash
 # Friday after market close OR Sunday evening
-/weekly-review
+/weekly-review               # Performance review
+/discover                    # Find new catalysts for next week
 ```
 
 ## Manual vs Automated
 
 | Task | Manual Method | Automated Method |
 |------|---------------|------------------|
+| Find catalysts | `/skill scan` | `/discover` |
 | Morning routine | `/skill regime` then `/skill monitor` | `/daily` |
-| Analyze new idea | `/skill screen TICKER` → `/skill analyze TICKER` → `/skill score TICKER` | `/analyze-idea TICKER` |
-| Check status | Read CONFIG.json, check alerts.json, run monitor | `/quick-check` |
+| Analyze idea (no position) | `/skill screen TICKER` → `/skill analyze TICKER` → `/skill score TICKER` | `/analyze-idea TICKER` |
+| Idea → Position | Screen → Analyze → Score → Open (4 skills) | `/new-trade TICKER` |
+| Open from watchlist | `/skill open TICKER` | `/open-position TICKER` |
+| Check status | Read CONFIG, check alerts, monitor | `/quick-check` |
 | Close position | `/skill close TRADE_ID` | `/close-trade TRADE_ID` |
 | Weekly review | `/skill review` then `/skill scan` | `/weekly-review` |
 
