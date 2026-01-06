@@ -1,126 +1,138 @@
-# Workflow Automation Commands
+# Autonomous Trading Commands
 
-This directory contains slash commands to automate common skill execution workflows in the idiosyncratic trading system.
+This system uses **3 simple commands** to run the entire trading operation autonomously.
 
-## Available Commands
+## The 3 Commands
 
-### Daily Operations
+### 1. `/daily` - Complete Daily Cycle
 
-**`/daily`** - Morning routine
-- Updates regime (VIX, credit spreads)
-- Monitors all active trades
-- Shows alerts and action items
-- **When**: Every market day before 9:30 AM ET
+**Runs everything automatically:**
+- Update market regime (VIX, credit)
+- Monitor & auto-close positions with exit signals
+- Scan for new catalyst events
+- Analyze new events → score → auto-open BUY positions
+- Generate daily summary
 
-**`/quick-check`** - Fast status check
-- Shows regime state
-- Monitors positions
-- Displays alerts and P&L
-- **When**: Intraday or after significant market moves
+**When**: Every market day before 9:30 AM ET
 
-### Discovery & Research
+**Token-efficient**: Processes 2-3 events per day, builds coverage incrementally
 
-**`/discover`** - Find new catalyst events
-- Scans FDA PDUFA calendar, SEC 13D filings, merger announcements
-- Updates universe/events.json with new catalysts
-- Displays newly discovered opportunities by archetype
-- Prompts to analyze promising tickers
-- **When**: Weekly to maintain 8-12 active catalyst events
+---
 
-### Analysis & Entry
+### 2. `/weekly` - Complete Weekly Review
 
-**`/analyze-idea TICKER`** - Analysis pipeline (no position opening)
-- Kill screens → Analyze → Score
-- Displays recommendation (BUY/CONDITIONAL/PASS)
-- Prompts to open position if BUY (but doesn't auto-open)
-- **When**: Want to analyze without committing to open position yet
+**Runs everything automatically:**
+- Performance review (wins, losses, patterns)
+- Deep catalyst scan (90-day forward look)
+- Watchlist maintenance (re-score stale items)
+- Precedent index updates
+- Framework calibration check
 
-**`/new-trade TICKER`** - Complete end-to-end workflow
-- Kill screens → Analyze → Score → Open position
-- Auto-opens if BUY (≥8.25), asks confirmation if CONDITIONAL
-- Creates active trade in trades/active/
-- **When**: Ready to go from idea to position in one command
+**When**: Friday after close OR Sunday evening
 
-**`/open-position TICKER`** - Open position from scored watchlist
-- Opens position from already-analyzed ticker
-- Requires existing watchlist file with score
-- **When**: Already ran `/analyze-idea`, now ready to open position
+---
 
-### Exit & Close
+### 3. `/analyze TICKER` - Manual Ticker Analysis
 
-**`/close-trade TRADE_ID`** - Close position
-- Closes position, calculates P&L
-- Creates post-mortem
-- Updates precedents
-- **When**: Exit signal ≥2.0, catalyst occurs, stop loss hit
+**For specific ideas outside automated flow:**
+- Kill screens → Analyze → Score → Auto-open if BUY
+- Only needed when YOU have a ticker idea
 
-### Weekly Maintenance
+**Example**: `/analyze SRPT`
 
-**`/weekly-review`** - End of week review
-- Generates review report
-- Scans for new catalysts
-- Checks stale watchlist items
-- **When**: Friday after close or Sunday evening
+---
 
-## Command Design Principles
+## How It Works
 
-1. **Simple & focused**: Each command does one workflow
-2. **Skill composition**: Commands chain existing skills, don't duplicate logic
-3. **User confirmation**: Commands prompt before high-stakes actions (opening/closing positions)
-4. **Fail-fast**: Stop immediately on kill screen failures
-5. **Traceable**: All decisions logged to appropriate directories
-
-## Typical Workflows
-
-### Daily Workflow
-```
-Morning:
-  /daily                    # Update regime + monitor positions
-
-During market hours:
-  /new-trade TICKER         # New opportunity → open position
-  /quick-check              # After significant market moves
-
-End of day:
-  /close-trade TRADE_ID     # If exit signal triggered
+### Daily Pattern
+```bash
+# Every morning
+/daily
+# That's it. The agent handles everything.
 ```
 
-### Weekly Workflow
-```
-Sunday evening or Friday after close:
-  /weekly-review            # Generate review + scan catalysts
-  /discover                 # Find new opportunities for the week
-```
+The `/daily` command:
+1. Updates regime
+2. Closes positions with exit signals (≥2.0)
+3. Scans for new catalysts
+4. Analyzes 2-3 new events (token-efficient)
+5. Opens BUY positions (respects max_positions limit from CONFIG.json)
+6. Reports summary
 
-### New Idea Workflows
+**No user decisions needed** - fully autonomous.
 
-**Option 1: Cautious (analyze first, decide later)**
-```
-/analyze-idea TICKER        # Just analyze and score
-# Review the thesis and score...
-/open-position TICKER       # Open if you like it
-```
-
-**Option 2: Aggressive (go from idea to position)**
-```
-/new-trade TICKER           # Complete workflow: analyze → open
+### Weekly Pattern
+```bash
+# Friday or Sunday
+/weekly
+# Reviews performance, scans deep, maintains watchlist
 ```
 
-## Manual Skill Invocation
+### Manual Override
+```bash
+# Only when you have a specific ticker idea
+/analyze SRPT
+```
 
-You can still invoke skills directly for specific use cases:
+---
 
-- `/skill regime` - Just update market regime
-- `/skill screen TICKER` - Fast kill screen check only
-- `/skill search TAGS` - Find similar precedent trades
-- `/skill scan` - Update catalyst calendar only
+## Philosophy: Autonomous Agent
 
-## Extending Workflows
+**Old approach**: 8 commands, user decides every step
+**New approach**: 3 commands, agent decides autonomously
 
-To add new commands:
-1. Create `.claude/commands/your-command.md`
-2. Describe the workflow steps clearly
-3. Specify when to use it
-4. Keep it simple and focused on one workflow
+### Decision Rules (Built-in)
 
-Commands are just markdown files that prompt Claude Code to execute a sequence of skills. The simpler, the better.
+- **Auto-close**: Exit signal ≥2.0 → close position immediately
+- **Auto-open**: Score ≥8.25 (BUY) → open position (if under max_positions)
+- **Log CONDITIONAL**: Score 6.5-8.24 → log to trades/conditional/ for review
+- **Log PASS**: Score <6.5 OR kill screen fail → log to trades/passed/
+
+### Token Management
+
+Daily command processes incrementally:
+- **Day 1**: 3 events scanned, 2 analyzed, 1 opened
+- **Day 2**: 3 more events, continue building
+- **Day 3+**: Maintain coverage, add new events
+
+Over weeks, full coverage builds up.
+
+### Max Positions Protection
+
+CONFIG.json has `max_positions: 10` - agent respects this automatically.
+
+---
+
+## Benefits
+
+1. **Simple**: 3 commands vs 8
+2. **Autonomous**: Agent makes decisions, not user
+3. **Token-efficient**: Incremental processing over days
+4. **Complete**: Nothing falls through cracks
+5. **Traceable**: Everything logged (passed/, conditional/, active/, closed/)
+
+---
+
+## What Happened to Old Commands?
+
+Removed for simplicity:
+- ~~`/analyze-idea`~~ → Use `/analyze TICKER`
+- ~~`/new-trade`~~ → Now automatic in `/daily`
+- ~~`/open-position`~~ → Now automatic in `/daily`
+- ~~`/close-trade`~~ → Now automatic in `/daily`
+- ~~`/discover`~~ → Now automatic in `/daily`
+- ~~`/quick-check`~~ → Check logs/ or run `/daily`
+- ~~`/weekly-review`~~ → Now `/weekly`
+
+**Less commands, more automation.**
+
+---
+
+## Extending
+
+To add custom behavior:
+1. Edit `.claude/commands/daily.md` or `weekly.md`
+2. Adjust decision rules (e.g., change BUY threshold from 8.25)
+3. Add new data sources to scan step
+
+Skills (`.codex/skills/*`) remain unchanged - commands orchestrate them.

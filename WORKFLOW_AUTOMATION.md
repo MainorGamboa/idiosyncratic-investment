@@ -1,334 +1,348 @@
-# Workflow Automation System
+# Autonomous Trading Workflow
 
-## Overview
+## Philosophy
 
-The workflow automation system uses Claude Code slash commands to chain skills together, eliminating manual step-by-step execution. Commands are stored in `.claude/commands/` and can be invoked with `/command-name`.
+The system uses **autonomous agent execution** with **3 simple commands**:
+- `/daily` - Complete daily trading cycle
+- `/weekly` - Complete weekly review
+- `/analyze TICKER` - Manual ticker analysis
+
+The agent makes decisions automatically based on framework rules. No user intervention required.
+
+---
 
 ## Command Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        SLASH COMMANDS                            │
-│                    (.claude/commands/*.md)                       │
-└────────────┬─────────────────────────────────────┬──────────────┘
-             │                                     │
-             ▼                                     ▼
-    ┌─────────────────┐                  ┌─────────────────┐
-    │  SKILLS LAYER   │                  │   DATA LAYER    │
-    │ (.codex/skills) │◄─────────────────┤ (schema/*.json) │
-    └────────┬────────┘                  └─────────────────┘
+│                    AUTONOMOUS COMMANDS                           │
+│                  (.claude/commands/*.md)                         │
+│                                                                   │
+│  /daily  →  Full cycle: regime → monitor → scan → analyze       │
+│  /weekly →  Review + deep scan + maintenance                     │
+│  /analyze → Manual ticker override                               │
+└────────────┬────────────────────────────────────────────────────┘
+             │
+             ▼
+    ┌─────────────────┐
+    │  SKILLS LAYER   │  (Autonomous decision-making)
+    │ (.codex/skills) │  - Auto-close if exit ≥2.0
+    │                 │  - Auto-open if score ≥8.25
+    │                 │  - Respect max_positions limit
+    └────────┬────────┘
+             │
+             ▼
+    ┌─────────────────┐
+    │   DATA LAYER    │
+    │ (schema/*.json) │  - Kill screens
+    │ (CONFIG.json)   │  - Scoring rules
+    │                 │  - Exit protocols
+    └────────┬────────┘
              │
              ▼
     ┌─────────────────┐
     │  FILE OUTPUTS   │
-    │ (trades/, logs/)│
+    │ (trades/, logs/)│  - Active positions
+    │ (universe/)     │  - Watchlist
+    │ (precedents/)   │  - Patterns
     └─────────────────┘
 ```
 
-## Automated Workflows
+---
 
-### 1. Discovery Workflow (`/discover`)
+## Daily Autonomous Cycle (`/daily`)
 
 ```
 START
   │
-  └─► scan skill ─────────► Find new catalysts
-                             │
-                             ├─► FDA PDUFA calendar
-                             ├─► SEC 13D filings (activists)
-                             ├─► Merger announcements (8-K)
-                             ├─► Spin-off announcements
-                             └─► Legislative developments
-                             │
-                             ▼
-                        Update universe/events.json
-                             │
-                             ▼
-                        Display new events by archetype
-                             │
-                             ▼
-                        Prompt: "Analyze TICKER?"
-                             │
-                             └─ YES ──► /analyze-idea TICKER or /new-trade TICKER
+  ├─► 1. REGIME UPDATE
+  │   └─► regime skill → Update CONFIG.json (VIX, credit spreads)
+  │
+  ├─► 2. MONITOR & AUTO-CLOSE
+  │   └─► monitor skill → Check active trades
+  │       │
+  │       └─► If exit signal ≥2.0:
+  │           └─► close skill (auto-close, create post-mortem)
+  │
+  ├─► 3. SCAN NEW EVENTS
+  │   └─► scan skill → FDA, SEC 13D, mergers, spin-offs
+  │       └─► Update universe/events.json
+  │
+  ├─► 4. PROCESS EVENTS PIPELINE (Token-efficient: 2-3 events/day)
+  │   │
+  │   └─► For each unanalyzed event:
+  │       │
+  │       ├─► screen skill → Kill screens
+  │       │   ├─ FAIL → Log to trades/passed/, SKIP
+  │       │   └─ PASS → Continue
+  │       │
+  │       ├─► analyze skill → Create watchlist/TICKER.md
+  │       │
+  │       ├─► score skill → Calculate score
+  │       │   │
+  │       │   ├─ Score <6.5 (PASS) → Log to trades/passed/
+  │       │   │
+  │       │   ├─ Score 6.5-8.24 (CONDITIONAL) → Log to trades/conditional/
+  │       │   │
+  │       │   └─ Score ≥8.25 (BUY) → Continue to open
+  │       │
+  │       └─► open skill (if BUY + under max_positions)
+  │           └─► Create trades/active/TRD-*.json
+  │               Submit entry order
+  │
+  └─► 5. DAILY SUMMARY
+      ├─► Regime state
+      ├─► Positions opened today
+      ├─► Positions closed today
+      ├─► Active positions (X/10)
+      ├─► New events discovered
+      └─► Alerts requiring attention
 ```
 
-**Output**: Updated events.json, list of new catalysts to investigate
+**Key Design Points:**
+- **Incremental**: Processes 2-3 events per day (token-efficient)
+- **Autonomous**: Auto-opens BUY scores, auto-closes exit signals
+- **Protected**: Respects max_positions limit from CONFIG.json
+- **Complete**: Full cycle from scan to close
 
 ---
 
-### 2. Daily Morning Routine (`/daily`)
+## Weekly Review Cycle (`/weekly`)
 
 ```
 START
   │
-  ├─► regime skill ────► Update CONFIG.json (VIX, HY OAS)
+  ├─► 1. PERFORMANCE REVIEW
+  │   └─► review skill
+  │       ├─► Analyze closed trades this week
+  │       ├─► Calculate win rate, avg return, P&L
+  │       ├─► Extract lessons learned
+  │       └─► Update precedents/patterns.md
   │
-  ├─► monitor skill ───► Check active trades for exit signals
+  ├─► 2. DEEP CATALYST SCAN
+  │   └─► scan skill (comprehensive, 90-day forward)
+  │       ├─► FDA PDUFA calendar
+  │       ├─► SEC 13D filings (last 7 days)
+  │       ├─► Merger/spin-off announcements
+  │       ├─► Legislative developments
+  │       └─► Goal: 8-12 active catalyst events
   │
-  ├─► Read alerts.json ─► Display active alerts
+  ├─► 3. WATCHLIST MAINTENANCE
+  │   ├─► Check stale items (>7 days old)
+  │   ├─► Re-score if material news
+  │   └─► Archive outdated events
   │
-  └─► Summary ─────────► Regime state + Action items
+  ├─► 4. PRECEDENT INDEX UPDATE
+  │   ├─► Verify precedents/index.json current
+  │   ├─► Add tags from closed trades
+  │   └─► Update patterns.md
+  │
+  ├─► 5. FRAMEWORK CALIBRATION
+  │   ├─► Review kill screen effectiveness
+  │   ├─► Check scoring threshold accuracy
+  │   └─► Flag systematic issues
+  │
+  └─► 6. WEEKLY SUMMARY
+      ├─► Week's performance metrics
+      ├─► New catalysts added
+      ├─► Active positions status
+      ├─► Regime changes
+      └─► Action items for next week
 ```
-
-**Output**: Updated CONFIG.json, alerts, monitoring logs
 
 ---
 
-### 3. Analysis Only (`/analyze-idea TICKER`)
+## Manual Ticker Analysis (`/analyze TICKER`)
 
 ```
-START: TICKER provided
+START: User provides TICKER
   │
-  ├─► screen skill ────► Kill screens (M-Score, Z-Score, etc.)
-  │                       │
-  │                       ├─ FAIL ──► Log to trades/passed/
-  │                       │            EXIT WORKFLOW
-  │                       │
-  │                       └─ PASS ──► Continue
+  ├─► screen skill → Kill screens
+  │   ├─ FAIL → Log to trades/passed/, EXIT
+  │   └─ PASS → Continue
   │
-  ├─► analyze skill ───► Full analysis + watchlist creation
-  │                       (universe/watchlist/TICKER.md)
+  ├─► analyze skill → Create watchlist
   │
-  ├─► score skill ─────► 6-filter scoring
-  │                       │
-  │                       ├─ <6.5 (PASS) ──► Log to trades/passed/
-  │                       │
-  │                       ├─ 6.5-8.24 (CONDITIONAL) ──► Explain confirmation needed
-  │                       │
-  │                       └─ ≥8.25 (BUY) ──► Prompt user: "Open position?"
-  │                                           │
-  │                                           └─ YES ──► open skill
-  │                                                      (creates trades/active/*.json)
+  ├─► score skill → Calculate score
+  │   │
+  │   ├─ <6.5 (PASS) → Log, EXIT
+  │   ├─ 6.5-8.24 (CONDITIONAL) → Log to trades/conditional/
+  │   └─ ≥8.25 (BUY) → Continue
   │
-  └─► Display final score and recommendation
+  └─► open skill (if BUY + under max_positions)
+      └─► Create active trade
 ```
 
-**Output**: Watchlist file, scored analysis (NO position opened automatically)
-
-**Use when**: Want to analyze without committing to open position yet
+**Use only when**: User has specific ticker idea outside automated daily flow.
 
 ---
 
-### 4. Complete Trade Workflow (`/new-trade TICKER`)
+## Token Efficiency Strategy
 
-```
-START: TICKER provided
-  │
-  ├─► screen skill ────► Kill screens (M-Score, Z-Score, etc.)
-  │                       │
-  │                       ├─ FAIL ──► Log to trades/passed/
-  │                       │            EXIT WORKFLOW
-  │                       │
-  │                       └─ PASS ──► Continue
-  │
-  ├─► analyze skill ───► Full analysis + watchlist creation
-  │                       (universe/watchlist/TICKER.md)
-  │
-  ├─► score skill ─────► 6-filter scoring
-  │                       │
-  │                       ├─ <6.5 (PASS) ──► Log to trades/passed/
-  │                       │                   EXIT WORKFLOW
-  │                       │
-  │                       ├─ 6.5-8.24 (CONDITIONAL) ──► Ask user confirmation
-  │                       │                              │
-  │                       │                              ├─ NO ──► Log to trades/conditional/
-  │                       │                              │          EXIT WORKFLOW
-  │                       │                              │
-  │                       │                              └─ YES ──► Continue to open
-  │                       │
-  │                       └─ ≥8.25 (BUY) ──► Auto-proceed to open
-  │
-  ├─► open skill ──────► Create position
-  │                       │
-  │                       ├─► Calculate position size (Kellner + Kelly)
-  │                       ├─► Create trades/active/TRD-*.json
-  │                       ├─► Submit limit order (bid/ask midpoint)
-  │                       └─► Display trade confirmation
-  │
-  └─► Display summary ─► Trade ID, size, entry, exit plan
-```
+### Daily Incremental Processing
 
-**Output**: Active trade in trades/active/, entry order submitted
+Instead of analyzing all 12 events in one day (expensive), process incrementally:
 
-**Use when**: Ready to go from idea to open position in one command
+**Week 1:**
+- Day 1: Scan finds 8 events → Analyze 2 → Open 1 BUY
+- Day 2: Scan finds 2 more → Analyze 3 total → Open 1 BUY
+- Day 3: Analyze remaining 3 → Open 1 BUY
+- Day 4-5: Maintenance, monitor existing, scan for new
+
+**Week 2:**
+- Day 1: New scans + monitor existing + close exits
+- Continue building coverage
+
+**Result**: Over 2 weeks, full coverage achieved with manageable token usage per day.
+
+### Max Positions Limit
+
+CONFIG.json: `max_positions: 10`
+
+Agent stops opening new positions when limit reached. This prevents:
+- Over-trading
+- Excessive token usage
+- Portfolio concentration risk
 
 ---
 
-### 5. Open Position from Watchlist (`/open-position TICKER`)
+## Autonomous Decision Rules
 
-```
-START: TICKER provided
-  │
-  ├─► Check watchlist ─► Verify universe/watchlist/TICKER.md exists
-  │                       │
-  │                       └─ NOT FOUND ──► Error: "Run /analyze-idea first"
-  │                                         EXIT WORKFLOW
-  │
-  ├─► Read score ──────► Get score from watchlist file
-  │                       │
-  │                       ├─ <6.5 ──► Error: "PASS score, cannot open"
-  │                       │            EXIT WORKFLOW
-  │                       │
-  │                       ├─ 6.5-8.24 (CONDITIONAL) ──► Ask user confirmation
-  │                       │                              │
-  │                       │                              └─ NO ──► EXIT WORKFLOW
-  │                       │
-  │                       └─ ≥8.25 (BUY) ──► Proceed
-  │
-  ├─► open skill ──────► Create position (same as /new-trade)
-  │
-  └─► Display summary ─► Trade ID, size, entry, exit plan
-```
+### Auto-Close Rules
+- Exit signal ≥2.0 → **CLOSE** immediately
+- Exit signal ≥3.0 → **CLOSE** immediately (full exit)
+- Cockroach Rule triggered → **CLOSE** immediately
+- Thesis Break → **CLOSE** immediately
 
-**Output**: Active trade in trades/active/, entry order submitted
+### Auto-Open Rules
+- Score ≥8.25 (BUY) → **OPEN** position
+- Current positions < max_positions → **ALLOW**
+- Current positions ≥ max_positions → **SKIP** (log to alerts)
 
-**Use when**: Already analyzed with `/analyze-idea`, now ready to open
+### Logging Rules
+- Score <6.5 (PASS) → Log to `trades/passed/`
+- Score 6.5-8.24 (CONDITIONAL) → Log to `trades/conditional/`
+- Kill screen fail → Log to `trades/passed/`
+
+**No user intervention needed** - agent follows rules autonomously.
 
 ---
 
-### 6. Quick Status Check (`/quick-check`)
+## Usage Patterns
 
-```
-START
-  │
-  ├─► Read CONFIG.json ─► Display regime (VIX, credit)
-  │
-  ├─► monitor skill ───► Check active trades
-  │
-  ├─► Read alerts.json ─► Show active alerts
-  │
-  └─► Calculate P&L ───► Quick summary
-```
-
-**Output**: Status summary (no file changes)
-
----
-
-### 7. Weekly Review (`/weekly-review`)
-
-```
-START
-  │
-  ├─► review skill ────► Generate weekly report
-  │                       (performance, closed trades, lessons)
-  │
-  ├─► scan skill ──────► Update catalyst calendar
-  │                       (FDA PDUFA, SEC 13D, earnings)
-  │
-  ├─► Check watchlist ─► Flag stale items (>7 days old)
-  │
-  └─► Display summary ─► Performance metrics + action items
-```
-
-**Output**: Review report, updated events.json, stale watchlist alerts
-
----
-
-### 8. Close Position (`/close-trade TRADE_ID`)
-
-```
-START: TRADE_ID provided
-  │
-  └─► close skill ─────► Close position workflow
-                          │
-                          ├─► Calculate P&L
-                          │
-                          ├─► Create post-mortem
-                          │   (trades/closed/wins/ or losses/)
-                          │
-                          ├─► Update precedents/index.json
-                          │
-                          └─► Archive from trades/active/
-
-```
-
-**Output**: Post-mortem file, updated precedents, archived trade
-
----
-
-## Typical Usage Patterns
-
-### Daily Pattern
-
+### Daily Routine
 ```bash
-# Morning (before market open)
+# Every market day, 9:00 AM
 /daily
 
-# During market hours (new idea discovered)
-/new-trade SRPT              # Go from idea → position
-# OR
-/analyze-idea SRPT           # Just analyze first
-/open-position SRPT          # Open later if you like it
-
-# Afternoon (exit signal triggered)
-/close-trade TRD-20250105-SRPT-PDUFA
-
-# Intraday check (after VIX spike)
-/quick-check
+# Agent handles:
+# - Regime update
+# - Close exit signals
+# - Scan new events
+# - Analyze 2-3 events
+# - Open BUY positions
+# - Report summary
 ```
 
-### Weekly Pattern
-
+### Weekly Routine
 ```bash
-# Friday after market close OR Sunday evening
-/weekly-review               # Performance review
-/discover                    # Find new catalysts for next week
+# Friday 4:30 PM or Sunday evening
+/weekly
+
+# Agent handles:
+# - Performance review
+# - Deep catalyst scan
+# - Watchlist maintenance
+# - Precedent updates
+# - Framework calibration
 ```
 
-## Manual vs Automated
+### Manual Override
+```bash
+# Only when you have specific ticker idea
+/analyze SRPT
 
-| Task | Manual Method | Automated Method |
-|------|---------------|------------------|
-| Find catalysts | `/skill scan` | `/discover` |
-| Morning routine | `/skill regime` then `/skill monitor` | `/daily` |
-| Analyze idea (no position) | `/skill screen TICKER` → `/skill analyze TICKER` → `/skill score TICKER` | `/analyze-idea TICKER` |
-| Idea → Position | Screen → Analyze → Score → Open (4 skills) | `/new-trade TICKER` |
-| Open from watchlist | `/skill open TICKER` | `/open-position TICKER` |
-| Check status | Read CONFIG, check alerts, monitor | `/quick-check` |
-| Close position | `/skill close TRADE_ID` | `/close-trade TRADE_ID` |
-| Weekly review | `/skill review` then `/skill scan` | `/weekly-review` |
+# Agent handles:
+# - Kill screens
+# - Analysis
+# - Scoring
+# - Auto-open if BUY
+```
 
-## Benefits
+---
 
-1. **Fewer steps**: One command instead of 3-5 skill invocations
-2. **Fail-fast**: Workflows stop immediately if kill screens fail
-3. **User prompts**: Commands ask for confirmation before high-stakes actions
-4. **Consistent**: Same workflow every time, no missed steps
-5. **Traceable**: All decisions still logged to appropriate files
+## Benefits of Autonomous Design
+
+1. **Simplicity**: 3 commands vs 8 (67% reduction)
+2. **Autonomous**: Agent makes framework-based decisions
+3. **Token-efficient**: Incremental daily processing
+4. **Complete coverage**: Nothing missed over time
+5. **Protected**: max_positions prevents overtrading
+6. **Traceable**: All decisions logged
+7. **Scalable**: Works with agent token limits
+
+---
+
+## File Organization
+
+### Automated by `/daily`
+```
+trades/
+├── active/              # Auto-created when score ≥8.25
+├── passed/              # Auto-logged when score <6.5 or kill fail
+└── conditional/         # Auto-logged when score 6.5-8.24
+
+universe/
+├── events.json          # Auto-updated by scan
+└── watchlist/           # Auto-created by analyze
+
+logs/
+└── */YYYY-MM-DD.log     # Auto-logged by each skill
+```
+
+### Automated by `/weekly`
+```
+precedents/
+├── index.json           # Auto-updated from closed trades
+└── patterns.md          # Auto-updated with lessons
+
+trades/closed/
+├── wins/                # Auto-created by close skill
+└── losses/              # Auto-created by close skill
+```
+
+---
 
 ## Extension Points
 
-Add new commands by creating `.claude/commands/your-command.md`:
+### Customize Decision Rules
 
+Edit `.claude/commands/daily.md`:
 ```markdown
-# Your Command
-
-Describe what the command does.
-
-1. Step 1: Run skill X
-2. Step 2: Run skill Y
-3. Step 3: Display result
-
-Use when: [describe use case]
+- If score ≥8.5 (BUY): Auto-open position  # Raised from 8.25
+- If score ≥2.5: Auto-close               # Raised from 2.0
 ```
 
-Claude Code will automatically discover and execute the workflow.
+### Adjust Token Budget
 
-## Integration with Existing System
+Edit daily processing limit:
+```markdown
+Process Events Pipeline (Token-efficient: 4-5 events/day)  # Raised from 2-3
+```
 
-- **Skills remain unchanged**: Commands orchestrate existing skills
-- **Schemas still authoritative**: Commands don't bypass framework rules
-- **Logging still happens**: Each skill logs to its own log directory
-- **User control**: Commands prompt before irreversible actions (open/close positions)
+### Add Data Sources
 
-## Next Steps
-
-1. Test `/daily` command tomorrow morning
-2. Use `/analyze-idea` for next new ticker
-3. Replace manual skill chains with appropriate commands
-4. Extend with custom commands for your specific patterns
+Edit scan step:
+```markdown
+3. **Discover New Events**
+   - Scan FDA PDUFA calendar
+   - Scan SEC 13D filings
+   - [NEW] Scan earnings calendars
+   - Update universe/events.json
+```
 
 ---
 
-**Version**: 1.0 (2025-01-05)
-**Compatible with**: Framework v1.0
+**Version**: 2.0 (Autonomous Agent Design)
+**Framework**: v1.0 compatible
+**Design**: Token-efficient, fully autonomous, 3-command system
