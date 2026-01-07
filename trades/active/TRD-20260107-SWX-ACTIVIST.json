@@ -79,6 +79,24 @@
       "thesis_breaks": [],
       "action": "HOLD",
       "notes": "Same-day entry monitoring. Price essentially flat (-0.1%). No mainstream media coverage. IV data unavailable. Icahn holds 8.48% stake (above 5% threshold). Positive development: Amended cooperation agreement with 4 Icahn board seats at 2026 annual meeting. Yellow flag: Icahn has been reducing position (sales in Nov 2024, March 2025), but board engagement suggests ongoing commitment to value realization."
+    },
+    {
+      "date": "2026-01-07",
+      "price": 80.46,
+      "change_from_entry_pct": 0.00037,
+      "unrealized_pnl": 0.54,
+      "info_parity": {
+        "media": 0,
+        "iv": 0,
+        "price": 0
+      },
+      "weighted_sum": 0.0,
+      "ma_200": null,
+      "above_200_ma": null,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price slightly up to 80.46. No new media signals. Holding."
     }
   ],
 

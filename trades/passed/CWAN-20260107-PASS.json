@@ -1,0 +1,76 @@
+{
+  "trade_id": "PASS-2026-004",
+  "ticker": "CWAN",
+  "company": "Clearwater Analytics Holdings, Inc.",
+  "archetype": "activist",
+  "decision_date": "2026-01-07",
+  "decision": "PASS",
+  "reason": "Failed kill screens",
+
+  "event_context": {
+    "event_ids": ["EVT-2026-031"],
+    "catalyst": "Starboard Value ~5% stake and push for strategic alternatives (sales process)",
+    "date": "2025-12-13",
+    "days_to_catalyst": -25
+  },
+
+  "market_data": {
+    "price_at_decision": 28.50,
+    "market_cap_millions": 7160
+  },
+
+  "kill_screen_results": {
+    "passed": false,
+    "failures": [
+      {
+        "screen": "Beneish M-Score",
+        "threshold": -1.78,
+        "actual": -0.6,
+        "status": "FAIL",
+        "severity": "high",
+        "note": "M-Score of -0.6 is significantly above the -1.78 threshold, indicating a high probability of earnings manipulation or aggressive accounting. This is often seen in high-growth companies with significant accruals or SGI (Sales Growth Index) components, but the framework treats any score > -1.78 as a mandatory pass."
+      }
+    ],
+    "passes": [
+      {
+        "screen": "Market Cap Ceiling",
+        "threshold_millions": 50000,
+        "actual_millions": 7160,
+        "status": "PASS"
+      },
+      {
+        "screen": "Altman Z-Score (Software Adjusted)",
+        "threshold": 2.0,
+        "actual": 4.15,
+        "status": "PASS",
+        "note": "Passed Software/SaaS adjustment (>2.0) with validated Gross Margin (70% > 60%) and Revenue Growth (50% > 20%)."
+      }
+    ]
+  },
+
+  "financial_summary": {
+    "m_score": -0.6,
+    "z_score": 4.15,
+    "gross_margin_pct": 70,
+    "revenue_growth_pct": 50.9,
+    "recent_news": "Starboard Value stake revealed Dec 13, 2025."
+  },
+
+  "thesis_assessment": {
+    "bull_case": "Tier-1 activist (Starboard) push for a sale is a high-conviction catalyst for a SaaS leader with 70% margins and 50%+ growth. Strategic value to larger fintech/data players is high.",
+    "bear_case": "M-Score of -0.6 signals accounting risk. High growth often masks 'low quality' earnings or aggressive revenue recognition. If Starboard's push fails to materialize a buyer, the stock could de-rate based on accounting skepticism.",
+    "framework_view": "M-Score kill screen is binary. Despite the tier-1 activist involvement and strong growth, the framework prioritizes accounting integrity/low-risk earnings. -0.6 is a hard fail."
+  },
+
+  "lessons_learned": [
+    "High-growth SaaS companies (50%+ YoY) frequently trigger the Beneish M-Score screen due to the SGI component.",
+    "Activists often target companies where they see value, but this framework's safety-first approach (M-Score) overrides even Tier-1 activist presence."
+  ],
+
+  "tags": [
+    "activist",
+    "m_score_fail",
+    "saas",
+    "starboard_value"
+  ]
+}

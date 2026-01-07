@@ -1,0 +1,78 @@
+{
+  "trade_id": "PASS-2026-005",
+  "ticker": "SOAR",
+  "company": "Volato Group, Inc.",
+  "archetype": "merger_arb",
+  "decision_date": "2026-01-07",
+  "decision": "PASS",
+  "reason": "Failed kill screens",
+
+  "event_context": {
+    "event_ids": ["EVT-2026-028"],
+    "catalyst": "Volato Group merger with M2i Global (All-Stock)",
+    "date": "2026-03-31",
+    "days_to_catalyst": 83,
+    "note": "Targeted Q1 2026 close"
+  },
+
+  "market_data": {
+    "price_at_decision": 0.40,
+    "market_cap_millions": 5.4,
+    "note": "Micro-cap ($5M) with extreme volatility"
+  },
+
+  "kill_screen_results": {
+    "passed": false,
+    "failures": [
+      {
+        "screen": "Altman Z-Score",
+        "threshold": 1.81,
+        "actual": -5.36,
+        "status": "FAIL",
+        "severity": "critical",
+        "note": "Z-Score of -5.36 indicates imminent bankruptcy risk. In an all-stock merger, if the deal breaks, the downside is likely 100% (insolvency)."
+      }
+    ],
+    "passes": [
+      {
+        "screen": "Market Cap Ceiling",
+        "threshold_millions": 100000,
+        "actual_millions": 5.4,
+        "status": "PASS"
+      },
+      {
+        "screen": "Hostile Deal",
+        "threshold": true,
+        "actual": false,
+        "status": "PASS",
+        "note": "Appears to be a friendly/negotiated merger"
+      }
+    ]
+  },
+
+  "financial_summary": {
+    "z_score": -5.36,
+    "market_cap_millions": 5.4,
+    "deal_type": "All-Stock Merger"
+  },
+
+  "thesis_assessment": {
+    "bull_case": "Speculative reverse merger play. If successful, shareholders transition to M2i Global equity. Potential for high volatility upside if deal closes.",
+    "bear_case": "Extreme financial distress (Z-Score -5.36). If the deal fails (regulatory, shareholder vote, financing), SOAR likely goes to zero/bankruptcy. All-stock nature exposes holders to the acquirer's risk as well.",
+    "framework_view": "The framework explicitly filters out targets with high bankruptcy risk (Z-Score < 1.81) to protect capital in 'deal break' scenarios. SOAR is a textbook example of this risk."
+  },
+
+  "lessons_learned": [
+    "Micro-cap reverse mergers often involve distressed shells.",
+    "Z-Score is a highly effective filter for avoiding 'deal break' zeros in merger arb.",
+    "All-stock deals in distressed companies are effectively 'rescue financing' in disguise."
+  ],
+
+  "tags": [
+    "merger_arb",
+    "z_score_fail",
+    "micro_cap",
+    "distressed",
+    "reverse_merger"
+  ]
+}

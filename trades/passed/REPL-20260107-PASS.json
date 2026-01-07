@@ -1,0 +1,88 @@
+{
+  "trade_id": "PASS-2026-002",
+  "ticker": "REPL",
+  "company": "Replimune Group Inc.",
+  "archetype": "pdufa",
+  "decision_date": "2026-01-07",
+  "decision": "PASS",
+  "reason": "Failed kill screens",
+
+  "event_context": {
+    "event_ids": ["EVT-2026-020"],
+    "catalyst": "FDA decision on RP1 (vusolimogene oderparepvec) for advanced melanoma",
+    "date": "2026-04-10",
+    "days_to_catalyst": 93
+  },
+
+  "market_data": {
+    "price_at_decision": 11.13,
+    "market_cap_millions": 663,
+    "note": "Price based on recent insider sale price"
+  },
+
+  "kill_screen_results": {
+    "passed": false,
+    "failures": [
+      {
+        "screen": "PDUFA Financial Health - Cash Runway",
+        "threshold_months": 18,
+        "actual_months": "12.4",
+        "status": "FAIL",
+        "severity": "critical",
+        "note": "Company guidance (Fiscal Q3 2025) states cash funds operations 'into Q4 2026'. From Jan 2026, this represents <12 months of runway. Threshold is 18 months to cover potential delays or CRL."
+      }
+    ],
+    "passes": [
+      {
+        "screen": "Market Cap Ceiling",
+        "threshold_millions": 50000,
+        "actual_millions": 663,
+        "status": "PASS"
+      },
+      {
+        "screen": "PDUFA Financial Health - Debt/Equity",
+        "threshold": 0.75,
+        "actual": 0.26,
+        "status": "PASS",
+        "calculation": "Total Debt $76M / Equity $289M"
+      },
+      {
+        "screen": "PDUFA Financial Health - Net Cash Position",
+        "threshold": 0,
+        "actual_millions": 460,
+        "status": "PASS",
+        "calculation": "Cash ~$536M - Debt $76M"
+      }
+    ]
+  },
+
+  "financial_summary": {
+    "cash_and_equivalents_millions": 536.5,
+    "total_debt_millions": 76.3,
+    "debt_details": "Hercules Capital term loan, interest-only period through Oct 2027",
+    "burn_rate_monthly_millions": "~22",
+    "runway_guidance": "Into Q4 2026",
+    "recent_financing": "Public offering completed Nov 2024"
+  },
+
+  "thesis_assessment": {
+    "bull_case": "RP1 shows competitive ORR (~33%) in anti-PD1 failed melanoma; PDUFA date April 2026 follows resubmission (suggesting previous issues addressed?); substantial cash balance ($536M) looks optically high.",
+    "bear_case": "Cash runway fails 18-month safety buffer requirement. If April 2026 PDUFA results in delay/CRL, company will have <6 months cash remaining, forcing highly dilutive raise or restructuring. Insiders selling in Nov/Dec 2025 adds conviction to the 'pass' decision.",
+    "framework_view": "Strict adherence to 18-month runway rule. While $536M is a large absolute number, the high burn rate and limited timeline ('into Q4 2026') creates binary risk at the PDUFA event without sufficient buffer."
+  },
+
+  "lessons_learned": [
+    "Absolute cash numbers can be misleading; burn rate context is key.",
+    "Guidance 'into Q4 2026' when current date is Jan 2026 means <1 year runway.",
+    "Insider selling ahead of PDUFA correlates with the financial risk flag.",
+    "PDUFA dates for 'resubmissions' imply prior failures/delays, increasing the need for financial buffer."
+  ],
+
+  "tags": [
+    "pdufa",
+    "biotech",
+    "cash_runway_fail",
+    "insider_selling",
+    "resubmission_risk"
+  ]
+}

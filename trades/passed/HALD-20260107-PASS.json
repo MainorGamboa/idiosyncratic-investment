@@ -1,0 +1,70 @@
+{
+  "trade_id": "PASS-2026-011",
+  "ticker": "HALD",
+  "company": "Halda Therapeutics",
+  "archetype": "merger_arb",
+  "decision_date": "2026-01-07",
+  "decision": "PASS",
+  "reason": "Failed kill screens",
+
+  "event_context": {
+    "event_ids": ["EVT-2026-011"],
+    "catalyst": "Johnson & Johnson acquisition of Halda Therapeutics ($3.05B)",
+    "date": "2026-03-31",
+    "days_to_catalyst": -9,
+    "note": "Deal actually closed Dec 29, 2025. Was private."
+  },
+
+  "market_data": {
+    "price_at_decision": 0.0,
+    "market_cap_millions": 0,
+    "note": "Private company (No public ticker)"
+  },
+
+  "kill_screen_results": {
+    "passed": false,
+    "failures": [
+      {
+        "screen": "Publicly Traded Target",
+        "threshold": true,
+        "actual": false,
+        "status": "FAIL",
+        "severity": "critical",
+        "note": "Halda Therapeutics was a private company. There is no public equity to trade."
+      },
+      {
+        "screen": "Deal Active",
+        "threshold": true,
+        "actual": false,
+        "status": "FAIL",
+        "severity": "critical",
+        "note": "Deal completed on Dec 29, 2025."
+      }
+    ],
+    "passes": []
+  },
+
+  "financial_summary": {
+    "deal_value_billions": 3.05,
+    "acquirer": "Johnson & Johnson (JNJ)",
+    "status": "Closed / Private"
+  },
+
+  "thesis_assessment": {
+    "bull_case": "N/A - Closed deal, private target.",
+    "bear_case": "N/A - Closed deal, private target.",
+    "framework_view": "Event is historical and involved a private target. No actionable trade."
+  },
+
+  "lessons_learned": [
+    "Private company acquisitions often appear in M&A feeds but offer no arb opportunity.",
+    "Check deal completion status immediately; 'expected' dates in databases can be outdated."
+  ],
+
+  "tags": [
+    "merger_arb",
+    "private_company",
+    "deal_closed",
+    "no_ticker"
+  ]
+}

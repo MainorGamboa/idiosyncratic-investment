@@ -1,0 +1,77 @@
+{
+  "trade_id": "PASS-2026-008",
+  "ticker": "SNY",
+  "company": "Sanofi",
+  "archetype": "pdufa",
+  "decision_date": "2026-01-07",
+  "decision": "PASS",
+  "reason": "Failed kill screens",
+
+  "event_context": {
+    "event_ids": ["EVT-2026-016", "EVT-2026-039"],
+    "catalyst": "Multiple FDA decisions (Cerezyme sBLA, Dupixent sBLA)",
+    "date": "2026-01-13",
+    "days_to_catalyst": 6,
+    "note": "Label expansions for existing drugs in a mega-cap pharma."
+  },
+
+  "market_data": {
+    "price_at_decision": 52.50,
+    "market_cap_millions": 117040,
+    "note": "Mega-cap ($117B)"
+  },
+
+  "kill_screen_results": {
+    "passed": false,
+    "failures": [
+      {
+        "screen": "Market Cap Ceiling",
+        "threshold_millions": 50000,
+        "actual_millions": 117040,
+        "status": "FAIL",
+        "severity": "critical",
+        "note": "Sanofi ($117B) exceeds the $50B cap. Framework targets small/mid-cap inefficiencies. Label expansions in mega-caps typically lack the materiality to drive the idiosyncratic alpha this system seeks."
+      }
+    ],
+    "passes": [
+      {
+        "screen": "Beneish M-Score",
+        "threshold": -1.78,
+        "actual": -2.58,
+        "status": "PASS"
+      },
+      {
+        "screen": "PDUFA Financial Health",
+        "threshold": "Various",
+        "actual": "Pass",
+        "status": "PASS",
+        "note": "Strong cash flow ($11B FCF) and low leverage (0.32 D/E) validate financial health despite borderline Z-Score."
+      }
+    ]
+  },
+
+  "financial_summary": {
+    "market_cap_billions": 117.0,
+    "z_score": 1.73,
+    "m_score": -2.58,
+    "cash_position_billions": 10.45
+  },
+
+  "thesis_assessment": {
+    "bull_case": "Dupixent continues to be a growth engine with new indications (CSU). Cerezyme update removes a legacy overhang. Valuation is reasonable.",
+    "bear_case": "Framework violation (Market Cap). The specific catalysts (sBLAs) are incremental, not transformative. Edge in predicting FDA outcomes for mega-caps is low due to high analyst coverage.",
+    "framework_view": "Hard pass on size. This is a general pharmaceutical hold, not a special situation trade."
+  },
+
+  "lessons_learned": [
+    "Mega-caps frequently appear in catalyst calendars (PDUFAs) but rarely fit the 'Special Situation' framework due to size/materiality.",
+    "Market Cap Ceiling effectively filters out high-efficiency/low-alpha events."
+  ],
+
+  "tags": [
+    "pdufa",
+    "market_cap_fail",
+    "mega_cap",
+    "pharma"
+  ]
+}

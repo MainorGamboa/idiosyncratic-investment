@@ -1,0 +1,87 @@
+{
+  "trade_id": "PASS-2026-009",
+  "ticker": "RGNX",
+  "company": "REGENXBIO Inc.",
+  "archetype": "pdufa",
+  "decision_date": "2026-01-07",
+  "decision": "PASS",
+  "reason": "Failed kill screens",
+
+  "event_context": {
+    "event_ids": ["EVT-2026-038"],
+    "catalyst": "FDA decision on RGX-121 for Hunter Syndrome (MPS II)",
+    "date": "2026-02-08",
+    "days_to_catalyst": 32
+  },
+
+  "market_data": {
+    "price_at_decision": 15.60,
+    "market_cap_millions": 718,
+    "note": "Price estimated from market cap"
+  },
+
+  "kill_screen_results": {
+    "passed": false,
+    "failures": [
+      {
+        "screen": "PDUFA Financial Health - Cash Runway",
+        "threshold_months": 18,
+        "actual_months": "~14",
+        "status": "FAIL",
+        "severity": "high",
+        "note": "Guidance states cash funds operations 'into early 2027'. From Jan 2026, this leaves ~14 months of runway. Threshold is 18 months to ensure survival through potential CRL/delay without immediate dilution."
+      },
+      {
+        "screen": "PDUFA Financial Health - Debt/Equity",
+        "threshold": 0.75,
+        "actual": 1.25,
+        "status": "FAIL",
+        "severity": "medium",
+        "calculation": "Total Debt $268M / Equity $213.7M = 1.25"
+      }
+    ],
+    "passes": [
+      {
+        "screen": "Market Cap Ceiling",
+        "threshold_millions": 50000,
+        "actual_millions": 718,
+        "status": "PASS"
+      },
+      {
+        "screen": "PDUFA Financial Health - Net Cash Position",
+        "threshold": 0,
+        "actual_millions": 34,
+        "status": "PASS",
+        "calculation": "Cash $302M - Debt $268M = +$34M"
+      }
+    ]
+  },
+
+  "financial_summary": {
+    "cash_and_equivalents_millions": 302.0,
+    "total_debt_millions": 268.1,
+    "shareholders_equity_millions": 213.7,
+    "burn_rate_ttm_millions": 103.3,
+    "runway_guidance": "Into early 2027"
+  },
+
+  "thesis_assessment": {
+    "bull_case": "RGX-121 approval would be transformative and potentially unlock PRV value/milestones, resolving the balance sheet overhang.",
+    "bear_case": "Financials are tight. With <18 months runway and high leverage (1.25 D/E), a CRL or delay would be disastrous, likely forcing a highly dilutive raise or restructuring. The framework prioritizes survival safety over binary upside.",
+    "framework_view": "Classic 'high risk' PDUFA setup that the kill screens are designed to avoid. Insolvency risk in the bear case is too high."
+  },
+
+  "lessons_learned": [
+    "Guidance must be measured from the *current* date, not the reporting date.",
+    "Potential milestone payments (like PRV) should be excluded from safety runway calculations (conservative basis).",
+    "Debt/Equity > 1.0 is a significant red flag for pre-profit biotechs."
+  ],
+
+  "tags": [
+    "pdufa",
+    "biotech",
+    "financial_health_fail",
+    "high_debt",
+    "insufficient_runway"
+  ]
+}

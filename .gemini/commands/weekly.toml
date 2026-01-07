@@ -1,0 +1,20 @@
+description = "Run the weekly performance review and deep maintenance cycle"
+prompt = """
+You are executing the **Weekly Autonomous Review Cycle**.
+
+Follow this sequence:
+
+1.  **Performance Review**: Run the `review` skill.
+    *   Analyze all trades closed this week (`trades/closed/`).
+    *   Calculate win rate, average return, and P&L.
+    *   Update `precedents/patterns.md` with any new lessons learned.
+2.  **Deep Scan**: Run the `scan` skill with extended parameters:
+    *   Look forward 90 days for FDA/PDUFA dates.
+    *   Look back 7 days for SEC filings.
+    *   Ensure `universe/events.json` is comprehensive.
+3.  **Watchlist Maintenance**:
+    *   Check `universe/watchlist/` for stale items (modified > 7 days ago).
+    *   Re-score or archive/delete them if the catalyst has passed or thesis is broken.
+4.  **Precedent Update**: Verify `precedents/index.json` is synced with recent closed trades.
+5.  **Summary**: Provide a comprehensive weekly report summarizing performance metrics, new high-conviction catalysts found, and system health.
+"""

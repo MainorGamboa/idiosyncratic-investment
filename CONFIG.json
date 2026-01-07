@@ -17,16 +17,16 @@
     "kellner_rule": "Max 2% portfolio loss per trade"
   },
   "regime": {
-    "vix": 14.94,
-    "vix_level": "<15",
+    "vix": 15.07,
+    "vix_level": "15-20",
     "vix_action": "Normal operations",
-    "hy_oas_bps": 284,
+    "hy_oas_bps": 301,
     "hy_oas_baseline": 284,
-    "credit_condition": "tight",
-    "credit_action": "Favorable for credit-sensitive strategies",
+    "credit_condition": "stable",
+    "credit_action": "Normal operations",
     "correlation_elevated": false,
     "alerts": [],
-    "last_updated": "2026-01-02T14:30:00Z"
+    "last_updated": "2026-01-07T09:00:00Z"
   },
   "framework_version": "1.0",
   "schema_format_version": "1.0",

@@ -1,0 +1,24 @@
+description = "Run the full autonomous daily trading cycle (Regime, Monitor, Scan, Process)"
+prompt = """
+You are executing the **Daily Autonomous Trading Cycle**.
+
+Follow this sequence strictly:
+
+1.  **Regime**: Run the `regime` skill to update market conditions (VIX, spreads) in `CONFIG.json`.
+2.  **Monitor**: Run the `monitor` skill on **all** active positions in `trades/active/`.
+    *   If any exit signal is ≥ 2.0, automatically execute the `close` skill for that position.
+3.  **Scan**: Run the `scan` skill to identify new catalyst events (FDA, Activist, Merger, etc.) and update `universe/events.json`.
+4.  **Process Pipeline**:
+    *   Identify pending events in `universe/events.json` that do not have a watchlist file yet.
+    *   Select a token-efficient subset (e.g., top 2-3 highest priority events) to process today.
+    *   For each selected event:
+        1.  Run `screen`. (Stop if fail).
+        2.  Run `analyze` (if passed screen).
+        3.  Run `score`.
+        4.  **Auto-Open**: If Score >= 8.25, run the `open` skill (checking `max_positions` constraint in `CONFIG.json` first).
+5.  **Summary**: Generate a concise daily report listing:
+    *   Regime state.
+    *   Positions monitored/closed.
+    *   New events found.
+    *   New positions opened (or passed).
+"""

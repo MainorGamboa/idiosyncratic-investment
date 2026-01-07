@@ -1,0 +1,84 @@
+{
+  "trade_id": "PASS-2026-003",
+  "ticker": "CMCSA",
+  "company": "Comcast Corporation",
+  "archetype": "spinoff",
+  "decision_date": "2026-01-07",
+  "decision": "PASS",
+  "reason": "Failed kill screens",
+
+  "event_context": {
+    "event_ids": ["EVT-2026-012"],
+    "catalyst": "Comcast spin-off of Versant Media Group (VSNT) distribution",
+    "date": "2026-01-02",
+    "days_to_catalyst": -5,
+    "note": "Spinoff completed Jan 2, 2026. VSNT now trading independently."
+  },
+
+  "market_data": {
+    "price_at_decision": 44.50,
+    "market_cap_millions": 100790,
+    "note": "Market cap post-spin remainco"
+  },
+
+  "kill_screen_results": {
+    "passed": false,
+    "failures": [
+      {
+        "screen": "Market Cap Ceiling",
+        "threshold_millions": 50000,
+        "actual_millions": 100790,
+        "status": "FAIL",
+        "severity": "critical",
+        "note": "CMCSA market cap > $100B exceeds the $50B limit for non-merger/non-legislative archetypes. Framework targets inefficiently priced special situations; mega-cap parents are highly efficient."
+      }
+    ],
+    "passes": [
+      {
+        "screen": "Altman Z-Score (Telecom Adjusted)",
+        "threshold": 1.5,
+        "actual": 1.50,
+        "status": "PASS",
+        "note": "Standard Z-Score 1.50 is borderline, but passes with telecom adjustment validated by Piotroski F-Score (8) and Interest Coverage (4.48x)."
+      },
+      {
+        "screen": "Beneish M-Score",
+        "threshold": -1.78,
+        "actual": -2.72,
+        "status": "PASS"
+      }
+    ]
+  },
+
+  "financial_summary": {
+    "piotroski_f_score": 8,
+    "interest_coverage": 4.48,
+    "z_score": 1.50,
+    "m_score": -2.72
+  },
+
+  "thesis_assessment": {
+    "bull_case": "Post-spin 'RemainCo' (GrowthCo) focuses on high-quality broadband/wireless/theme parks assets. Shedding the declining cable network assets (Versant) should improve multiple expansion. Stock up 3.5% post-spin vs VSNT down 25%, validating quality flight.",
+    "bear_case": "Market Cap > $50B kill screen violation. At $100B+, CMCSA is a widely covered institutional staple. The 'conglomerate discount' unwinding is a well-known thesis likely fully priced in. The edge in this transaction likely resides in the sold-off, unloved SpinCo (VSNT) rather than the parent, though VSNT's early performance is poor.",
+    "framework_view": "Strict adherence to the $50B cap. CMCSA is too large for this 'special situations' framework which seeks inefficiency in smaller, overlooked capitalization segments."
+  },
+
+  "lessons_learned": [
+    "Mega-cap parents in spinoffs often fail the specific 'Market Cap Ceiling' screen of this framework.",
+    "The opportunity in such large-cap splits typically lies in the smaller SpinCo (VSNT), assuming it isn't a 'garbage barge' (bad assets dumped).",
+    "VSNT dropping 25% in 3 days suggests it might be a 'garbage barge' or experiencing indiscriminant selling (forced selling by index funds/parents). VSNT should be analyzed separately if it fits the screens."
+  ],
+
+  "alternative_plays": {
+    "note": "Analyze VSNT (Versant Media Group) separately. It likely passes the Market Cap ceiling screen and may be experiencing 'indiscriminant selling' pressure, a classic spinoff pattern.",
+    "action": "Add VSNT to watchlist for potential analysis"
+  },
+
+  "tags": [
+    "spinoff",
+    "market_cap_fail",
+    "mega_cap",
+    "remainco",
+    "parent_co"
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "trade_id": "TRD-20260107-LULU-ACTIVIST",
+  "ticker": "LULU",
+  "archetype": "activist",
+  "status": "active",
+  "thesis": {
+    "summary": "Elliott Management (Tier-1) $1B+ stake demanding CEO replacement (Jane Nielsen for Calvin McDonald). Thesis is operational turnaround and brand cleanup.",
+    "catalyst": "CEO Change / Strategic Review",
+    "catalyst_date": null,
+    "linked_event": "EVT-2026-030"
+  },
+  "scoring": {
+    "catalyst": 1.5,
+    "mispricing": 1.5,
+    "noise_survival": 2.0,
+    "downside_floor": 2.0,
+    "risk_reward": 1.5,
+    "info_half_life": 1.0,
+    "base_score": 9.5,
+    "adjustments": [
+      {
+        "type": "activist_tier",
+        "value": 1.0,
+        "reason": "Tier-1 (Elliott)"
+      }
+    ],
+    "final_score": 10.5
+  },
+  "decision": {
+    "action": "BUY",
+    "date": "2026-01-07",
+    "rationale": "Score 10.5 > 8.25. High conviction Tier-1 activist campaign on high-quality asset trading at compressed valuation."
+  },
+  "position": {
+    "entry_date": "2026-01-07",
+    "entry_price": 211.72,
+    "shares": 7,
+    "cost_basis": 1482.04,
+    "size_percent": 0.059,
+    "stop_price": 190.00,
+    "target_price": 260.00,
+    "order_id": "mock-lulu-1",
+    "ibkr_account": "paper"
+  },
+  "exit_plan": {
+    "info_parity_weights": {
+      "media": 1.0,
+      "iv": 0.5,
+      "price": 1.0
+    },
+    "thesis_break_triggers": [
+      "Elliott exits position (<5% stake)",
+      "Board rejects all demands and wins proxy fight definitively",
+      "Guidance cut >20%"
+    ]
+  },
+  "monitoring": [
+    {
+      "date": "2026-01-07",
+      "price": 211.72,
+      "action": "OPEN",
+      "notes": "Opened position. Elliott campaign active."
+    }
+  ],
+  "precedents": [
+    "SBUX (Elliott 2024)",
+    "PINS (Elliott 2022)"
+  ],
+  "tags": ["activist", "tier-1", "retail", "turnaround"]
+}

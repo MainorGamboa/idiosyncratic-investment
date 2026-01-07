@@ -1,0 +1,62 @@
+{
+  "trade_id": "PASS-2026-010",
+  "ticker": "CLRS",
+  "company": "Clario Holdings, Inc.",
+  "archetype": "merger_arb",
+  "decision_date": "2026-01-07",
+  "decision": "PASS",
+  "reason": "Failed kill screens",
+
+  "event_context": {
+    "event_ids": ["EVT-2026-010"],
+    "catalyst": "Thermo Fisher acquisition of Clario ($8.9B)",
+    "date": "2026-06-30",
+    "days_to_catalyst": 174,
+    "note": "Targeted close mid-2026"
+  },
+
+  "market_data": {
+    "price_at_decision": 0.0,
+    "market_cap_millions": 0,
+    "note": "Private company (No public ticker)"
+  },
+
+  "kill_screen_results": {
+    "passed": false,
+    "failures": [
+      {
+        "screen": "Publicly Traded Target",
+        "threshold": true,
+        "actual": false,
+        "status": "FAIL",
+        "severity": "critical",
+        "note": "Clario is a privately held company (owned by Nordic Capital/Astorg). There is no public equity to trade to capture the merger spread. The ticker 'CLRS' appears to be a placeholder or error."
+      }
+    ],
+    "passes": []
+  },
+
+  "financial_summary": {
+    "deal_value_billions": 8.875,
+    "acquirer": "Thermo Fisher Scientific (TMO)",
+    "status": "Private"
+  },
+
+  "thesis_assessment": {
+    "bull_case": "N/A - No tradeable instrument.",
+    "bear_case": "N/A - No tradeable instrument.",
+    "framework_view": "Merger arbitrage requires a public target to execute the spread capture. As a private acquisition, this event offers no direct trading opportunity under this archetype."
+  },
+
+  "lessons_learned": [
+    "Always verify if the target in a merger is public or private.",
+    "Placeholders in event datasets can mimic tickers; verification is essential."
+  ],
+
+  "tags": [
+    "merger_arb",
+    "private_company",
+    "no_ticker",
+    "untradeable"
+  ]
+}

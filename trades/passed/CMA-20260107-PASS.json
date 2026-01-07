@@ -1,0 +1,85 @@
+{
+  "trade_id": "PASS-2026-007",
+  "ticker": "CMA",
+  "company": "Comerica Incorporated",
+  "archetype": "merger_arb",
+  "decision_date": "2026-01-07",
+  "decision": "PASS",
+  "reason": "Failed kill screens",
+
+  "event_context": {
+    "event_ids": ["EVT-2026-036"],
+    "catalyst": "Fifth Third Bancorp acquisition of Comerica (Shareholder Approved)",
+    "date": "2026-03-31",
+    "days_to_catalyst": 83,
+    "note": "Shareholders approved Jan 6-7, 2026. Closing expected Q1 2026."
+  },
+
+  "market_data": {
+    "price_at_decision": 92.45,
+    "market_cap_millions": 11650,
+    "acquirer_ticker": "FITB",
+    "acquirer_price": 49.98
+  },
+
+  "kill_screen_results": {
+    "passed": false,
+    "failures": [
+      {
+        "screen": "Merger Spread Too Narrow",
+        "threshold": 2.5,
+        "actual": "0.90%",
+        "status": "FAIL",
+        "severity": "high",
+        "note": "Spread compressed to 0.90% following shareholder approval. Offer value $93.28 (1.8663x FITB) vs Price $92.45. Upside is minimal relative to residual regulatory risk."
+      }
+    ],
+    "passes": [
+      {
+        "screen": "Market Cap Ceiling",
+        "threshold_millions": 100000,
+        "actual_millions": 11650,
+        "status": "PASS"
+      },
+      {
+        "screen": "Hostile Deal",
+        "threshold": true,
+        "actual": false,
+        "status": "PASS"
+      },
+      {
+        "screen": "Altman Z-Score (Bank Adjusted)",
+        "threshold": "N/A",
+        "actual": "Pass",
+        "status": "PASS",
+        "note": "Tier 1 Capital ~12% (>8%) and NPL Ratio 2.8% (<3%)."
+      }
+    ]
+  },
+
+  "financial_summary": {
+    "deal_type": "All-Stock",
+    "exchange_ratio": 1.8663,
+    "tier_1_capital_ratio": 12.0,
+    "npl_ratio": 2.8
+  },
+
+  "thesis_assessment": {
+    "bull_case": "Deal is effectively done (shareholder approved). 0.9% spread is 'free money' if it closes quickly. Combined entity creates 9th largest US bank.",
+    "bear_case": "Spread of 0.9% offers insufficient buffer for any unforeseen regulatory delay or macro shock. All-stock nature exposes holder to FITB downside. Framework requires >2.5% to justify capital allocation.",
+    "framework_view": "Classic 'too late' setup. The arbitrage opportunity has been arbed away. The framework avoids picking up pennies in front of steamrollers."
+  },
+
+  "lessons_learned": [
+    "Post-shareholder approval spreads often compress below the 2.5% hurdle.",
+    "Bank merger kill screens (Tier 1/NPL) remain effective health checks even when the primary failure is the spread.",
+    "All-stock deal spreads fluctuate with the acquirer's price, requiring real-time calculation."
+  ],
+
+  "tags": [
+    "merger_arb",
+    "spread_too_narrow",
+    "bank_merger",
+    "shareholder_approved"
+  ]
+}

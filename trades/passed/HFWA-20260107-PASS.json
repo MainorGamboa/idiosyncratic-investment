@@ -1,0 +1,85 @@
+{
+  "trade_id": "PASS-2026-006",
+  "ticker": "HFWA",
+  "company": "Heritage Financial Corporation",
+  "archetype": "merger_arb",
+  "decision_date": "2026-01-07",
+  "decision": "PASS",
+  "reason": "Failed kill screens",
+
+  "event_context": {
+    "event_ids": ["EVT-2026-025"],
+    "catalyst": "Heritage Financial acquisition of Olympic Bancorp (Closing Phase)",
+    "date": "2026-01-31",
+    "days_to_catalyst": 24,
+    "note": "Deal expected to close in Q1 2026 (Jan 31 target)"
+  },
+
+  "market_data": {
+    "price_at_decision": 22.85,
+    "market_cap_millions": 825,
+    "note": "Price estimated from market cap"
+  },
+
+  "kill_screen_results": {
+    "passed": false,
+    "failures": [
+      {
+        "screen": "Merger Spread Too Narrow",
+        "threshold": 2.5,
+        "actual": "Likely < 2.5%",
+        "status": "FAIL",
+        "severity": "high",
+        "note": "Deal is in final stages (closing ~24 days). Spreads typically compress below 2.5% absolute return near completion, failing the framework's minimum spread requirement. Additionally, HFWA is the acquirer, not the target (Olympic), making it the wrong vehicle for a standard spread-capture trade."
+      }
+    ],
+    "passes": [
+      {
+        "screen": "Market Cap Ceiling",
+        "threshold_millions": 100000,
+        "actual_millions": 825,
+        "status": "PASS"
+      },
+      {
+        "screen": "Hostile Deal",
+        "threshold": true,
+        "actual": false,
+        "status": "PASS"
+      },
+      {
+        "screen": "Altman Z-Score (Bank Adjusted)",
+        "threshold": "N/A",
+        "actual": "Pass",
+        "status": "PASS",
+        "note": "Passed Bank Safety Checks: Tier 1 Capital 12.8% (>8%) and NPL Ratio 0.09% (<3%)."
+      }
+    ]
+  },
+
+  "financial_summary": {
+    "tier_1_capital_ratio": 12.8,
+    "npl_ratio": 0.09,
+    "deal_type": "All-Stock Acquisition",
+    "role": "Acquirer"
+  },
+
+  "thesis_assessment": {
+    "bull_case": "Heritage Financial is a healthy regional bank (Tier 1 12.8%, low NPLs) making a strategic, friendly acquisition. Long-term value accretion likely.",
+    "bear_case": "As a 'merger arb' trade, this fails. The spread is compressed due to imminent closing, and HFWA is the acquirer (buyer), meaning owning it exposes one to deal execution risk without the arbitrage spread cushion. The framework requires a >2.5% spread.",
+    "framework_view": "Strict adherence to kill screens. Spread < 2.5% is a fail. Wrong vehicle (acquirer vs target) reinforces the pass decision."
+  },
+
+  "lessons_learned": [
+    "Distinguish clearly between Acquirer and Target in merger events.",
+    "Merger arb kill screens (spread) apply to the deal mechanics. If analyzing the Acquirer, the 'spread' rationale often breaks or indicates a pass.",
+    "Bank-specific health metrics (Tier 1, NPL) successfully replaced standard Z-Score for this analysis."
+  ],
+
+  "tags": [
+    "merger_arb",
+    "spread_too_narrow",
+    "acquirer",
+    "bank_merger",
+    "wrong_vehicle"
+  ]
+}
