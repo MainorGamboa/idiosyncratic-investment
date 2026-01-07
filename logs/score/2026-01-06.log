@@ -1,0 +1,21 @@
+{
+  "timestamp": "2026-01-06T08:45:00Z",
+  "skill": "score",
+  "ticker": "SWX",
+  "archetype": "activist",
+  "outcome": "BUY",
+  "metrics": {
+    "final_score": 10.0,
+    "base_score": 9.5,
+    "adjustments": 0.5,
+    "catalyst": 1.5,
+    "mispricing": 1.5,
+    "noise_survival": 2.0,
+    "downside_floor": 2.0,
+    "risk_reward": 2.0,
+    "info_half_life": 0.5
+  },
+  "data_sources": ["watchlist file", "financials"],
+  "execution_time_ms": 1500,
+  "notes": "Strong regulated utility profile + Icahn Tier-2 adjustment. BUY decision at 9.5."
+}

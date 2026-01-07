@@ -1,0 +1,13 @@
+{
+  "timestamp": "2026-01-06T08:00:00Z",
+  "skill": "scan",
+  "outcome": "COMPLETE",
+  "metrics": {
+    "new_events_found": 7,
+    "sources_checked": ["FDA PDUFA calendar", "SEC 13D filings", "M&A news"],
+    "events_added": 7
+  },
+  "data_sources": ["accessdata.fda.gov", "sec.gov", "Business Wire", "PR Newswire"],
+  "execution_time_ms": 15400,
+  "notes": "Weekly scan completed. Added 7 new catalyst events (4 PDUFA, 2 Merger, 1 Activist). Updated TVTX FSGS event."
+}

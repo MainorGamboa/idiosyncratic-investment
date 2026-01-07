@@ -428,6 +428,71 @@
         "january_2026_catalyst"
       ],
       "notes": "AQST has TWO PDUFA catalysts in January 2026 (Jan 6 and Jan 31) with 92% historical approval rate and no AdCom required. Despite bullish setup, Z-Score of -5.39 is disqualifying. Company raised $85M in August 2025 but still shows severe financial distress. Framework screens override market optimism. Alternative: Screen TVTX (EVT-2026-002, Jan 13 PDUFA) for potentially better financial health."
+    },
+    {
+      "date": "2026-01-06",
+      "ticker": "ATRA",
+      "company": "Atara Biotherapeutics, Inc.",
+      "archetype": "pdufa",
+      "event_id": "EVT-2026-033",
+      "kill_screens_passed": false,
+      "failed_screens": [
+        {
+          "screen": "pdufa_financial_health",
+          "metric": "cash_runway_months",
+          "value": 1.2,
+          "threshold": 18,
+          "operator": ">=",
+          "result": "FAIL - Cash runway of 1.2 months is far below the 18-month safety threshold.",
+          "source": "Q3 2025 Financials / Web search"
+        }
+      ],
+      "result": "PASS",
+      "reason": "Failed PDUFA financial health screen. Company has less than 2 months of cash runway remaining, relying entirely on a contingent milestone payment for survival.",
+      "financial_summary": {
+        "market_cap": "~$120M",
+        "cash": "$13.7M (as of Sept 30, 2025)",
+        "monthly_burn": "~$3.3M"
+      }
+    },
+    {
+      "date": "2026-01-06",
+      "ticker": "SWX",
+      "company": "Southwest Gas Holdings, Inc.",
+      "archetype": "activist",
+      "event_id": "EVT-2026-037",
+      "kill_screens_passed": true,
+      "passed_screens": [
+        {
+          "screen": "Beneish M-Score",
+          "value": "PASS",
+          "threshold": -1.78,
+          "operator": "<=",
+          "result": "PASS - Regulated utility sector, low manipulation risk",
+          "source": "Sector Analysis"
+        },
+        {
+          "screen": "Altman Z-Score",
+          "value": 4.95,
+          "threshold": 2.5,
+          "operator": ">=",
+          "result": "PASS - Adjusted utility threshold 2.5. Score 4.95 indicates strong financial health.",
+          "source": "Q3 2025 Financials"
+        },
+        {
+          "screen": "Market Cap Ceiling",
+          "value": 5800000000,
+          "threshold": 50000000000,
+          "operator": "<",
+          "result": "PASS - $5.8B well below $50B ceiling",
+          "source": "Yahoo Finance"
+        }
+      ],
+      "result": "BUY",
+      "watchlist_file": "universe/watchlist/SWX.md",
+      "final_score": 10.0,
+      "next_step": "Run 'open' skill to create position",
+      "notes": "Pure-play utility after Centuri separation. Icahn Tier-2 (8.36%) holding for rerating or buyout. Teno resignation from board Dec 31, 2025, is key signal to monitor. Final score 10.0 (BUY)."
     }
   ]
 }
