@@ -1,0 +1,16 @@
+{
+  "date": "2026-01-06",
+  "ticker": "ATRA",
+  "archetype": "pdufa",
+  "kill_screens_passed": false,
+  "failed_screens": [
+    {
+      "screen": "pdufa_financial_health",
+      "metric": "cash_runway_months",
+      "value": 1.2,
+      "threshold": 18,
+      "notes": "Est. cash ~$3.9M Jan 1 vs $3.3M/mo burn. Contingent $31M milestone on approval does not count towards runway."
+    }
+  ],
+  "result": "pass"
+}

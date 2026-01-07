@@ -1,0 +1,51 @@
+{
+  "timestamp": "2026-01-06T08:15:00Z",
+  "skill": "analyze",
+  "ticker": "ATRA",
+  "archetype": "pdufa",
+  "outcome": "PASS",
+  "metrics": {
+    "m_score": null,
+    "z_score": null,
+    "market_cap": 120000000,
+    "kill_screens_passed": false,
+    "cash_runway_months": 1.2
+  },
+  "data_sources": ["Atara IR", "SEC Filings", "Web Search"],
+  "execution_time_ms": 12500,
+  "notes": "Failed PDUFA financial health screen. < 2 months cash runway remaining."
+}
+{
+  "timestamp": "2026-01-06T08:30:00Z",
+  "skill": "analyze",
+  "ticker": "SWX",
+  "archetype": "activist",
+  "outcome": "WATCHLIST",
+  "metrics": {
+    "m_score": "PASS",
+    "z_score": 4.95,
+    "market_cap": 5800000000,
+    "kill_screens_passed": true
+  },
+  "data_sources": ["SEC Filings", "13D/A Amendment", "Utility Peer Analysis"],
+  "execution_time_ms": 11200,
+  "notes": "All kill screens passed. Pure-play utility transformation complete. Watchlist file created."
+}
+{
+  "timestamp": "2026-01-06T09:00:00Z",
+  "skill": "analyze",
+  "ticker": "TVTX",
+  "archetype": "pdufa",
+  "outcome": "PASS",
+  "metrics": {
+    "m_score": null,
+    "z_score": null,
+    "market_cap": 3500000000,
+    "kill_screens_passed": false,
+    "net_cash": -25500000,
+    "debt_to_equity": 3.2
+  },
+  "data_sources": ["Travere Q3 2025 Earnings", "Web Search"],
+  "execution_time_ms": 13400,
+  "notes": "Failed PDUFA financial health (Net Cash & D/E). Commercial momentum strong but balance sheet leverage violates strict safety rules."
+}

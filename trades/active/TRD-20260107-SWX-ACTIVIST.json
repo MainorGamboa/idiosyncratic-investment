@@ -1,0 +1,87 @@
+{
+  "trade_id": "TRD-20260107-SWX-ACTIVIST",
+  "ticker": "SWX",
+  "archetype": "activist",
+  "status": "active",
+
+  "thesis": {
+    "summary": "Carl Icahn (Tier-2) value realization phase following Centuri separation. Pure-play regulated gas utility now. Board resignation (Andrew Teno, Dec 31 2025) signals transition to endgame (sale or strategic value unlock).",
+    "catalyst": "Value realization via sale or strategic action",
+    "catalyst_date": null,
+    "linked_event": "EVT-2026-037"
+  },
+
+  "scoring": {
+    "catalyst": 1.5,
+    "mispricing": 1.5,
+    "noise_survival": 2.0,
+    "downside_floor": 2.0,
+    "risk_reward": 2.0,
+    "info_half_life": 0.5,
+    "base_score": 9.5,
+    "adjustments": [
+      {
+        "type": "activist_tier",
+        "value": 0.5,
+        "reason": "Carl Icahn - Tier-2"
+      }
+    ],
+    "final_score": 10.0
+  },
+
+  "decision": {
+    "action": "BUY",
+    "date": "2026-01-07",
+    "rationale": "Score 10.0 exceeds threshold 8.25. Highest conviction setup following de-risking of business model. Pure-play utility status makes it clean acquisition target."
+  },
+
+  "position": {
+    "entry_date": "2026-01-07",
+    "entry_price": 80.43,
+    "shares": 18,
+    "cost_basis": 1447.74,
+    "size_percent": 0.0579,
+    "stop_price": 73.00,
+    "target_price": 100.00,
+    "order_id": "9",
+    "ibkr_account": "paper"
+  },
+
+  "exit_plan": {
+    "info_parity_weights": {
+      "media": 1.0,
+      "iv": 0.5,
+      "price": 1.0
+    },
+    "thesis_break_triggers": [
+      "Icahn fully exits position (13D filing showing <5% stake)",
+      "Major regulatory setback to utility operations",
+      "Acquisition discussions publicly collapse",
+      "Earnings miss with guidance cut >15%"
+    ]
+  },
+
+  "monitoring": [
+    {
+      "date": "2026-01-07",
+      "price": 80.35,
+      "change_from_entry_pct": -0.001,
+      "unrealized_pnl": -1.44,
+      "info_parity": {
+        "media": 0,
+        "iv": 0,
+        "price": 0
+      },
+      "weighted_sum": 0.0,
+      "ma_200": null,
+      "above_200_ma": null,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Same-day entry monitoring. Price essentially flat (-0.1%). No mainstream media coverage. IV data unavailable. Icahn holds 8.48% stake (above 5% threshold). Positive development: Amended cooperation agreement with 4 Icahn board seats at 2026 annual meeting. Yellow flag: Icahn has been reducing position (sales in Nov 2024, March 2025), but board engagement suggests ongoing commitment to value realization."
+    }
+  ],
+
+  "precedents": [],
+  "tags": ["activist", "active", "tier-2", "utility", "regulated", "icahn"]
+}

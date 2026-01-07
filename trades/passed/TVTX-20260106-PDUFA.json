@@ -1,0 +1,43 @@
+{
+  "date": "2026-01-06",
+  "ticker": "TVTX",
+  "archetype": "pdufa",
+  "kill_screens_passed": false,
+  "failed_screens": [
+    {
+      "screen": "pdufa_financial_health",
+      "metric": "net_cash_position",
+      "value": -25500000,
+      "threshold": 0,
+      "operator": ">",
+      "result": "FAIL - Net debt ~$25.5M (Cash ~$294.5M vs Debt $320M)",
+      "notes": "Cash includes Oct $40M milestone. Debt is convertible notes."
+    },
+    {
+      "screen": "pdufa_financial_health",
+      "metric": "debt_to_equity",
+      "value": 3.2,
+      "threshold": 0.75,
+      "operator": "<",
+      "result": "FAIL - Book D/E ~3.2 (>0.75 threshold)",
+      "notes": "Low book equity common for biotech, but strict screen requires <0.75"
+    }
+  ],
+  "passed_screens": [
+    {
+      "screen": "cash_runway",
+      "metric": "months",
+      "value": "Infinite/59+",
+      "threshold": 18,
+      "result": "PASS - Q3 Net Income positive; normalized burn implies >50mo runway"
+    },
+    {
+      "screen": "market_cap_ceiling",
+      "value": 3500000000,
+      "threshold": 50000000000,
+      "result": "PASS"
+    }
+  ],
+  "result": "pass",
+  "note": "Commercial-stage company with Filspari sales ($91M Q3). Fails strict PDUFA financial health screens designed for pre-revenue solvency, despite strong commercial momentum. Framework prioritizes balance sheet safety."
+}
