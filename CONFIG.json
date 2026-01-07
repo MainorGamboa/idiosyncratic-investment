@@ -42,5 +42,17 @@
     "active_alerts_file": "alerts.json",
     "archive_file": "alerts_archive.json"
   },
+  "automation": {
+    "dry_run": false,
+    "auto_approve_orders": false,
+    "require_confirmation": true,
+    "max_positions": 10,
+    "data_cache_ttl_minutes": 60
+  },
+  "testing": {
+    "mock_ibkr": false,
+    "use_fixtures": false,
+    "log_level": "INFO"
+  },
   "notes": "v1.0 launch. Framework reset from v3.7 pre-release. See TECHNICAL_SPEC.md for implementation details."
 }

@@ -1,0 +1,49 @@
+{
+  "ticker": "ATRA",
+  "date": "2026-01-07",
+  "archetype": "unknown",
+  "industry": "biotech",
+  "result": "PASS",
+  "reason": "Kill screens failed",
+  "kill_screens": {
+    "m_score": {
+      "value": 27.53,
+      "threshold": -1.78,
+      "pass": false,
+      "note": "Extreme anomaly - far outside expected range of -2 to +2"
+    },
+    "z_score": {
+      "value": -84.55,
+      "threshold": 1.5,
+      "industry_adjusted": true,
+      "pass": false,
+      "note": "Extreme anomaly - far outside expected range of -5 to +10"
+    }
+  },
+  "market_data": {
+    "price": 14.80,
+    "price_source": "Stooq (15-min delay)",
+    "market_cap": 106708000,
+    "shares_outstanding": 7210000
+  },
+  "financials": {
+    "total_assets": 30167000,
+    "total_liabilities": 66801000,
+    "working_capital": 375000,
+    "revenue": 119177000,
+    "ebit": 38425000,
+    "net_income": 36094000,
+    "equity": -36634000,
+    "note": "Negative equity - liabilities exceed assets by $36.6M"
+  },
+  "data_sources": [
+    "Stooq (15-min delay)",
+    "SEC XBRL API"
+  ],
+  "data_quality_warnings": [
+    "M-Score 27.53 far outside expected range (-2 to +2)",
+    "Z-Score -84.55 far outside expected range (-5 to +10)",
+    "Negative book value - liabilities exceed assets"
+  ],
+  "analysis_notes": "Company has severe financial distress with negative equity. Both M-Score and Z-Score show catastrophic levels indicating high manipulation risk and bankruptcy risk. Automatic PASS per framework rules."
+}

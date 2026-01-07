@@ -29,6 +29,23 @@ Complete 6-filter scoring after initial analysis. Generates final BUY/CONDITIONA
 
 ## Process
 
+### Step 0: Fetch Market Data (AUTOMATED)
+
+**AUTOMATION: Fetch additional market data needed for scoring**
+
+Run the market data fetcher for noise survival and mispricing filters:
+```bash
+python scripts/data_fetcher.py fetch_market_data {TICKER}
+```
+
+This automatically fetches:
+- Current price and 200-day MA
+- Options IV (if available)
+- Trading volume
+- Price stability metrics
+
+Display fetched data for use in scoring filters.
+
 ### Step 1: Score Each Filter
 Reference: `schema/scoring.json`
 
