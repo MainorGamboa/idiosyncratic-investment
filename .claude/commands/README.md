@@ -76,10 +76,6 @@ The `/daily` command:
 
 ---
 
-## Philosophy: Autonomous Agent
-
-**Old approach**: 8 commands, user decides every step
-**New approach**: 3 commands, agent decides autonomously
 
 ### Decision Rules (Built-in)
 
@@ -100,39 +96,3 @@ Over weeks, full coverage builds up.
 ### Max Positions Protection
 
 CONFIG.json has `max_positions: 10` - agent respects this automatically.
-
----
-
-## Benefits
-
-1. **Simple**: 3 commands vs 8
-2. **Autonomous**: Agent makes decisions, not user
-3. **Token-efficient**: Incremental processing over days
-4. **Complete**: Nothing falls through cracks
-5. **Traceable**: Everything logged (passed/, conditional/, active/, closed/)
-
----
-
-## What Happened to Old Commands?
-
-Removed for simplicity:
-- ~~`/analyze-idea`~~ → Use `/analyze TICKER`
-- ~~`/new-trade`~~ → Now automatic in `/daily`
-- ~~`/open-position`~~ → Now automatic in `/daily`
-- ~~`/close-trade`~~ → Now automatic in `/daily`
-- ~~`/discover`~~ → Now automatic in `/daily`
-- ~~`/quick-check`~~ → Check logs/ or run `/daily`
-- ~~`/weekly-review`~~ → Now `/weekly`
-
-**Less commands, more automation.**
-
----
-
-## Extending
-
-To add custom behavior:
-1. Edit `.claude/commands/daily.md` or `weekly.md`
-2. Adjust decision rules (e.g., change BUY threshold from 8.25)
-3. Add new data sources to scan step
-
-Skills (`.codex/skills/*`) remain unchanged - commands orchestrate them.
