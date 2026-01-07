@@ -33,18 +33,63 @@ Close position and create post-mortem. Moves trade to closed/, calculates outcom
 ### Step 1: Load Active Trade
 Read `trades/active/{TRADE_ID}.json`
 
-### Step 1b: Place Exit Order
+### Step 1b: Exit Order Preview & Confirmation (AUTOMATED)
+
+**AUTOMATION: Use order_manager.py for exit preview and execution**
+
+**Step 1b-1: Generate Exit Preview**
+```bash
+python scripts/order_manager.py preview_exit {TICKER} \
+  --trade-id {TRADE_ID} \
+  --exit-reason {exit_reason}
+```
+
+This displays a formatted exit preview with:
+- Current position details
+- Entry vs exit price
+- P&L ($ and %)
+- Exit reason
+- Days held
+
+**Example preview:**
+```
+═══════════════════════════════════════════════════════
+EXIT PREVIEW: SELL SRPT
+═══════════════════════════════════════════════════════
+Trade ID:         TRD-20260105-SRPT-PDUFA
+Entry:            $125.50 × 30 shares = $3,765
+Exit:             $175.00 × 30 shares = $5,250
+P&L:              +$1,485 (+39.4%)
+Days Held:        37
+Exit Reason:      catalyst_complete
+
+Annualized Return: 389%
+
+═══════════════════════════════════════════════════════
+Execute this exit? [y/N]: _
+```
+
+**Step 1b-2: Get User Confirmation**
+Present the preview and wait for user confirmation (y/N).
+
+**Step 1b-3: Execute Exit Order** (if confirmed)
+```bash
+python scripts/order_manager.py execute_exit {TICKER} \
+  --trade-id {TRADE_ID} \
+  --order-type MKT
+```
+
+This script:
+1. Gets current market price
+2. Places market order via IBKR
+3. Confirms execution
+4. Logs to `logs/orders/YYYY-MM-DD.log`
 
 **See TECHNICAL_SPEC.md §10 for complete order execution logic.**
 
 **Order type:** Market order (immediate execution required)
 - Rationale: Exit signals demand immediate action, slippage acceptable
 - Time in force: IOC (Immediate or Cancel)
-
-**Execution** (if using IBKR paper):
-```bash
-python scripts/ibkr_paper.py close {ticker} --order-type MKT
-```
 
 Market orders ensure execution when exit signal triggered (cockroach, thesis break, info parity).
 

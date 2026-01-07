@@ -1,0 +1,50 @@
+{
+  "timestamp": "2026-01-05T08:00:00Z",
+  "skill": "scan",
+  "outcome": "COMPLETE",
+  "metrics": {
+    "new_events_found": 1,
+    "sources_checked": [
+      "FDA PDUFA calendar (via web search)",
+      "SEC 13D filings (via web search)",
+      "Merger announcements (via web search)",
+      "Spin-off trackers (via web search)"
+    ],
+    "events_added": 1,
+    "events_by_archetype": {
+      "pdufa": 1,
+      "merger_arb": 0,
+      "activist": 0,
+      "spinoff": 0,
+      "legislative": 0
+    }
+  },
+  "data_sources": [
+    "Atara Biotherapeutics investor relations",
+    "FDA calendar sources",
+    "Rheumatology Advisor",
+    "HCPLive Q1 2026 preview",
+    "Yahoo Finance",
+    "BioPharmCatalyst",
+    "InsideArbitrage",
+    "StockSpinoffs.com"
+  ],
+  "new_events": [
+    {
+      "id": "EVT-2026-033",
+      "ticker": "ATRA",
+      "type": "pdufa",
+      "catalyst": "FDA decision on tabelecleucel for EBV+ PTLD",
+      "date": "2026-01-10",
+      "priority": "high",
+      "rationale": "Priority review, first-in-class potential for rare disease, strong ORR data (48.8%)"
+    }
+  ],
+  "execution_time_ms": 12500,
+  "notes": "Weekly scan completed. Most PDUFA dates for Q1 2026 already tracked in events.json from previous scans. Discovered 1 new high-priority PDUFA event (ATRA tabelecleucel, Jan 10). FDA calendar access limited - relied on secondary sources (HCPLive, Rheumatology Advisor, FDA tracker aggregators). No new activist 13D filings found beyond those already tracked (LULU, CWAN, BILL from late December). Merger landscape quiet in early January - most Q1 2026 deals already tracked. Comcast Versant spin-off completed Jan 2 as expected.",
+  "next_steps": [
+    "Consider running 'analyze ATRA' - high-priority PDUFA (Jan 10, 2026)",
+    "Monitor activist sources daily per framework recommendation (13D Monitor, SEC filings)",
+    "Next weekly scan recommended: 2026-01-12"
+  ]
+}

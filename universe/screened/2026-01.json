@@ -493,6 +493,55 @@
       "final_score": 10.0,
       "next_step": "Run 'open' skill to create position",
       "notes": "Pure-play utility after Centuri separation. Icahn Tier-2 (8.36%) holding for rerating or buyout. Teno resignation from board Dec 31, 2025, is key signal to monitor. Final score 10.0 (BUY)."
+    },
+    {
+      "date": "2026-01-07",
+      "ticker": "ATRA",
+      "company": "Atara Biotherapeutics, Inc.",
+      "archetype": "biotech",
+      "event_id": "unknown",
+      "kill_screens_passed": false,
+      "failed_screens": [
+        {
+          "screen": "Beneish M-Score",
+          "value": 27.53,
+          "threshold": -1.78,
+          "operator": "<=",
+          "result": "CATASTROPHIC FAIL - M-Score of 27.53 is far outside expected range (-2 to +2), indicates extreme manipulation risk or data anomaly",
+          "source": "SEC XBRL API",
+          "severity": "critical",
+          "data_quality_warning": "Value far exceeds normal range, possible calculation error or extreme distress"
+        },
+        {
+          "screen": "Altman Z-Score",
+          "value": -84.55,
+          "threshold": 1.5,
+          "operator": ">=",
+          "result": "CATASTROPHIC FAIL - Z-Score of -84.55 is far outside expected range (-5 to +10), indicates extreme bankruptcy risk",
+          "source": "SEC XBRL API",
+          "severity": "critical",
+          "context": "Biotech-adjusted threshold 1.5. Score of -84.55 is catastrophically low, indicating severe insolvency."
+        }
+      ],
+      "result": "PASS",
+      "reason": "Failed BOTH M-Score and Z-Score kill screens catastrophically. Both values far outside expected ranges, indicating extreme financial distress and negative equity situation.",
+      "financial_summary": {
+        "market_cap": "$106.7M",
+        "current_price": "$14.80",
+        "total_assets": "$30.2M",
+        "total_liabilities": "$66.8M",
+        "equity": "$-36.6M (NEGATIVE)",
+        "working_capital": "$0.4M (critically thin)",
+        "revenue": "$119.2M",
+        "net_income": "$36.1M"
+      },
+      "data_quality_warnings": [
+        "M-Score 27.53 far outside expected range (-2 to +2)",
+        "Z-Score -84.55 far outside expected range (-5 to +10)",
+        "Negative book value - liabilities exceed assets by $36.6M"
+      ],
+      "framework_assessment": "Re-screening ATRA (previously screened 2026-01-06 with cash runway failure) reveals even more catastrophic kill screen failures. M-Score and Z-Score both show extreme anomalies. Company has negative equity with liabilities exceeding assets by 2x. Both universal kill screens failed by wide margins.",
+      "notes": "Re-analysis of ATRA reveals additional kill screen failures beyond Jan 6 screening. Company has negative stockholders' equity and both M-Score and Z-Score show catastrophic levels. Prior screening flagged 1.2-month cash runway; this analysis confirms severe insolvency via M-Score/Z-Score anomalies."
     }
   ]
 }

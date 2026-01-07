@@ -25,7 +25,36 @@ Run a ticker through the full framework analysis, from kill screens through scor
 
 ## Process
 
-### Step 1: Gather Context
+### Step 1: Gather Context (AUTOMATED)
+
+**AUTOMATION: Use data_fetcher.py to automatically fetch all required data**
+
+Run the automated data fetcher:
+```bash
+python scripts/data_fetcher.py fetch_all {TICKER} --industry {industry}
+```
+
+This script automatically:
+- Fetches current price (tries IBKR → Stooq → Yahoo with graceful degradation)
+- Fetches financials from SEC API
+- Calculates M-Score and Z-Score with industry adjustments
+- Validates data across sources
+- Returns formatted data for kill screens
+
+**Example output:**
+```json
+{
+  "ticker": "SRPT",
+  "price": 125.50,
+  "price_source": "IBKR",
+  "market_cap": 8500000000,
+  "m_score": -1.23,
+  "z_score": 2.1,
+  "z_score_threshold": 1.5,
+  "industry": "biotech",
+  "data_quality": "high"
+}
+```
 
 **Data Source Strategy** (see TECHNICAL_SPEC.md §2.1):
 
@@ -40,11 +69,12 @@ Run a ticker through the full framework analysis, from kill screens through scor
 2. If fails → Manual calculation from 10-Q/10-K
 3. If fails → Third-party screening tools
 
-Gather:
-- Current price (with fallback)
-- Market cap (shares outstanding × price)
-- Sector/industry
-- Relevant dates
+Display fetched data to user:
+- Current price (with source attribution)
+- Market cap
+- M-Score (with validation notes)
+- Z-Score (with industry-adjusted threshold)
+- Data quality assessment
 
 ### Step 2: Run Kill Screens
 Reference: `schema/kill_screens.json`

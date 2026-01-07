@@ -29,10 +29,28 @@ Read all files in `trades/active/`
 
 ### Step 2: For Each Trade
 
-#### A. Get Current Data
-- Current price
+#### A. Get Current Data (AUTOMATED)
+
+**AUTOMATION: Use data_fetcher.py to fetch current market data**
+
+For each active trade, run:
+```bash
+python scripts/data_fetcher.py fetch_price {TICKER}
+python scripts/data_fetcher.py fetch_market_data {TICKER}
+```
+
+This automatically fetches:
+- Current price (with source attribution)
 - 200-day MA
 - Options IV (if available)
+- Recent news mentions (for media signal)
+- Volume metrics
+
+Display fetched data:
+- Current price vs entry price (% change)
+- Price vs 200-day MA
+- IV current vs historical average
+- Data quality and sources used
 
 #### B. Check Info Parity Signals
 

@@ -142,28 +142,78 @@ Create `trades/active/{TRADE_ID}.json`:
 }
 ```
 
-### Step 5: Place Entry Order
+### Step 5: Order Preview & Confirmation (AUTOMATED)
 
-**See TECHNICAL_SPEC.md §10 for complete order execution logic.**
+**AUTOMATION: Use order_manager.py for preview and execution**
+
+**Step 5a: Generate Order Preview**
+```bash
+python scripts/order_manager.py preview {TICKER} BUY {shares} \
+  --archetype {archetype} \
+  --score {score} \
+  --entry-price {entry_price} \
+  --stop-price {stop_price}
+```
+
+This displays a formatted order preview with:
+- Order details (ticker, action, shares, price)
+- Position sizing (% of portfolio, within archetype limits)
+- Risk metrics (max loss, stop price)
+- Rationale (archetype, score, kill screens, timing)
+
+**Example preview:**
+```
+═══════════════════════════════════════════════════════
+ORDER PREVIEW: BUY SRPT
+═══════════════════════════════════════════════════════
+Ticker:           SRPT
+Action:           BUY
+Shares:           30
+Limit Price:      $125.50 (bid/ask midpoint)
+Total Cost:       $3,765.00
+Position Size:    1.51% of portfolio ($25,000)
+
+Rationale:
+- Archetype: PDUFA
+- Score: 8.7 (BUY)
+- Kill screens: PASS (M-Score -1.23, Z-Score 2.1)
+- PDUFA date: 2026-02-15 (41 days)
+- Entry timing: Optimal (days -45 to -30)
+
+Max Loss (Kellner): $500 (2% of portfolio)
+Stop Price:         $95.00 (-24% from entry)
+
+═══════════════════════════════════════════════════════
+Execute this order? [y/N]: _
+```
+
+**Step 5b: Get User Confirmation**
+Present the preview and wait for user confirmation (y/N).
+
+**Step 5c: Execute Order** (if confirmed)
+```bash
+python scripts/order_manager.py execute {TICKER} BUY {shares} \
+  --order-type LMT \
+  --limit {midpoint_price}
+```
+
+This script:
+1. Gets current bid/ask quotes
+2. Calculates midpoint: `(bid + ask) / 2`
+3. Places limit order via IBKR
+4. Tracks order status
+5. Logs execution to `logs/orders/YYYY-MM-DD.log`
 
 **Order type:** Limit order at bid/ask midpoint
 - Rationale: Better price, acceptable no-fill risk for non-urgent entries
 - Time in force: DAY
 
-**Process:**
-1. Get current bid/ask quotes for {ticker}
-2. Calculate midpoint: `(bid + ask) / 2`
-3. Place limit order at midpoint
-4. If not filled after 30 minutes:
-   - Check if price moved >5% from limit → Cancel, mark "missed entry"
-   - Otherwise → Adjust limit to new midpoint, retry
+**Retry logic:**
+- If not filled after 30 minutes:
+  - Check if price moved >5% from limit → Cancel, mark "missed entry"
+  - Otherwise → Adjust limit to new midpoint, retry
 
-**Execution** (if using IBKR paper):
-```bash
-python scripts/ibkr_paper.py place {ticker} BUY {shares} --order-type LMT --limit {midpoint_price}
-```
-
-Track order status and log entry price once filled.
+**See TECHNICAL_SPEC.md §10 for complete order execution logic.**
 
 ### Step 6: Link to Event (if applicable)
 If there's a linked event in `universe/events.json`, update the event's `linked_idea` field.
