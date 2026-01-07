@@ -1,0 +1,25 @@
+{
+  "timestamp": "2026-01-07T$(date -u +%H:%M:%S)Z",
+  "skill": "open",
+  "trade_id": "TRD-20260107-SWX-ACTIVIST",
+  "ticker": "SWX",
+  "archetype": "activist",
+  "outcome": "SUCCESS",
+  "metrics": {
+    "entry_price": 80.43,
+    "shares": 18,
+    "position_value": 1447.74,
+    "position_pct": 0.0579,
+    "archetype_max_pct": 0.06,
+    "score": 10.0,
+    "binding_constraint": "archetype_cap",
+    "kellner_shares": 67,
+    "archetype_cap_shares": 18,
+    "stop_price": 73.00,
+    "target_price": 100.00
+  },
+  "data_sources": ["IBKR paper quotes", "CONFIG.json", "watchlist/SWX.md"],
+  "execution_time_ms": null,
+  "order_id": "9",
+  "notes": "BUY decision executed. Score 10.0 (highest conviction). Limit order filled at midpoint $80.43. Position constrained by activist archetype cap (6%). Kellner rule would allow 67 shares, but archetype cap limits to 18 shares."
+}
