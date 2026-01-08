@@ -11,6 +11,7 @@ Used by analyze, score, and monitor skills.
 """
 
 import json
+import subprocess
 import sys
 from pathlib import Path
 from typing import Dict, Optional
@@ -241,6 +242,85 @@ def fetch_quote(ticker: str) -> Optional[Dict]:
     return fetch_price(ticker)
 
 
+def fetch_options_data(ticker: str, strike: float, expiration: str) -> Optional[Dict]:
+    """
+    Fetch options chain data for monitor skill.
+
+    Data fetched:
+    - Current option bid/ask/mid price
+    - Greeks (delta, theta, gamma, vega)
+    - Implied volatility
+    - Open interest
+    - Volume
+
+    Args:
+        ticker: Stock ticker symbol (underlying)
+        strike: Strike price
+        expiration: Expiration date (YYYY-MM-DD format)
+
+    Returns:
+        Dict with options data, or None if fetch fails
+    """
+    ticker = ticker.upper()
+
+    try:
+        script_path = Path(__file__).parent / "ibkr_paper.py"
+
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(script_path),
+                "quote_option",
+                ticker,
+                "--strike", str(strike),
+                "--expiration", expiration,
+                "--right", "CALL"
+            ],
+            capture_output=True,
+            text=True,
+            timeout=30
+        )
+
+        if result.returncode != 0:
+            print(f"Options fetch failed for {ticker}: {result.stderr}", file=sys.stderr)
+            return None
+
+        data = json.loads(result.stdout)
+
+        if "error" in data or not data.get("mid_price"):
+            return None
+
+        return {
+            "ticker": ticker,
+            "strike": strike,
+            "expiration": expiration,
+            "right": "CALL",
+            "bid": data.get("bid"),
+            "ask": data.get("ask"),
+            "last": data.get("last"),
+            "mid_price": data.get("mid_price"),
+            "delta": data.get("delta"),
+            "theta": data.get("theta"),
+            "gamma": data.get("gamma"),
+            "vega": data.get("vega"),
+            "implied_volatility": data.get("implied_volatility"),
+            "open_interest": data.get("open_interest"),
+            "volume": data.get("volume"),
+            "timestamp": datetime.now().isoformat(),
+            "source": data.get("source", "IBKR Paper")
+        }
+
+    except subprocess.TimeoutExpired:
+        print(f"Options fetch timeout for {ticker}", file=sys.stderr)
+        return None
+    except json.JSONDecodeError as e:
+        print(f"Options JSON parse error for {ticker}: {e}", file=sys.stderr)
+        return None
+    except Exception as e:
+        print(f"Options fetch error for {ticker}: {e}", file=sys.stderr)
+        return None
+
+
 def main():
     """CLI interface for data fetching."""
     import argparse
@@ -264,6 +344,13 @@ def main():
     # fetch_quote command
     parser_quote = subparsers.add_parser("fetch_quote", help="Fetch simple price quote")
     parser_quote.add_argument("ticker", help="Stock ticker symbol")
+
+    # fetch_options_data command
+    parser_options = subparsers.add_parser("fetch_options_data",
+                                           help="Fetch options data for monitor skill")
+    parser_options.add_argument("ticker", help="Stock ticker symbol (underlying)")
+    parser_options.add_argument("--strike", type=float, required=True, help="Strike price")
+    parser_options.add_argument("--expiration", required=True, help="Expiration date (YYYY-MM-DD)")
 
     args = parser.parse_args()
 
@@ -293,6 +380,14 @@ def main():
             print(json.dumps(data, indent=2))
         else:
             print(f"ERROR: Could not fetch quote for {args.ticker}", file=sys.stderr)
+            sys.exit(1)
+
+    elif args.command == "fetch_options_data":
+        data = fetch_options_data(args.ticker, args.strike, args.expiration)
+        if data:
+            print(json.dumps(data, indent=2))
+        else:
+            print(f"ERROR: Could not fetch options data for {args.ticker}", file=sys.stderr)
             sys.exit(1)
 
 
