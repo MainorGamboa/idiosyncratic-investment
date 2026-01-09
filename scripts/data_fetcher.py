@@ -26,6 +26,25 @@ from sec_api import (
     get_cik_from_ticker
 )
 
+# Import new v1.1 modules for archetype-specific data
+try:
+    from regulatory_data import check_form_483, check_ema_approval, classify_crl
+    REGULATORY_DATA_AVAILABLE = True
+except ImportError:
+    REGULATORY_DATA_AVAILABLE = False
+
+try:
+    from insider_analysis import validate_insider_cluster
+    INSIDER_ANALYSIS_AVAILABLE = True
+except ImportError:
+    INSIDER_ANALYSIS_AVAILABLE = False
+
+try:
+    from warn_act_checker import check_warn_filing, check_warn_for_activist_exit, check_warn_for_spinoff_sizing
+    WARN_ACT_AVAILABLE = True
+except ImportError:
+    WARN_ACT_AVAILABLE = False
+
 
 def fetch_all(ticker: str, industry: str = "general", archetype: str = "general") -> Dict:
     """
@@ -176,8 +195,67 @@ def fetch_all(ticker: str, industry: str = "general", archetype: str = "general"
         result["z_score"] = None
         result["financial_screens_pass"] = False
 
-    # 3. Summary
+    # 3. Archetype-specific data (v1.1 enhancements)
+    archetype_lower = archetype.lower()
+
+    if archetype_lower == "pdufa" and REGULATORY_DATA_AVAILABLE:
+        # PDUFA: Check Form 483 with OAI and EMA approval
+        try:
+            # Note: company_name would need to be passed or looked up
+            # For now, use ticker as placeholder
+            company_name = ticker  # TODO: Improve company name lookup
+
+            form_483 = check_form_483(company_name)
+            result["form_483_with_oai"] = form_483.get("has_oai", None)
+            result["form_483_details"] = form_483
+            result["data_sources_used"].append("regulatory_data")
+
+            # EMA approval check would need drug name
+            # For MVP, include placeholder
+            result["ema_approved"] = None
+            result["ema_note"] = "Drug name required for EMA approval check"
+        except Exception as e:
+            result["errors"].append(f"Error fetching PDUFA regulatory data: {e}")
+
+    elif archetype_lower == "insider" and INSIDER_ANALYSIS_AVAILABLE:
+        # Insider: Validate cluster quality (kill screen)
+        try:
+            cluster = validate_insider_cluster(ticker, min_opportunistic=3)
+            result["insider_cluster_valid"] = cluster.get("cluster_valid")
+            result["opportunistic_count"] = cluster.get("opportunistic_count", 0)
+            result["routine_count"] = cluster.get("routine_count", 0)
+            result["insider_cluster_details"] = cluster
+            result["data_sources_used"].append("insider_analysis")
+
+            # Update kill screens status if cluster invalid
+            if cluster.get("cluster_valid") == False:
+                result["kill_screens_status"] = "FAIL"
+                result["kill_screen_failed"] = "insider_cluster_quality"
+        except Exception as e:
+            result["errors"].append(f"Error validating insider cluster: {e}")
+
+    elif archetype_lower in ["activist", "spinoff"] and WARN_ACT_AVAILABLE:
+        # Activist/Spin-off: Check WARN filings
+        try:
+            company_name = ticker  # TODO: Improve company name lookup
+            warn = check_warn_filing(company_name)
+            result["has_warn_filing"] = warn.get("has_warn", None)
+            result["warn_details"] = warn
+            result["data_sources_used"].append("warn_act_checker")
+        except Exception as e:
+            result["errors"].append(f"Error checking WARN filings: {e}")
+
+    elif archetype_lower == "merger_arb":
+        # Merger Arb: Note for second request, CFIUS, China-connected checks
+        # These would be detected during scoring phase, not kill screens
+        result["merger_arb_note"] = "Check for second request, CFIUS exposure, and China-connected buyer during scoring"
+
+    # 4. Summary
     kill_screens_passed = result.get("financial_screens_pass", False)
+
+    # Override if insider cluster failed
+    if result.get("kill_screen_failed"):
+        kill_screens_passed = False
 
     result["kill_screens_status"] = "PASS" if kill_screens_passed else "FAIL"
 

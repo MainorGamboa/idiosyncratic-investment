@@ -26,17 +26,31 @@
     }
   },
   "adjustments": {
+    "pdufa": {
+      "form_483_with_oai": -1.0,
+      "prior_ema_approval": 0.5,
+      "note": "Form 483 with OAI at manufacturing site reduces confidence. EMA approval shows regulatory precedent (91-98% concordance)."
+    },
     "activist": {
       "tier_1": 1.0,
-      "tier_2": 0.5
+      "tier_2": 0.5,
+      "dso_divergence_gt_20pct": -0.5,
+      "note": "DSO divergence >20% vs peers indicates harder operational fix, reduces activist success probability."
     },
     "legislative": {
       "obvious_beneficiary": -1.5,
       "macro_sensitive": -1.0
     },
-    "merger": {
+    "merger_arb": {
       "third_party_veto": -1,
-      "doj_ftc_lawsuit": -2
+      "doj_ftc_lawsuit": -2,
+      "second_request_issued": -1.0,
+      "china_connected_buyer": -1.5,
+      "note": "Second request: 35-45% abandonment rate. China-connected buyer: elevated regulatory risk and abandonment."
+    },
+    "spinoff": {
+      "warn_filing_at_spinco": "SIZE_DOWN_50_PERCENT",
+      "note": "WARN filing signals operational distress at SpinCo. Reduce position size by 50%, not a score penalty."
     }
   },
   "thresholds": {
