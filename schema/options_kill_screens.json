@@ -1,0 +1,271 @@
+{
+  "overview": {
+    "purpose": "Options-specific kill screens to ensure tradeable liquidity and reasonable pricing",
+    "version": "1.0",
+    "philosophy": "Wide spreads and illiquidity eliminate edge. Only trade options with institutional-grade liquidity.",
+    "application": "Run AFTER equity kill screens pass, BEFORE comparing options vs equity"
+  },
+
+  "kill_screens": {
+    "options_existence": {
+      "name": "Options Market Exists",
+      "fail_condition": "No options chain available for ticker",
+      "check": "Query options API (IBKR/Yahoo) for any listed options",
+      "rationale": "Newly listed stocks, small caps, and some SPACs have no options",
+      "applies_to": ["all"],
+      "auto_fallback": "Use equity if options don't exist"
+    },
+
+    "open_interest": {
+      "name": "Minimum Open Interest",
+      "thresholds": {
+        "target_strike": {
+          "min_oi": 100,
+          "description": "Primary strike must have 100+ OI"
+        },
+        "nearby_strikes": {
+          "min_oi": 50,
+          "description": "Adjacent strikes must have 50+ OI"
+        }
+      },
+      "fail_condition": "Target strike OI < 100 OR both adjacent strikes OI < 50",
+      "rationale": "Low OI indicates illiquid market, difficult to exit position",
+      "check_frequency": "At initial screening and before entry",
+      "applies_to": ["all"]
+    },
+
+    "average_volume": {
+      "name": "Minimum Daily Options Volume",
+      "thresholds": {
+        "target_strike": {
+          "min_volume_20d": 20,
+          "description": "20-day average volume >= 20 contracts"
+        },
+        "total_chain_volume": {
+          "min_volume_20d": 100,
+          "description": "Total options volume across all strikes >= 100"
+        }
+      },
+      "fail_condition": "Strike volume < 20 OR total chain volume < 100",
+      "rationale": "Volume confirms active market making and pricing efficiency",
+      "applies_to": ["all"]
+    },
+
+    "bid_ask_spread": {
+      "name": "Bid-Ask Spread Width",
+      "thresholds": {
+        "max_spread_pct": 0.10,
+        "calculation": "(ask - bid) / midpoint",
+        "description": "Spread must be < 10% of mid price"
+      },
+      "fail_condition": "Spread > 10% of midpoint",
+      "rationale": "Wide spreads mean you pay market makers instead of capturing mispricing",
+      "edge_cases": {
+        "very_cheap_options": {
+          "condition": "Premium < $0.50",
+          "adjusted_threshold": 0.15,
+          "note": "Allow 15% spread for options < $0.50 (absolute spreads are small)"
+        },
+        "deep_itm": {
+          "condition": "Delta > 0.85",
+          "adjusted_threshold": 0.05,
+          "note": "Tighten to 5% for deep ITM (should trade near intrinsic)"
+        }
+      },
+      "applies_to": ["all"]
+    },
+
+    "implied_volatility": {
+      "name": "IV Sanity Checks",
+      "checks": {
+        "iv_percentile": {
+          "min": 5,
+          "max": 95,
+          "description": "IV rank should be 5-95 percentile (avoid extremes)"
+        },
+        "iv_absolute": {
+          "min": 0.10,
+          "max": 3.00,
+          "description": "IV should be 10%-300% (flag if outside)"
+        },
+        "iv_skew": {
+          "max_put_call_skew": 0.30,
+          "description": "Put IV - Call IV should be < 30 points (avoid post-earnings distortion)"
+        }
+      },
+      "fail_condition": "IV < 10% (options too cheap, no volatility edge) OR IV > 300% (data error or extreme event)",
+      "rationale": "Extreme IV indicates data issues or unfavorable pricing",
+      "applies_to": ["all"],
+      "note": "Low IV is NOT a kill screen for PDUFA (binary catalyst creates IV naturally)"
+    },
+
+    "time_to_expiration": {
+      "name": "Minimum Days to Expiration",
+      "thresholds": {
+        "absolute_minimum": 21,
+        "optimal_minimum": 30,
+        "description": "Never trade options with < 21 DTE"
+      },
+      "fail_condition": "DTE < 21 days at time of entry",
+      "rationale": "Gamma risk and theta decay accelerate exponentially below 21 DTE",
+      "applies_to": ["all"],
+      "exception": "If catalyst is in 14-20 days and you MUST use options, flag for manual approval"
+    },
+
+    "earnings_blackout": {
+      "name": "Avoid Near-Term Earnings",
+      "blackout_window": {
+        "days_before_earnings": 7,
+        "days_after_earnings": 3
+      },
+      "fail_condition": "Earnings date within 7 days before or 3 days after proposed entry",
+      "rationale": "Earnings create IV distortions and skew unrelated to catalyst",
+      "applies_to": ["all"],
+      "exception": "PDUFA archetypes where FDA decision is the only catalyst (ignore earnings)",
+      "check": "Query earnings calendar from API (Yahoo Finance, Nasdaq)"
+    },
+
+    "expiration_alignment": {
+      "name": "Expiration After Catalyst",
+      "rule": "Expiration must be AFTER catalyst date + buffer days",
+      "buffer_by_archetype": {
+        "pdufa": 7,
+        "activist": 30,
+        "merger_arb": 60,
+        "insider": 14
+      },
+      "fail_condition": "Expiration before catalyst + buffer",
+      "rationale": "Options expiring before catalyst = guaranteed loss if stock doesn't move early",
+      "applies_to": ["pdufa", "activist", "merger_arb", "insider"]
+    },
+
+    "strike_availability": {
+      "name": "Desired Strike Exists",
+      "requirements": {
+        "atm_strike": "Strike within 5% of current price must exist",
+        "otm_strike": "At least one 5-15% OTM strike available",
+        "strike_spacing": "Strikes spaced reasonably (not only $5 or $10 wide on $20 stock)"
+      },
+      "fail_condition": "No strike within 5% of current price OR strike spacing > 10% of stock price",
+      "rationale": "Need reasonable strike selection to match framework strategy",
+      "applies_to": ["all"]
+    },
+
+    "pricing_anomalies": {
+      "name": "Options Pricing Sanity",
+      "checks": {
+        "intrinsic_value": {
+          "rule": "ITM options must trade >= intrinsic value",
+          "fail_condition": "Call price < (stock - strike) for ITM",
+          "note": "Violations indicate stale pricing or data error"
+        },
+        "put_call_parity": {
+          "rule": "C - P = S - K*e^(-r*t) (approximately)",
+          "tolerance": 0.10,
+          "fail_condition": "Parity violation > 10%",
+          "note": "Large violations indicate arbitrage or pricing errors"
+        },
+        "vertical_spread_pricing": {
+          "rule": "Higher strikes should have lower call prices",
+          "fail_condition": "Call(K1) < Call(K2) where K1 < K2",
+          "note": "Violations indicate stale data"
+        }
+      },
+      "applies_to": ["all"],
+      "action_on_fail": "Flag for data quality check, use alternative source or fallback to equity"
+    }
+  },
+
+  "archetype_specific_screens": {
+    "pdufa": {
+      "additional_screens": [
+        {
+          "name": "PDUFA IV Surge Check",
+          "rule": "If IV percentile > 80, options may already be pricing in catalyst",
+          "action": "Flag for manual review - may still be acceptable for binary bet",
+          "not_a_kill_screen": true
+        },
+        {
+          "name": "Biotech Options Quality",
+          "rule": "Biotech often has lower OI - adjust min OI to 50 (vs 100)",
+          "adjusted_threshold": {
+            "min_oi": 50,
+            "min_volume": 10
+          }
+        }
+      ]
+    },
+    "activist": {
+      "additional_screens": [
+        {
+          "name": "LEAPS Availability",
+          "rule": "Must have options with 12-18 month expirations available",
+          "fail_condition": "No expirations beyond 6 months",
+          "rationale": "Activist campaigns need time - 6mo options insufficient"
+        }
+      ]
+    },
+    "merger_arb": {
+      "additional_screens": [
+        {
+          "name": "Deal Price Strike Availability",
+          "rule": "Strike at or near deal price should exist",
+          "fail_condition": "Nearest strike to deal price is > 10% away",
+          "rationale": "Need to target deal price for spread capture"
+        }
+      ]
+    }
+  },
+
+  "screening_workflow": {
+    "step_1": "Check options_existence - if fail, auto-fallback to equity",
+    "step_2": "Check time_to_expiration and expiration_alignment - if fail, try next expiration",
+    "step_3": "Check open_interest and average_volume - if fail, KILL (illiquid)",
+    "step_4": "Check bid_ask_spread - if fail, KILL (spreads too wide)",
+    "step_5": "Check implied_volatility and pricing_anomalies - if fail, flag data quality issue",
+    "step_6": "Check earnings_blackout - if fail, delay entry or use equity",
+    "step_7": "Run archetype-specific screens",
+    "step_8": "If all pass, proceed to breakeven analysis and options vs equity comparison",
+    "step_9": "If any critical screens fail, fallback to equity (no penalty to idea)"
+  },
+
+  "data_sources": {
+    "primary": "IBKR API (paper account)",
+    "fallback": "Yahoo Finance options API",
+    "fields_required": [
+      "bid",
+      "ask",
+      "last",
+      "volume",
+      "open_interest",
+      "implied_volatility",
+      "delta",
+      "theta",
+      "gamma",
+      "expiration_date",
+      "strike"
+    ],
+    "update_frequency": "Real-time for active positions, daily for screening"
+  },
+
+  "failure_behavior": {
+    "kill_screen_fail": {
+      "action": "Automatically fallback to equity analysis",
+      "log_reason": "Log which screen failed in analyze skill output",
+      "user_notification": "Inform user: 'Options screened but failed liquidity checks - using equity'",
+      "no_penalty": "Failing options screens does NOT affect equity scoring"
+    },
+    "data_unavailable": {
+      "action": "If cannot fetch options data, assume options not viable",
+      "fallback": "Proceed with equity analysis only",
+      "retry": "Try once more from fallback source before giving up"
+    }
+  },
+
+  "notes": [
+    "Options kill screens are INDEPENDENT of equity kill screens",
+    "Failing options screens means 'use equity instead', not 'reject the idea'",
+    "Liquidity is the #1 concern - would rather miss opportunity than fight market makers",
+    "These screens protect against the biggest options trading mistakes: illiquidity and wide spreads"
+  ]
+}

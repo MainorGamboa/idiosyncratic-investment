@@ -1,0 +1,311 @@
+{
+  "overview": {
+    "purpose": "Position sizing rules for options to maintain risk parity with equity framework",
+    "version": "1.0",
+    "philosophy": "Match equity risk levels but capture leverage benefit. Total portfolio risk unchanged.",
+    "integration": "Used by open skill to calculate position sizes for options trades"
+  },
+
+  "global_limits": {
+    "max_premium_at_risk_total": {
+      "value": 0.10,
+      "description": "Maximum 10% of total portfolio in options premium across all positions",
+      "rationale": "Prevent overconcentration in levered instruments"
+    },
+    "max_notional_exposure": {
+      "value": 0.30,
+      "description": "Maximum 30% notional exposure (delta-adjusted) across all options",
+      "calculation": "Sum of (contracts * 100 * stock_price * delta) / portfolio_value",
+      "rationale": "Total delta exposure should not exceed reasonable equity allocation"
+    },
+    "max_options_positions": {
+      "value": 5,
+      "description": "Maximum 5 simultaneous options positions",
+      "rationale": "Options require active monitoring - limit cognitive load",
+      "note": "Total positions (equity + options) still capped at 10 from CONFIG.json"
+    },
+    "max_single_position_premium": {
+      "value": 0.04,
+      "description": "No single options position > 4% portfolio in premium",
+      "rationale": "Match largest single equity position (Activist 6% * 2/3 safety margin)"
+    }
+  },
+
+  "archetype_sizing": {
+    "pdufa": {
+      "max_premium_at_risk": 0.015,
+      "max_notional_exposure": 0.05,
+      "leverage_range": [3, 5],
+      "calculation_example": {
+        "portfolio_value": 25000,
+        "max_premium": 375,
+        "stock_price": 15,
+        "option_premium": 0.75,
+        "contracts": 5,
+        "total_premium_paid": 375,
+        "notional_exposure": 7500,
+        "leverage": 20,
+        "note": "Same $375 risk as equity, but 5x notional exposure ($7,500 vs $1,500)"
+      },
+      "contract_calculation": {
+        "formula": "floor(portfolio_value * max_premium_at_risk / (option_premium * 100))",
+        "example": "floor(25000 * 0.015 / (0.75 * 100)) = floor(375 / 75) = 5 contracts"
+      },
+      "adjustments": {
+        "high_iv": {
+          "condition": "IV percentile > 75",
+          "action": "Reduce position by 25% (expensive options)",
+          "example": "5 contracts → 4 contracts"
+        },
+        "biotech_premium": {
+          "condition": "Stock price < $10 and market cap < $500M",
+          "action": "Reduce max_premium to 0.012 (1.2%)",
+          "rationale": "Smaller biotechs have binary risk - reduce exposure"
+        }
+      }
+    },
+
+    "activist": {
+      "tier_1": {
+        "max_premium_at_risk": 0.04,
+        "max_notional_exposure": 0.10,
+        "leverage_range": [2, 4],
+        "note": "Tier-1 83% success rate justifies larger position"
+      },
+      "tier_2": {
+        "max_premium_at_risk": 0.03,
+        "max_notional_exposure": 0.08,
+        "leverage_range": [2, 3],
+        "note": "Tier-2 80% success rate - slightly smaller"
+      },
+      "tier_3": {
+        "max_premium_at_risk": 0,
+        "note": "Tier-3 40% success rate - equity only, no options"
+      },
+      "adjustments": {
+        "leaps_premium": {
+          "condition": "DTE > 365 days",
+          "action": "LEAPS are expensive - verify breakeven analysis",
+          "max_premium_pct_of_stock": 0.15,
+          "note": "Don't pay >15% of stock price in premium for LEAPS"
+        }
+      }
+    },
+
+    "merger_arb": {
+      "max_premium_at_risk": 0.02,
+      "max_notional_exposure": 0.06,
+      "leverage_range": [2, 3],
+      "minimum_spread": 0.08,
+      "calculation_notes": {
+        "note": "Only use options when spread >8% - otherwise equity is better",
+        "target_return": "Capture 50-70% of spread via options leverage"
+      },
+      "adjustments": {
+        "narrow_spread": {
+          "condition": "Spread 8-10%",
+          "action": "Reduce position by 25%",
+          "rationale": "Less margin for error on narrow spreads"
+        },
+        "hostile_premium": {
+          "condition": "Deal has regulatory risk or financing contingency",
+          "action": "Reduce position by 50% or avoid options entirely",
+          "rationale": "Options amplify downside on deal breaks"
+        }
+      }
+    },
+
+    "insider": {
+      "max_premium_at_risk": 0.03,
+      "max_notional_exposure": 0.08,
+      "leverage_range": [2, 3],
+      "enhanced_requirements": {
+        "min_cluster_size": 5,
+        "min_aggregate_purchase_usd": 1000000,
+        "min_score": 8.5,
+        "note": "Higher bar than equity (3+ insiders, $250k, score 8.25)"
+      },
+      "adjustments": {
+        "distressed_context": {
+          "condition": "Stock down >50% from 52w high",
+          "action": "Increase max_premium to 0.035",
+          "rationale": "Distressed insider buys have 70% success rate - higher conviction"
+        }
+      }
+    },
+
+    "spinoff": {
+      "enabled": false,
+      "rationale": "No options market in first 60-90 days - use equity only"
+    },
+
+    "liquidation": {
+      "enabled": false,
+      "rationale": "SPACs near NAV have minimal volatility - options not advantageous"
+    },
+
+    "legislative": {
+      "enabled": false,
+      "rationale": "Uncertain timelines - theta decay makes options unsuitable"
+    }
+  },
+
+  "position_sizing_workflow": {
+    "step_1": "Identify archetype and confirm options enabled",
+    "step_2": "Calculate base position: contracts = floor(portfolio * max_premium / (option_premium * 100))",
+    "step_3": "Apply archetype-specific adjustments (IV, spread, tier, etc.)",
+    "step_4": "Calculate notional exposure: notional = contracts * 100 * stock_price * delta",
+    "step_5": "Verify notional < max_notional_exposure for archetype",
+    "step_6": "Verify total portfolio premium < max_premium_at_risk_total (10%)",
+    "step_7": "Verify total portfolio notional < max_notional_exposure (30%)",
+    "step_8": "If any limit exceeded, reduce position proportionally",
+    "step_9": "Round down to whole contracts (never round up)"
+  },
+
+  "kellner_rule_adaptation": {
+    "original_rule": "Max 2% portfolio loss per trade",
+    "options_interpretation": "Max 2% portfolio in premium at risk per trade",
+    "rationale": "Options premium is the 'max loss' - this maintains risk parity with equity",
+    "archetype_caps": {
+      "pdufa": "1.5% (matches equity cap)",
+      "activist_tier_1": "4% (weighted for 83% success rate)",
+      "activist_tier_2": "3% (weighted for 80% success rate)",
+      "merger_arb": "2% (conservative vs 3% equity cap)",
+      "insider": "3% (conservative vs 5% equity cap)"
+    },
+    "note": "Archetype caps are LOWER for options to account for theta decay risk"
+  },
+
+  "kelly_fraction_adaptation": {
+    "original": {
+      "negative_skew": "25% Kelly (Merger, PDUFA, Activist)",
+      "positive_skew": "50% Kelly (Spinoff, Liquidation)"
+    },
+    "options_adjustment": {
+      "all_options": "Use 25% Kelly maximum (more conservative)",
+      "rationale": "Options have theta decay - reduce Kelly fraction across all archetypes",
+      "exception": "None - always quarter-Kelly for options"
+    }
+  },
+
+  "portfolio_level_constraints": {
+    "concentration_limits": {
+      "max_premium_single_archetype": 0.06,
+      "description": "No more than 6% total premium in any single archetype",
+      "example": "Can't have 4% PDUFA + 4% PDUFA + 4% PDUFA = 12%"
+    },
+    "correlation_adjustments": {
+      "same_sector": {
+        "condition": "Multiple positions in same sector (e.g., 2+ biotech PDUFA)",
+        "action": "Reduce each position by 20%",
+        "rationale": "Sector events (FDA staffing, policy) create correlation"
+      },
+      "same_catalyst_date": {
+        "condition": "2+ PDUFA dates within 7 days",
+        "action": "Reduce smaller position by 30%",
+        "rationale": "FDA often batches decisions - correlation risk"
+      }
+    },
+    "regime_adjustments": {
+      "vix_20_30": {
+        "action": "Reduce all new options positions by 25%",
+        "rationale": "Elevated volatility = higher option prices, less attractive"
+      },
+      "vix_above_30": {
+        "action": "Reduce all new options positions by 50%",
+        "rationale": "Crisis mode - options extremely expensive, equity preferred"
+      },
+      "hy_oas_widening": {
+        "condition": "HY OAS widens >100bp from baseline",
+        "action": "Pause all new merger arb options (maintain equity rules)",
+        "rationale": "Credit stress increases deal break risk"
+      }
+    }
+  },
+
+  "risk_metrics_monitoring": {
+    "track_per_position": {
+      "premium_at_risk": "Total premium paid",
+      "notional_exposure": "contracts * 100 * stock_price * delta",
+      "leverage_ratio": "notional / premium",
+      "theta_per_day": "Daily time decay in dollars",
+      "days_to_expiration": "Remaining DTE",
+      "breakeven_stock_price": "Strike + premium paid (for calls)"
+    },
+    "track_portfolio_level": {
+      "total_premium_at_risk": "Sum of all options premiums",
+      "total_notional_exposure": "Sum of all delta-adjusted notional",
+      "aggregate_theta": "Total daily theta decay across all positions",
+      "average_dte": "Weighted average days to expiration",
+      "options_as_pct_portfolio": "total_premium / portfolio_value"
+    },
+    "alert_thresholds": {
+      "total_premium_approaching_limit": {
+        "threshold": 0.08,
+        "action": "Alert: 'Options exposure 8% of portfolio, approaching 10% limit'"
+      },
+      "high_theta_decay": {
+        "threshold": "aggregate_theta > 0.01 * portfolio_value per day",
+        "action": "Alert: 'Theta decay exceeds 1% of portfolio per day - review positions'"
+      },
+      "approaching_expiration": {
+        "threshold": "Any position with DTE < 30",
+        "action": "Alert: 'Position expiring in <30 days - close or roll soon'"
+      }
+    }
+  },
+
+  "example_calculations": {
+    "pdufa_example": {
+      "ticker": "FBIO",
+      "portfolio_value": 25000,
+      "stock_price": 15.00,
+      "option_premium": 0.75,
+      "delta": 0.50,
+      "max_premium_at_risk": 0.015,
+      "calculation": {
+        "max_dollar_premium": "25000 * 0.015 = $375",
+        "contracts": "floor(375 / (0.75 * 100)) = floor(375 / 75) = 5",
+        "total_premium_paid": "5 * 0.75 * 100 = $375",
+        "notional_exposure": "5 * 100 * 15 * 0.50 = $3,750",
+        "leverage": "3750 / 375 = 10x",
+        "pct_portfolio_notional": "3750 / 25000 = 15%",
+        "check_limits": {
+          "premium_ok": "375 < 1000 (4% single position limit)",
+          "notional_ok": "3750 < 1250 (5% PDUFA notional cap)",
+          "portfolio_premium_ok": "375 < 2500 (10% total portfolio premium)",
+          "portfolio_notional_ok": "3750 < 7500 (30% total notional)",
+          "result": "PASS - all limits satisfied"
+        }
+      }
+    },
+    "activist_tier_1_example": {
+      "ticker": "LULU",
+      "portfolio_value": 25000,
+      "stock_price": 280.00,
+      "option_premium": 15.00,
+      "delta": 0.55,
+      "dte": 450,
+      "max_premium_at_risk": 0.04,
+      "calculation": {
+        "max_dollar_premium": "25000 * 0.04 = $1,000",
+        "contracts": "floor(1000 / (15 * 100)) = floor(1000 / 1500) = 0",
+        "issue": "Can't even buy 1 contract - LEAPS too expensive",
+        "adjustment": "Try call debit spread to reduce cost",
+        "spread_cost": "15.00 - 8.00 = $7.00 net debit",
+        "contracts_spread": "floor(1000 / 700) = 1 contract",
+        "total_premium_paid": "1 * 7 * 100 = $700",
+        "notional_exposure": "1 * 100 * 280 * 0.55 = $15,400",
+        "note": "Expensive stocks often require spreads to fit position sizing"
+      }
+    }
+  },
+
+  "notes": [
+    "Always round DOWN to whole contracts - never exceed risk limits",
+    "Premium at risk is the true 'position size' for options - treat it like equity allocation",
+    "Monitor theta decay daily - it's real P&L even if unrealized",
+    "Notional exposure caps prevent over-leveraging via cheap options",
+    "Regime adjustments apply to options MORE than equity (volatility premium impact)"
+  ]
+}

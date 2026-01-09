@@ -15,6 +15,8 @@ Close position and create post-mortem. Moves trade to closed/, calculates outcom
 - Stop loss hit
 
 ## Inputs
+
+**For Equity:**
 ```json
 {
   "trade_id": "TRD-2025-001",
@@ -23,10 +25,24 @@ Close position and create post-mortem. Moves trade to closed/, calculates outcom
 }
 ```
 
+**For Options:**
+```json
+{
+  "trade_id": "TRD-2025-001",
+  "exit_option_price": 8.50,
+  "exit_reason": "catalyst_complete|info_parity|approaching_expiration|theta_decay|cockroach|thesis_break|other",
+  "partial_close": false,
+  "contracts_to_close": null
+}
+```
+
 **Parameters:**
 - `trade_id` (required): Trade ID to close
-- `exit_price` (required): Actual exit price
+- `exit_price` (required for equity): Stock exit price
+- `exit_option_price` (required for options): Option mid price at exit
 - `exit_reason` (required): Primary reason for exit
+- `partial_close` (optional for options): If true, close only portion of contracts
+- `contracts_to_close` (optional for options): Number of contracts to close (for partial)
 
 ## Process
 
@@ -51,7 +67,7 @@ This displays a formatted exit preview with:
 - Exit reason
 - Days held
 
-**Example preview:**
+**Example Equity Preview:**
 ```
 ═══════════════════════════════════════════════════════
 EXIT PREVIEW: SELL SRPT
@@ -69,10 +85,53 @@ Annualized Return: 389%
 Execute this exit? [y/N]: _
 ```
 
+**Example Options Preview:**
+```
+═══════════════════════════════════════════════════════
+OPTIONS EXIT PREVIEW: SELL TO CLOSE SRPT CALLS
+═══════════════════════════════════════════════════════
+Trade ID:          TRD-20260105-SRPT-PDUFA
+Strategy:          Long Calls
+Strike:            $130.00
+Expiration:        2025-03-21
+Contracts:         5
+
+Entry:
+  Premium Paid:    $3.50 × 5 × 100 = $1,750
+  Underlying:      $125.50
+  DTE at Entry:    70 days
+  Entry Date:      2025-01-10
+
+Exit:
+  Premium Selling: $8.50 × 5 × 100 = $4,250
+  Underlying Now:  $178.00
+  DTE Remaining:   34 days
+  Exit Date:       2025-02-15 (catalyst day)
+
+P&L:
+  Gross P&L:       +$2,500 (+142.9%)
+  Theta Decay:     $350 (estimated)
+  Net P&L:         +$2,150 (+122.9%)
+  Days Held:       36
+
+Performance vs Equity:
+  Options Return:  +122.9%
+  Stock Return:    +41.8% (if held stock)
+  Leverage Factor: 2.9x
+
+Exit Reason:       catalyst_complete
+Catalyst:          FDA approval announced
+
+═══════════════════════════════════════════════════════
+Execute this exit? [y/N]: _
+```
+
 **Step 1b-2: Get User Confirmation**
 Present the preview and wait for user confirmation (y/N).
 
 **Step 1b-3: Execute Exit Order** (if confirmed)
+
+**For Equity:**
 ```bash
 python scripts/order_manager.py execute_exit {TICKER} \
   --trade-id {TRADE_ID} \
@@ -85,21 +144,79 @@ This script:
 3. Confirms execution
 4. Logs to `logs/orders/YYYY-MM-DD.log`
 
-**See TECHNICAL_SPEC.md §10 for complete order execution logic.**
-
 **Order type:** Market order (immediate execution required)
 - Rationale: Exit signals demand immediate action, slippage acceptable
 - Time in force: IOC (Immediate or Cancel)
 
-Market orders ensure execution when exit signal triggered (cockroach, thesis break, info parity).
+**For Options:**
+```bash
+python scripts/order_manager.py execute_exit_options {TICKER} \
+  --trade-id {TRADE_ID} \
+  --order-type MKT \
+  --action SELL_TO_CLOSE \
+  --contracts {contracts}
+```
+
+This script:
+1. Gets current options bid price
+2. Places market order SELL TO CLOSE via IBKR
+3. Confirms execution
+4. Logs final Greeks and exit price to trade file
+5. Logs to `logs/orders/YYYY-MM-DD.log`
+
+**Order type:** Market order (immediate execution required)
+- Rationale: Exit signals demand immediate action, options spreads wider than equity
+- Time in force: IOC (Immediate or Cancel)
+- Action: SELL TO CLOSE (closes long calls position)
+
+**Important:** For partial closes (e.g., info parity = 1.5 → exit 50%):
+- Calculate contracts to close: `floor(total_contracts * 0.50)`
+- Update trade file with remaining contracts
+- Keep trade in `active/` if partial close, move to `closed/` if full close
+
+**See TECHNICAL_SPEC.md §10 for complete order execution logic.**
 
 ### Step 2: Calculate Outcome
+
+**For Equity:**
 ```javascript
 gross_return_pct = (exit_price - entry_price) / entry_price
 gross_return_usd = (exit_price - entry_price) * shares
 hold_days = date_diff(exit_date, entry_date)
 
 thesis_correct = (gross_return_pct > 0) // Simplified, refine based on thesis
+```
+
+**For Options:**
+```javascript
+// P&L Calculation
+premium_paid_per_contract = options_position.premium_per_contract
+exit_premium_per_contract = exit_option_price
+contracts_closed = contracts_to_close || options_position.contracts
+
+gross_pnl_per_contract = (exit_premium_per_contract - premium_paid_per_contract) * 100
+total_gross_pnl = gross_pnl_per_contract * contracts_closed / 100
+total_premium_paid = premium_paid_per_contract * contracts_closed * 100
+
+gross_return_pct = (exit_premium_per_contract - premium_paid_per_contract) / premium_paid_per_contract
+
+// Account for theta decay
+total_theta_decay = sum(all monitoring.greeks.theta) // Estimate from history
+net_pnl = total_gross_pnl - abs(total_theta_decay)
+
+// Calculate vs equity comparison
+stock_entry = options_position.underlying_price_at_entry
+stock_exit = current_underlying_price
+stock_return_pct = (stock_exit - stock_entry) / stock_entry
+leverage_factor = gross_return_pct / stock_return_pct
+
+// Timing metrics
+hold_days = date_diff(exit_date, entry_date)
+dte_at_entry = options_position.dte_at_entry
+dte_at_exit = calculate_dte(expiration, exit_date)
+dte_used = dte_at_entry - dte_at_exit
+
+thesis_correct = (gross_return_pct > 0)
 ```
 
 ### Step 3: Write Post-Mortem
@@ -109,25 +226,30 @@ Prompt for or analyze:
 - Which filters/signals were accurate?
 - Did precedents apply correctly?
 - Was sizing appropriate?
+- **For Options:** Was expiration timing correct? Did leverage justify theta decay cost?
 
 **What Didn't Work:**
 - Which assumptions were wrong?
 - Did filters miss something?
 - Was timing off?
+- **For Options:** Was strike selection optimal? Did theta decay too quickly? Should have used equity instead?
 
 **Lessons Learned:**
 - New patterns discovered?
 - Rule changes needed?
 - Calibration adjustments?
+- **For Options:** Did options outperform equity? Was IV pricing fair? What was actual vs expected leverage?
 
 **Tags to Add:**
 - Pattern tags (e.g., `obvious_beneficiary`, `cockroach_exit`)
 - Outcome tags (`positive_outcome`, `negative_outcome`, `neutral_outcome`)
 - Archetype-specific tags
+- **For Options:** `options_trade`, strategy tag (`long_calls`, `call_debit_spread`, `leaps`), `options_outperformed` or `equity_would_have_won`
 
 ### Step 4: Update Trade JSON
 Add outcome and post_mortem sections:
 
+**For Equity:**
 ```json
 {
   "outcome": {
@@ -159,6 +281,76 @@ Add outcome and post_mortem sections:
       "pdufa_approval",
       "positive_outcome"
     ],
+    "rule_changes": []
+  }
+}
+```
+
+**For Options:**
+```json
+{
+  "options_outcome": {
+    "exit_date": "2025-02-15",
+    "exit_option_price": 8.50,
+    "underlying_price_at_exit": 178.00,
+    "exit_reason": "catalyst_complete",
+    "contracts_closed": 5,
+    "premium_paid_total": 1750,
+    "premium_received_total": 4250,
+    "gross_return_pct": 1.429,
+    "gross_return_usd": 2500,
+    "theta_decay_total": 350,
+    "net_return_pct": 1.229,
+    "net_return_usd": 2150,
+    "hold_days": 36,
+    "dte_at_entry": 70,
+    "dte_at_exit": 34,
+    "dte_used": 36,
+    "thesis_correct": true,
+    "annualized_return": 12.45,
+    "vs_equity": {
+      "stock_return_pct": 0.418,
+      "options_return_pct": 1.229,
+      "leverage_achieved": 2.94,
+      "leverage_expected": 4.21,
+      "options_outperformed": true,
+      "advantage_pct": 0.811
+    }
+  },
+
+  "post_mortem": {
+    "what_worked": [
+      "Options provided 2.9x leverage on PDUFA approval",
+      "Expiration 35 days post-catalyst was appropriate timing buffer",
+      "Exited day-of catalyst - captured full move, avoided post-announcement IV crush",
+      "Strike selection (3.6% OTM) balanced leverage vs cost",
+      "Theta decay was manageable (1.9%/day average)"
+    ],
+    "what_didnt_work": [
+      "Actual leverage (2.9x) fell short of entry projection (4.2x) due to IV crush",
+      "Could have used slightly closer strike (ATM) for higher delta"
+    ],
+    "lessons": [
+      "PDUFA options work best when exited ON catalyst day (before IV crush)",
+      "ATM calls may be preferable to OTM for PDUFA (higher delta, less IV sensitivity)",
+      "Exit immediately on approval - don't wait for stock to run further",
+      "Options clearly superior for binary catalysts with defined dates"
+    ],
+    "tags_added": [
+      "options_trade",
+      "long_calls",
+      "pdufa_approval",
+      "options_outperformed",
+      "catalyst_day_exit",
+      "positive_outcome"
+    ],
+    "options_analysis": {
+      "strike_performance": "Good - ITM by $48 at exit",
+      "expiration_timing": "Excellent - 34 DTE remaining, no urgency",
+      "iv_behavior": "IV crushed post-approval (68% → 35%), exited before full crush",
+      "theta_impact": "Low - only 36 days of decay vs 70 DTE purchased",
+      "equity_comparison": "Options delivered 81% additional return vs equity approach"
+    },
     "rule_changes": []
   }
 }

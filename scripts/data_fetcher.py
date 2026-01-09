@@ -11,6 +11,7 @@ Used by analyze, score, and monitor skills.
 """
 
 import json
+import subprocess
 import sys
 from pathlib import Path
 from typing import Dict, Optional
@@ -25,6 +26,9 @@ from sec_api import (
     calculate_z_score,
     get_cik_from_ticker
 )
+
+# Import data quality monitor
+from data_quality_monitor import get_monitor
 
 
 def fetch_all(ticker: str, industry: str = "general", archetype: str = "general") -> Dict:
@@ -241,6 +245,148 @@ def fetch_quote(ticker: str) -> Optional[Dict]:
     return fetch_price(ticker)
 
 
+def fetch_options_data(ticker: str, strike: float, expiration: str) -> Optional[Dict]:
+    """
+    Fetch options chain data for monitor skill.
+
+    Data fetched:
+    - Current option bid/ask/mid price
+    - Greeks (delta, theta, gamma, vega)
+    - Implied volatility
+    - Open interest
+    - Volume
+
+    IMPORTANT: Includes data quality validation with circuit breaker.
+    Will halt trading after 3 consecutive validation failures.
+
+    Args:
+        ticker: Stock ticker symbol (underlying)
+        strike: Strike price
+        expiration: Expiration date (YYYY-MM-DD format)
+
+    Returns:
+        Dict with options data, or None if fetch/validation fails
+    """
+    ticker = ticker.upper()
+    monitor = get_monitor()
+
+    # Check if circuit breaker is active
+    if monitor.is_circuit_breaker_active():
+        raise RuntimeError("⛔ Circuit breaker is active. Options trading halted. Reset manually after reviewing data quality logs.")
+
+    try:
+        script_path = Path(__file__).parent / "ibkr_paper.py"
+
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(script_path),
+                "quote_option",
+                ticker,
+                "--strike", str(strike),
+                "--expiration", expiration,
+                "--right", "CALL"
+            ],
+            capture_output=True,
+            text=True,
+            timeout=30
+        )
+
+        if result.returncode != 0:
+            error_msg = f"IBKR fetch failed: {result.stderr}"
+            print(f"Options fetch failed for {ticker}: {error_msg}", file=sys.stderr)
+            monitor.record_failure("ibkr_connection", error_msg, ticker)
+            return None
+
+        data = json.loads(result.stdout)
+
+        if "error" in data or not data.get("mid_price"):
+            error_msg = f"IBKR returned error or missing mid_price"
+            monitor.record_failure("ibkr_response", error_msg, ticker)
+            return None
+
+        # ===== DATA QUALITY VALIDATION =====
+
+        # 1. Validate Greeks
+        greeks = {
+            "delta": data.get("delta"),
+            "theta": data.get("theta"),
+            "gamma": data.get("gamma"),
+            "vega": data.get("vega"),
+            "implied_volatility": data.get("implied_volatility")
+        }
+
+        valid, error = monitor.validate_greeks(greeks, right="CALL")
+        if not valid:
+            print(f"⚠️  Greeks validation failed for {ticker}: {error}", file=sys.stderr)
+            monitor.record_failure("greeks_validation", error, ticker)
+            return None
+
+        # 2. Validate Pricing
+        valid, error = monitor.validate_pricing(
+            data.get("bid"),
+            data.get("ask"),
+            data.get("last")
+        )
+        if not valid:
+            print(f"⚠️  Pricing validation failed for {ticker}: {error}", file=sys.stderr)
+            monitor.record_failure("pricing_validation", error, ticker)
+            return None
+
+        # 3. Validate Liquidity (warning only - doesn't trigger circuit breaker)
+        valid, warning = monitor.validate_liquidity(
+            data.get("open_interest"),
+            data.get("volume")
+        )
+        if not valid:
+            # Liquidity warnings are logged but don't fail the request
+            print(f"⚠️  Liquidity warning for {ticker}: {warning}", file=sys.stderr)
+            # Don't return None - just warn
+
+        # All validations passed - reset failure counter
+        monitor.reset_failures()
+
+        return {
+            "ticker": ticker,
+            "strike": strike,
+            "expiration": expiration,
+            "right": "CALL",
+            "bid": data.get("bid"),
+            "ask": data.get("ask"),
+            "last": data.get("last"),
+            "mid_price": data.get("mid_price"),
+            "delta": data.get("delta"),
+            "theta": data.get("theta"),
+            "gamma": data.get("gamma"),
+            "vega": data.get("vega"),
+            "implied_volatility": data.get("implied_volatility"),
+            "open_interest": data.get("open_interest"),
+            "volume": data.get("volume"),
+            "timestamp": datetime.now().isoformat(),
+            "source": data.get("source", "IBKR Paper"),
+            "data_quality_validated": True  # Flag that validation passed
+        }
+
+    except subprocess.TimeoutExpired:
+        error_msg = f"IBKR timeout after 30 seconds"
+        print(f"Options fetch timeout for {ticker}", file=sys.stderr)
+        monitor.record_failure("ibkr_timeout", error_msg, ticker)
+        return None
+    except json.JSONDecodeError as e:
+        error_msg = f"IBKR JSON parse error: {e}"
+        print(f"Options JSON parse error for {ticker}: {error_msg}", file=sys.stderr)
+        monitor.record_failure("ibkr_json_error", error_msg, ticker)
+        return None
+    except RuntimeError as e:
+        # Circuit breaker triggered - re-raise to halt execution
+        raise
+    except Exception as e:
+        error_msg = f"Unexpected error: {e}"
+        print(f"Options fetch error for {ticker}: {error_msg}", file=sys.stderr)
+        monitor.record_failure("unexpected_error", error_msg, ticker)
+        return None
+
+
 def main():
     """CLI interface for data fetching."""
     import argparse
@@ -264,6 +410,13 @@ def main():
     # fetch_quote command
     parser_quote = subparsers.add_parser("fetch_quote", help="Fetch simple price quote")
     parser_quote.add_argument("ticker", help="Stock ticker symbol")
+
+    # fetch_options_data command
+    parser_options = subparsers.add_parser("fetch_options_data",
+                                           help="Fetch options data for monitor skill")
+    parser_options.add_argument("ticker", help="Stock ticker symbol (underlying)")
+    parser_options.add_argument("--strike", type=float, required=True, help="Strike price")
+    parser_options.add_argument("--expiration", required=True, help="Expiration date (YYYY-MM-DD)")
 
     args = parser.parse_args()
 
@@ -293,6 +446,14 @@ def main():
             print(json.dumps(data, indent=2))
         else:
             print(f"ERROR: Could not fetch quote for {args.ticker}", file=sys.stderr)
+            sys.exit(1)
+
+    elif args.command == "fetch_options_data":
+        data = fetch_options_data(args.ticker, args.strike, args.expiration)
+        if data:
+            print(json.dumps(data, indent=2))
+        else:
+            print(f"ERROR: Could not fetch options data for {args.ticker}", file=sys.stderr)
             sys.exit(1)
 
 

@@ -107,6 +107,52 @@ For the archetype, check ALL applicable kill screens:
 - Strict enforcement: 1.79 < 1.81 threshold = FAIL (no tolerance band)
 - Log exact values for reference
 
+### Step 2c: Options Viability Assessment (If Applicable)
+
+**Run After Equity Kill Screens Pass:**
+
+Check if archetype supports options (`schema/options_strategies.json` → archetype.enabled):
+
+1. **Fetch Options Chain Data**
+   - Query IBKR or Yahoo Finance for options chain
+   - Get all available expirations and strikes
+   - Calculate implied volatility metrics
+
+2. **Run Options Kill Screens** (from `schema/options_kill_screens.json`):
+   - Options existence check
+   - Open interest ≥ thresholds (100 for target, 50 for adjacent)
+   - Average volume ≥ thresholds (20 for strike, 100 total)
+   - Bid-ask spread < 10% of mid
+   - Time to expiration: Find expiration matching catalyst + buffer
+   - IV sanity checks (10%-300%)
+   - Archetype-specific checks (LEAPS for activist, deal price strike for merger arb)
+
+3. **Breakeven Analysis**
+   - If options screens pass, calculate:
+     - Stock move needed for breakeven: `(strike + premium - current_price) / current_price`
+     - Effective leverage: `notional_exposure / premium_paid`
+     - Premium as % of notional: `premium / (shares * stock_price)`
+   - Compare to mispricing gap from thesis
+   - If stock_move_needed < mispricing_gap AND leverage > 3x → Options favorable
+
+4. **Generate Options Recommendation**
+   - **Options viable + favorable:** "Recommend options - better risk/reward than equity"
+   - **Options viable but marginal:** "Options available - analyze will present both approaches"
+   - **Options not viable:** "Options screened out - use equity (reason: low liquidity / wide spreads / no suitable expiration)"
+   - **Archetype doesn't support:** "Equity only for this archetype"
+
+**Add to watchlist file in Step 3 below:**
+```markdown
+## Options Analysis
+**Viable:** Yes/No
+**Reason:** [Why options passed/failed screens]
+**Recommended Strike:** $X (ATM/OTM)
+**Recommended Expiration:** YYYY-MM-DD (67 DTE)
+**Breakeven Stock Move:** +15% (vs +25% mispricing gap → favorable)
+**Effective Leverage:** 4.2x
+**Recommendation:** Consider options - premium $X for Y contracts
+```
+
 ### Step 3: Create Watchlist File
 If screens pass, create `universe/watchlist/{TICKER}.md`:
 
@@ -125,6 +171,32 @@ If screens pass, create `universe/watchlist/{TICKER}.md`:
 - [x] M-Score: {value} (PASS)
 - [x] Z-Score: {value} (PASS)
 - [x] Other applicable screens...
+
+## Options Analysis
+**Archetype Supports Options:** {Yes/No}
+**Options Viable:** {Yes/No}
+**Options Screening:**
+- Open Interest: {value} (threshold: 100) → {PASS/FAIL}
+- Bid-Ask Spread: {X}% (threshold: 10%) → {PASS/FAIL}
+- Suitable Expiration: {YYYY-MM-DD} ({X} DTE) → {PASS/FAIL}
+- IV: {X}% (percentile: {Y}) → {PASS/FAIL}
+
+**If Options Viable:**
+- **Recommended Strategy:** {long_calls / call_debit_spread / leaps_calls}
+- **Strike:** ${X} ({ATM/OTM description})
+- **Expiration:** {YYYY-MM-DD} ({X} DTE)
+- **Estimated Premium:** ${X} per contract
+- **Position Size:** {Y} contracts (${Z} total premium at {A}% of portfolio)
+- **Breakeven Stock Price:** ${X} (+{Y}% from current)
+- **Effective Leverage:** {Z}x
+- **Comparison to Mispricing:** Breakeven {Y}% vs expected move {Z}% → {Favorable/Unfavorable}
+
+**Recommendation:** {Options preferred / Equity preferred / Consider both}
+**Reason:** {Brief explanation}
+
+**If Options Not Viable:**
+- **Reason:** {Low liquidity / Wide spreads / No suitable expiration / Archetype doesn't support}
+- **Fallback:** Use equity approach
 
 ## Key Questions
 - [ ] Question 1

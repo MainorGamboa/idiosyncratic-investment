@@ -64,6 +64,45 @@ For each applicable screen:
 4. Compare to threshold
 5. If ANY screen fails → STOP and return FAIL
 
+### Step 3a: Options Kill Screens (If Applicable)
+
+**Run After Equity Screens Pass:**
+
+If archetype supports options (check `schema/options_strategies.json` → archetype.enabled = true):
+
+1. **Check Options Existence**
+   - Query IBKR or Yahoo Finance for options chain
+   - If no options available → Auto-fallback to equity, log note
+
+2. **Check Liquidity Screens** (from `schema/options_kill_screens.json`):
+   - Open Interest: Target strike ≥ 100, adjacent strikes ≥ 50
+   - Average Volume: Strike avg ≥ 20, total chain ≥ 100
+   - Bid-Ask Spread: < 10% of mid price
+
+3. **Check Time to Expiration**:
+   - Find expiration that matches: catalyst_date + buffer_days (from options_strategies.json)
+   - Verify DTE ≥ 21 days minimum
+   - If no suitable expiration → Fallback to equity
+
+4. **Check IV Sanity**:
+   - IV should be 10%-300% (flag if outside)
+   - IV percentile 5-95 (avoid extremes)
+
+5. **Check Pricing Anomalies**:
+   - ITM options ≥ intrinsic value
+   - Call prices decrease with higher strikes
+   - If violations → Flag data quality issue, use alternative source
+
+6. **Archetype-Specific Screens**:
+   - PDUFA: Adjust OI minimum to 50 (biotech options often lower volume)
+   - Activist: Verify LEAPS (12-18mo) available
+   - Merger Arb: Strike at/near deal price exists
+
+**Options Screen Result:**
+- If options pass all screens → Flag "options_viable = true" for analyze skill
+- If options fail any screen → Flag "options_viable = false, reason = X"
+- **Important:** Options screen failure does NOT kill the idea (equity still viable)
+
 ### Step 4: Log Result
 Update `universe/screened/{YYYY-MM}.json`:
 
@@ -77,6 +116,19 @@ Update `universe/screened/{YYYY-MM}.json`:
   "results": {
     "beneish_m_score": {"value": -2.1, "threshold": -1.78, "passed": true},
     "altman_z_score": {"value": 2.5, "threshold": 1.81, "passed": true}
+  },
+  "options_screening": {
+    "archetype_supports_options": true,
+    "options_viable": true,
+    "screens_checked": ["options_existence", "open_interest", "bid_ask_spread", "time_to_expiration"],
+    "results": {
+      "options_existence": {"passed": true},
+      "open_interest": {"target_strike_oi": 250, "threshold": 100, "passed": true},
+      "bid_ask_spread": {"spread_pct": 0.08, "threshold": 0.10, "passed": true},
+      "time_to_expiration": {"dte": 67, "min_dte": 21, "passed": true}
+    },
+    "recommended_approach": "Consider both equity and options - analyze will compare",
+    "note": "Options screens passed - viable for options strategy"
   }
 }
 ```
