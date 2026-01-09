@@ -172,6 +172,40 @@
           "result": "FAIL - Runway 4.9mo << 18mo threshold. Z-Score -5.39 already failed."
         }
       }
+    },
+
+    "insider_cluster_quality": {
+      "id": "KS-008",
+      "name": "Insider Cluster Quality",
+      "threshold": 3,
+      "operator": "<",
+      "fail_condition": "Fewer than 3 opportunistic insiders in cluster",
+      "rationale": "Routine traders eliminate ~50% of false signals. Only count opportunistic traders toward cluster threshold.",
+      "applies_to": ["insider"],
+      "how_to_check": "Pull 3-year Form 4 history for each insider. Classify as routine if trades occur in same calendar month annually (3+ years). Count only opportunistic traders toward 3+ threshold.",
+      "routine_trader_definition": {
+        "pattern": "Trades occur in same calendar month annually",
+        "lookback_period_years": 3,
+        "example": "Insider sells every June for 3+ years = routine. Exclude from cluster count."
+      },
+      "implementation": {
+        "data_source": "SEC Form 4 via EdgarTools",
+        "analysis": "For each insider in cluster: fetch Form 4s from past 3 years, extract transaction dates, check for annual calendar month pattern. If pattern detected, exclude insider from cluster count."
+      },
+      "examples": {
+        "pass": {
+          "scenario": "5 insider purchases in 2-week window: 4 opportunistic + 1 routine",
+          "opportunistic_count": 4,
+          "routine_count": 1,
+          "result": "PASS - 4 opportunistic insiders >= 3 threshold"
+        },
+        "fail": {
+          "scenario": "5 insider purchases in 2-week window: 2 opportunistic + 3 routine",
+          "opportunistic_count": 2,
+          "routine_count": 3,
+          "result": "FAIL - 2 opportunistic insiders < 3 threshold"
+        }
+      }
     }
   },
 

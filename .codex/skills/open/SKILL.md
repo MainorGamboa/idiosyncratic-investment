@@ -80,6 +80,24 @@ position_value = min(max_position_size, calculated_from_kelly)
 - Negative skew (Merger, PDUFA, Activist): 25% of Kelly
 - Positive skew (Spin-off, Liquidation): 50% of Kelly
 
+**v1.1 Position Sizing Adjustments:**
+
+**For Spin-off archetype:**
+- Check for WARN Act filing at SpinCo
+- Use: `python scripts/warn_act_checker.py spinoff_sizing {SPINCO_NAME} {PARENT_NAME}`
+- **If WARN filing detected → Reduce position size by 50%**
+- Rationale: WARN signals operational distress at SpinCo, warrants risk reduction
+- Reference: `schema/archetypes.json` → spinoff → operational_risk_signals
+
+Example calculation with WARN adjustment:
+```
+base_position_value = min(max_position_size, calculated_from_kelly)
+if spinoff_has_warn:
+    adjusted_position_value = base_position_value * 0.5
+else:
+    adjusted_position_value = base_position_value
+```
+
 ### Step 3: Generate Trade ID
 
 **See TECHNICAL_SPEC.md §15.1 for complete trade ID specification.**

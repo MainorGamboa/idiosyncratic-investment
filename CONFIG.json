@@ -28,14 +28,47 @@
     "alerts": [],
     "last_updated": "2026-01-07T09:00:00Z"
   },
-  "framework_version": "1.0",
-  "schema_format_version": "1.0",
+  "framework_version": "1.1",
+  "schema_format_version": "1.1",
   "data_sources": {
     "price_priority": ["ibkr_paper", "stooq", "yahoo_finance"],
     "financials_priority": ["sec_api", "manual_calculation", "third_party"],
+    "regulatory_priority": ["openfda_api", "fda_foia_reading_room"],
+    "insider_priority": ["sec_edgar_edgartools"],
+    "activist_priority": ["sec_edgar_13d", "13d_monitor_public"],
+    "pdufa_priority": ["biopharmcatalyst", "fda_calendar"],
     "cache_policy": {
       "price_duration_minutes": 60,
-      "financials_duration_days": 90
+      "financials_duration_days": 90,
+      "regulatory_duration_days": 30,
+      "insider_duration_days": 7
+    }
+  },
+  "external_apis": {
+    "openfda": {
+      "base_url": "https://api.fda.gov",
+      "endpoints": {
+        "device_483": "/device/event.json",
+        "drug_enforcement": "/drug/enforcement.json"
+      },
+      "rate_limit": "240 requests per minute",
+      "auth_required": false
+    },
+    "sec_edgar": {
+      "base_url": "https://www.sec.gov",
+      "user_agent": "Trading Framework mainor@example.com",
+      "rate_limit": "10 requests per second",
+      "auth_required": false
+    },
+    "ema": {
+      "base_url": "https://www.ema.europa.eu",
+      "medicines_database": "/en/medicines",
+      "auth_required": false
+    },
+    "warn_databases": {
+      "california": "https://edd.ca.gov/en/Jobs_and_Training/Layoff_Services_WARN",
+      "new_york": "https://dol.ny.gov/warn-notices",
+      "note": "State WARN databases vary. Some have APIs, most require web scraping."
     }
   },
   "alerts": {
@@ -54,5 +87,5 @@
     "use_fixtures": false,
     "log_level": "INFO"
   },
-  "notes": "v1.0 launch. Framework reset from v3.7 pre-release. See TECHNICAL_SPEC.md for implementation details."
+  "notes": "v1.1 - Archetype-Specific Modifiers Enhancement. Added new scoring modifiers, insider cluster quality kill screen, updated base rates, and enhanced data sources. See schema/CHANGELOG.md for details."
 }

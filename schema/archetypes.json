@@ -5,7 +5,15 @@
       "base_rates": {
         "friendly_definitive": 0.94,
         "strategic_buyer_bonus": "+2-3%",
-        "hostile": 0.38
+        "hostile": 0.38,
+        "post_second_request": [0.55, 0.65],
+        "cfius_exposed": 0.83,
+        "china_connected": [0.60, 0.70]
+      },
+      "timeline_adjustments": {
+        "second_request_issued": "+90-120 days",
+        "cfius_exposed": "+160 days",
+        "note": "CFIUS review adds significant timeline risk. China-connected buyers face elevated abandonment rates."
       },
       "adjustments": {
         "third_party_veto": -1,
@@ -26,8 +34,25 @@
       "base_rates": {
         "post_nda": 0.92,
         "with_adcom_positive": 0.97,
+        "with_adcom_unanimous": 0.99,
+        "ema_fda_concordance": [0.91, 0.98],
         "crl_resub_manufacturing": [0.60, 0.70],
         "crl_resub_efficacy": [0.30, 0.40]
+      },
+      "timeline_adjustments": {
+        "crl_class_1_resubmission": "2 months (not 6 months)",
+        "crl_class_2_resubmission": "6 months",
+        "note": "Class 1 CRLs are manufacturing/labeling issues with faster turnaround. Class 2 requires additional studies."
+      },
+      "regulatory_signals": {
+        "form_483_with_oai": {
+          "impact": "Scoring adjustment -1.0",
+          "rationale": "OAI (Official Action Indicated) at manufacturing site raises approval risk"
+        },
+        "prior_ema_approval": {
+          "impact": "Scoring adjustment +0.5",
+          "rationale": "91-98% EMA→FDA concordance validates safety/efficacy profile"
+        }
       },
       "therapeutic_area_loa": {
         "hematology": 0.26,
@@ -118,6 +143,13 @@
           "rationale": "Signals forced selling exhaustion vs. continued distribution"
         }
       },
+      "operational_risk_signals": {
+        "warn_filing_at_spinco": {
+          "action": "Reduce position size by 50%",
+          "rationale": "WARN filing signals operational distress at SpinCo. Not a kill screen, but warrants risk reduction.",
+          "implementation": "Check WARN Act database for SpinCo ticker/parent company before opening position."
+        }
+      },
       "position": {
         "max_size": 0.08,
         "kelly": 0.50,
@@ -155,7 +187,7 @@
         "skew": "negative"
       },
       "entry_timing": {
-        "base_signal": "On cluster detection",
+        "base_signal": "On cluster detection (after kill screen validates cluster quality)",
         "volume_overlay": {
           "threshold": "2x 20-day average",
           "rationale": "Insiders buy during quiet periods. Volume surge signals market discovery",
@@ -163,7 +195,7 @@
           "note": "Not a scored filter. Used only for timing execution on scored ideas ≥8.25"
         }
       },
-      "kill_screens": ["beneish_m_score"]
+      "kill_screens": ["beneish_m_score", "insider_cluster_quality"]
     },
     
     "legislative": {

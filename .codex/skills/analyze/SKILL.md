@@ -80,11 +80,40 @@ Display fetched data to user:
 Reference: `schema/kill_screens.json`
 
 For the archetype, check ALL applicable kill screens:
-- All archetypes: M-Score, Z-Score
-- Merger Arb: Hostile deal, Spread < 2.5%
-- Legislative: Macro conflict
+- **All archetypes**: M-Score, Z-Score, Market cap ceiling
+- **Merger Arb**: Hostile deal, Spread < 2.5%
+- **Legislative**: Macro conflict
+- **Insider** (v1.1): Insider Cluster Quality (KS-008) - requires 3+ opportunistic insiders
+  - Routine traders excluded (trades in same month annually for 3+ years)
+  - Uses `scripts/insider_analysis.py` to validate cluster
+- **PDUFA**: Financial health (18mo cash runway, D/E <0.75, net cash position)
 
 **If ANY kill screen fails → PASS. Stop here.**
+
+### Step 2a: Archetype-Specific Data Gathering (v1.1)
+
+**data_fetcher.py now automatically gathers archetype-specific data:**
+
+**For PDUFA archetype:**
+- Check Form 483 with OAI (affects scoring: -1.0pt if present)
+- Check EMA approval status (affects scoring: +0.5pt if approved)
+- Note: These are scoring modifiers, not kill screens
+- Manual verification may be required (see data_fetcher output)
+
+**For Insider archetype:**
+- Validate insider cluster quality (kill screen KS-008)
+- Fetch 3-year Form 4 history for each insider
+- Classify routine vs opportunistic traders
+- Count only opportunistic insiders toward 3+ threshold
+
+**For Activist/Spin-off archetypes:**
+- Check WARN Act filings (state databases)
+- Activist: WARN with "loss of contract" = exit signal (not kill screen)
+- Spin-off: WARN at SpinCo = reduce position size 50%
+
+**For Merger Arb:**
+- Note: Second request, CFIUS, and China-connected checks happen during scoring
+- Not part of kill screens, but tracked for scoring adjustments
 
 ### Step 2b: Data Validation & Anomaly Detection
 
@@ -124,7 +153,14 @@ If screens pass, create `universe/watchlist/{TICKER}.md`:
 ## Kill Screens
 - [x] M-Score: {value} (PASS)
 - [x] Z-Score: {value} (PASS)
-- [x] Other applicable screens...
+- [x] Market cap: {value} (< threshold)
+- [x] Archetype-specific: {list archetype kill screens}
+
+**v1.1 Archetype-Specific Data:**
+- **PDUFA**: Form 483 with OAI: {Yes/No}, EMA approved: {Yes/No}
+- **Insider**: Opportunistic insiders: {count}, Routine insiders: {count}
+- **Activist/Spin-off**: WARN filing: {Yes/No}
+- **Merger Arb**: Note any second request, CFIUS, or China exposure
 
 ## Key Questions
 - [ ] Question 1
