@@ -93,5 +93,28 @@
     "use_fixtures": false,
     "log_level": "INFO"
   },
+  "data_quality": {
+    "greeks_validation": {
+      "iv_range": [0.10, 3.00],
+      "delta_range_calls": [0.01, 1.00],
+      "theta_range_long": [-10.0, 0.0],
+      "gamma_range": [0.0, 1.0],
+      "vega_range": [0.0, 10.0]
+    },
+    "pricing_validation": {
+      "max_bid_ask_spread_pct": 0.15,
+      "min_bid": 0.01,
+      "min_ask": 0.01
+    },
+    "liquidity_validation": {
+      "min_open_interest": 50,
+      "min_daily_volume": 10
+    },
+    "circuit_breaker": {
+      "consecutive_failures_threshold": 3,
+      "timeout_threshold_per_hour": 3,
+      "auto_reset_after_hours": 24
+    }
+  },
   "notes": "v1.0 launch. Framework reset from v3.7 pre-release. See TECHNICAL_SPEC.md for implementation details."
 }

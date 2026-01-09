@@ -115,15 +115,51 @@ class IBKRApp(EWrapper, EClient):
         theta,
         undPrice,
     ):
-        """Handle Greeks data for options."""
+        """
+        Handle Greeks data for options.
+
+        Validates sentinel values and range checks to ensure data quality.
+        IBKR uses -1 and -2 as "not available" sentinels.
+        """
+        def clean_greek(value, name, valid_range=None):
+            """
+            Clean and validate Greek value from IBKR.
+
+            Args:
+                value: Raw value from IBKR
+                name: Greek name for logging
+                valid_range: Optional tuple (min, max) for range validation
+
+            Returns:
+                Cleaned value or None if invalid
+            """
+            # IBKR sentinel values
+            if value is None or value == -1 or value == -2:
+                return None
+
+            # Range validation
+            if valid_range:
+                min_val, max_val = valid_range
+                if not (min_val <= value <= max_val):
+                    import sys
+                    print(
+                        f"WARNING: {name}={value:.4f} outside range [{min_val}, {max_val}]",
+                        file=sys.stderr
+                    )
+                    return None  # Don't use out-of-range values
+
+            return value
+
         greeks = self.market_data.setdefault(reqId, {}).setdefault("greeks", {})
-        greeks["implied_volatility"] = impliedVol if impliedVol and impliedVol != -1 and impliedVol != -2 else None
-        greeks["delta"] = delta if delta and delta != -1 and delta != -2 else None
-        greeks["gamma"] = gamma if gamma and gamma != -1 and gamma != -2 else None
-        greeks["vega"] = vega if vega and vega != -1 and vega != -2 else None
-        greeks["theta"] = theta if theta and theta != -1 and theta != -2 else None
-        greeks["option_price"] = optPrice if optPrice and optPrice != -1 and optPrice != -2 else None
-        greeks["underlying_price"] = undPrice if undPrice and undPrice != -1 and undPrice != -2 else None
+
+        # Clean and validate each Greek with appropriate ranges
+        greeks["implied_volatility"] = clean_greek(impliedVol, "IV", (0.05, 5.0))  # 5% to 500% IV
+        greeks["delta"] = clean_greek(delta, "Delta", (0.0, 1.0))  # Delta for calls: 0 to 1
+        greeks["gamma"] = clean_greek(gamma, "Gamma", (0.0, 1.0))  # Gamma: 0 to 1
+        greeks["vega"] = clean_greek(vega, "Vega", (0.0, 10.0))  # Vega: 0 to 10
+        greeks["theta"] = clean_greek(theta, "Theta", (-10.0, 0.0))  # Theta for long: -10 to 0
+        greeks["option_price"] = clean_greek(optPrice, "OptPrice", (0.0, 10000.0))  # Option price sanity
+        greeks["underlying_price"] = clean_greek(undPrice, "UndPrice", (0.0, 100000.0))  # Stock price sanity
 
     def tickSnapshotEnd(self, reqId):
         self._mktdata_done.set()
