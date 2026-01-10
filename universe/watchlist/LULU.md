@@ -40,9 +40,5 @@ Valuation: LULU is trading well below historical multiples due to recent underpe
 - **Consumer Preferences:** Fickle nature of athleisure trends.
 - **Valuation:** Still trades at a premium to general retail, though compressed for LULU history.
 
-## 5. Precedents
-- **Starbucks (SBUX) / Elliott (2024):** Elliott involvement led to CEO change (Brian Niccol) -> Stock +20%.
-- **Pinterest (PINS) / Elliott (2022):** Operational improvements, margin expansion.
-
-## 6. Decision Log
+## 5. Decision Log
 - **2026-01-07:** Added to watchlist. Passed kill screens. High priority due to Tier-1 Activist.

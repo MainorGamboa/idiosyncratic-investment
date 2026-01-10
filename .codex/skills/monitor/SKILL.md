@@ -1,6 +1,6 @@
 ---
 name: monitor
-description: Update all active trades with current data and check exit signals. Evaluates info parity signals and hard exit triggers. Use daily as part of morning routine, or when significant market moves occur.
+description: Update all active trades with current data and check exit signals. Evaluates info parity signals and hard exit triggers.
 ---
 
 # Monitor Skill
@@ -9,7 +9,7 @@ description: Update all active trades with current data and check exit signals. 
 Update all active trades with current data, check exit signals.
 
 ## When to Use
-- Daily (morning routine)
+- Daily
 - When significant market move occurs
 - Before major catalyst dates
 
@@ -325,7 +325,6 @@ Append to `logs/monitor/YYYY-MM-DD.log`:
 ```
 
 ## Rules
-- Run daily at minimum
 - Check hard exits BEFORE info parity
 - Always log monitoring entry, even if no action
 - Note any cockroaches, even minor ones

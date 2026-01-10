@@ -23,17 +23,12 @@ Execute the complete weekly review and maintenance workflow:
    - Re-score if material news or price changes
    - Archive outdated events
 
-4. **Precedent Index Update**
-   - Verify precedents/index.json is current
-   - Add tags from this week's closed trades
-   - Update patterns.md
-
-5. **Framework Calibration Check**
+4. **Framework Calibration Check**
    - Review kill screen effectiveness
    - Check if scoring thresholds need adjustment
    - Flag any systematic issues
 
-6. **Weekly Summary**
+5. **Weekly Summary**
    - Week's performance metrics
    - New catalysts added
    - Active positions status

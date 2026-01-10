@@ -31,7 +31,6 @@ The system separates **data (JSON)** from **narrative (Markdown)**.
     *   `active/`: JSON files for open positions (`TRD-YYYYMMDD-TICKER-ARCH.json`).
     *   `closed/`: Markdown post-mortems for wins/losses.
     *   `passed/`: JSON logs for ideas that failed kill screens or scoring.
-*   **`precedents/`**: Pattern library (`index.json`, `patterns.md`).
 *   **`scripts/`**: Python integration scripts (`ibkr_paper.py`).
 
 ### Key Files
@@ -52,9 +51,8 @@ You will act as the operator of this system, performing "Skills" as defined in `
 | **`score`** | Complete 6-filter scoring (max 11 pts). | `schema/scoring.json`, `universe/watchlist/` |
 | **`open`** | Open position (sizing, trade file creation). | `schema/archetypes.json`, `trades/active/` |
 | **`monitor`** | Check active trades for exit signals. | `schema/exits.json`, `trades/active/`, `alerts.json` |
-| **`close`** | Close position & create post-mortem. | `trades/active/` → `trades/closed/`, `precedents/` |
+| **`close`** | Close position & create post-mortem. | `trades/active/` → `trades/closed/` |
 | **`scan`** | Find new catalysts. | `universe/events.json` |
-| **`search`** | Find precedents. | `precedents/index.json` |
 
 ## 4. Workflows & Conventions
 
@@ -86,5 +84,4 @@ Use `python scripts/ibkr_paper.py` for execution if requested.
 
 *   **Be "Ask-First":** If a kill screen is ambiguous or a metric is borderline, ask the user.
 *   **Log Everything:** Every decision (even a PASS) generates a file.
-*   **Context Aware:** When scoring, check `precedents/` for similar past trades.
 *   **Markdown for Humans, JSON for Machines:** Ensure `trades/*.json` files are strictly valid JSON and `universe/watchlist/*.md` files are descriptive.

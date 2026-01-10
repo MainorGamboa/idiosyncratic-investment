@@ -61,10 +61,5 @@
       "action": "OPEN",
       "notes": "Opened position. Elliott campaign active."
     }
-  ],
-  "precedents": [
-    "SBUX (Elliott 2024)",
-    "PINS (Elliott 2022)"
-  ],
-  "tags": ["activist", "tier-1", "retail", "turnaround"]
+  ]
 }

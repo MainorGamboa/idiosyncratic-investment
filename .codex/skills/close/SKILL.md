@@ -1,6 +1,6 @@
 ---
 name: close
-description: Close position and create post-mortem. Calculates returns, writes lessons learned, updates precedents index. Use when exit signal triggered, catalyst occurred, thesis invalidated, or stop loss hit.
+description: Close position and create post-mortem. Calculates returns, writes lessons learned. Use when exit signal triggered, catalyst occurred, thesis invalidated, or stop loss hit.
 ---
 
 # Close Skill
@@ -224,7 +224,6 @@ Prompt for or analyze:
 
 **What Worked:**
 - Which filters/signals were accurate?
-- Did precedents apply correctly?
 - Was sizing appropriate?
 - **For Options:** Was expiration timing correct? Did leverage justify theta decay cost?
 
@@ -373,23 +372,10 @@ Convert JSON to Markdown format:
 
 This organization enables better learning from outcomes (wins vs losses patterns).
 
-### Step 6: Update Precedents Index
-Add tags to `precedents/index.json`:
-
-```json
-{
-  "tags": {
-    "breakthrough_adcom_combo": ["TRD-2025-001"],
-    "pdufa_approval": ["TRD-2025-001"],
-    "positive_outcome": ["TRD-2025-001"]
-  }
-}
-```
-
-### Step 7: Update Event (if linked)
+### Step 6: Update Event (if linked)
 If trade was linked to an event, update event status to "completed" in `universe/events.json`.
 
-### Step 8: Write Log Entry
+### Step 7: Write Log Entry
 
 Append to `logs/close/YYYY-MM-DD.log`:
 
@@ -438,7 +424,6 @@ Append to `logs/close/YYYY-MM-DD.log`:
 ## Rules
 - ALWAYS write post-mortem (even for small wins/losses)
 - Document what DIDN'T work as much as what did
-- Add specific, searchable tags to precedents index
 - Calculate annualized return for comparison across trades
 - Note if rules need updating (but don't update automatically)
 - Be honest about mistakes and missed signals
@@ -464,5 +449,4 @@ Append to `logs/close/YYYY-MM-DD.log`:
 
 ## Related Skills
 - `monitor` — Identifies when to close
-- `search` — Find similar trades for comparison
 - `review` — Aggregates closed trades in weekly review

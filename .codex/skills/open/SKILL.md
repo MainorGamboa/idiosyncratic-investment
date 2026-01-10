@@ -274,9 +274,6 @@ Create `trades/active/{TRADE_ID}.json`:
   },
 
   "monitoring": [],
-
-  "precedents": [],
-  "tags": ["{archetype}", "active"]
 }
 ```
 
@@ -371,9 +368,6 @@ Create `trades/active/{TRADE_ID}.json`:
 
   "monitoring": [],
   "options_greeks_history": [],
-
-  "precedents": [],
-  "tags": ["{archetype}", "active", "options", "long_calls"]
 }
 ```
 

@@ -28,10 +28,6 @@ idiosyncratic/
 ├── journal/                  # Narrative layer
 │   └── reviews/              # Weekly reviews
 │
-├── precedents/               # Searchable patterns
-│   ├── index.json            # Tag → trade mappings
-│   └── patterns.md           # Named patterns
-│
 └── skills/                   # Claude Code skills
     ├── analyze/              # Full framework analysis
     ├── screen/               # Kill screens only
@@ -40,7 +36,6 @@ idiosyncratic/
     ├── monitor/              # Update active trades
     ├── close/                # Close position
     ├── regime/               # Check market regime
-    ├── search/               # Find precedents
     ├── scan/                 # Find new events
     └── review/               # Generate reports
 ```
@@ -118,7 +113,6 @@ Skills (`/open`, `/monitor`, `/close`) include optional IBKR execution steps.
 | `FRAMEWORK.md` | Human-readable rules |
 | `CONFIG.json` | System state (update daily) |
 | `schema/*.json` | Machine-readable rules |
-| `precedents/patterns.md` | Named patterns from experience |
 
 ## Design Principles
 

@@ -55,10 +55,5 @@
       "action": "OPEN",
       "notes": "Opened position. PDUFA in 7 days."
     }
-  ],
-  "precedents": [
-    "Protalix (PLX) - CRL for CMC, Approved",
-    "Vericel (VCEL) - Manufacturing remediation"
-  ],
-  "tags": ["pdufa", "rare_disease", "resubmission", "biotech"]
+  ]
 }

@@ -35,17 +35,5 @@ Execute the complete autonomous daily trading workflow:
    - New events discovered
    - Alerts requiring attention
 
-## Token-Efficient Design
-
-The agent processes incrementally:
-- Day 1: Scan 3 events, analyze 2, open 1
-- Day 2: Continue with remaining events + new scans
-- Day 3: Build up coverage over time
-
 Max positions limit (from CONFIG.json) prevents overtrading.
 
-## When to Run
-
-Every market day before 9:30 AM ET.
-
-The agent handles everything autonomously - no user decisions required unless alerts are raised.

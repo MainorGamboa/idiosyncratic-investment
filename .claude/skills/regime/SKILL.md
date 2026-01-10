@@ -1,6 +1,6 @@
 ---
 name: regime
-description: Check market regime via VIX and credit spreads. Updates CONFIG.json with regime state and recommended actions. Use daily before market open, after significant market moves, or before opening new positions.
+description: Check market regime via VIX and credit spreads. Updates CONFIG.json with regime state and recommended actions.
 ---
 
 # Regime Skill
@@ -9,20 +9,9 @@ description: Check market regime via VIX and credit spreads. Updates CONFIG.json
 Check market regime (VIX, credit spreads) and update CONFIG.json with current conditions and recommended actions.
 
 ## When to Use
-- Daily (morning routine before market open)
 - After significant market moves
 - Before opening new positions
 - When considering risk adjustments
-
-## Inputs
-```json
-{
-  "manual_override": false
-}
-```
-
-**Parameters:**
-- `manual_override` (optional): If true, prompt for manual VIX/spread input instead of fetching
 
 ## Process
 
@@ -30,11 +19,11 @@ Check market regime (VIX, credit spreads) and update CONFIG.json with current co
 
 **VIX (CBOE Volatility Index):**
 - Fetch current VIX level
-- Sources: Yahoo Finance (^VIX), CBOE data, or manual input
+- Sources: Yahoo Finance (^VIX), CBOE data
 
 **HY OAS (High Yield Option-Adjusted Spread):**
 - Fetch current HY OAS spread in basis points
-- Sources: FRED (Federal Reserve Economic Data), Bloomberg, or manual input
+- Sources: FRED (Federal Reserve Economic Data), Bloomberg
 - Series: FRED code "BAMLH0A0HYM2"
 
 ### Step 2: Determine VIX Level and Action
@@ -193,7 +182,6 @@ Log every execution for historical regime tracking.
 ```
 
 ## Rules
-- Run DAILY before market open
 - Update CONFIG.json every run (timestamp is critical)
 - VIX >30 must be "sustained" (3+ days) before pausing all new positions
 - Credit spread changes are relative to 30-day baseline (not absolute levels)

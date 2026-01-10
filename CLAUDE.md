@@ -58,13 +58,9 @@ trades/              # Decision traces
 ├── conditional/    # CONDITIONAL scores user declined (JSON)
 └── passed/         # Failed kill screens / PASS scores (JSON)
 
-precedents/          # Searchable pattern library
-├── index.json       # Tag → trade_id mappings
-└── patterns.md      # Named patterns from closed trades
-
 logs/                # Execution logs by skill
 ├── screen/, analyze/, score/, open/, monitor/, close/
-├── regime/, search/, scan/, review/
+├── regime/, scan/, review/
 └── Format: YYYY-MM-DD.log
 
 alerts.json          # Active alerts requiring action
@@ -74,7 +70,7 @@ alerts_archive.json  # Acknowledged alerts
 ### Key Constraints
 
 1. **Flat over nested**: Maximum 2 directory levels. No deeply nested structures.
-2. **IDs link everything**: Trades reference event IDs; precedents reference trade IDs.
+2. **IDs link everything**: Trades reference event IDs;
 3. **Decision traces compound**: Even PASS decisions are logged in `trades/passed/` for future learning.
 4. **Schema is authoritative**: `FRAMEWORK.md` is human-readable, but `schema/*.json` files are the machine-executable truth.
 
@@ -178,7 +174,6 @@ logs/monitor/YYYY-MM-DD.log
 logs/open/YYYY-MM-DD.log
 logs/close/YYYY-MM-DD.log
 logs/regime/YYYY-MM-DD.log
-logs/search/YYYY-MM-DD.log
 logs/scan/YYYY-MM-DD.log
 logs/review/YYYY-MM-DD.log
 ```
@@ -215,7 +210,6 @@ Skills are implemented as Claude Code skills in `.codex/skills/` (note: skills a
 | `open` | Open new position from scored idea | After `score` returns BUY or CONDITIONAL with confirmation |
 | `monitor` | Check all active trades for exit signals | Daily morning routine or after major moves |
 | `close` | Close position, create post-mortem | Exit signal triggered or catalyst occurred |
-| `search` | Find similar trades by tags/text | Before scoring new ideas (find precedents) |
 | `scan` | Find new catalyst events from FDA/SEC/etc. | Weekly to maintain catalyst calendar |
 | `review` | Generate weekly/monthly review report | End of week/month or after significant events |
 
@@ -228,7 +222,7 @@ Skills are implemented as Claude Code skills in `.codex/skills/` (note: skills a
 3. score TICKER → updates watchlist with final score
 4. open TICKER (if BUY) → creates trades/active/{TRADE_ID}.json
 5. monitor (daily) → checks exit signals
-6. close TRADE_ID (when triggered) → moves to trades/closed/, updates precedents/index.json
+6. close TRADE_ID (when triggered) → moves to trades/closed/
 ```
 
 ## Critical Rules
@@ -317,10 +311,6 @@ universe/
 └── screened/          # Monthly kill screen results
     └── YYYY-MM.json
 
-precedents/
-├── index.json         # Tag → trade_id mappings
-└── patterns.md        # Named patterns
-
 logs/
 ├── screen/           # Kill screen logs
 ├── analyze/          # Analysis logs
@@ -348,7 +338,6 @@ alerts_archive.json   # Acknowledged alerts
 | `schema/*.json` | Machine-readable rules | Rarely (framework updates) |
 | `schema/CHANGELOG.md` | Framework version history | Each version update |
 | `universe/events.json` | Upcoming catalyst calendar | Weekly via `scan` skill |
-| `precedents/patterns.md` | Named patterns from experience | After closing trades |
 | `alerts.json` | Active alerts requiring action | Real-time by skills |
 
 ## Data Sources & Integration
@@ -382,7 +371,6 @@ Skills fetch external data with graceful degradation:
 
 - **Skills run autonomously**: User invokes skill by name (e.g., `/analyze SRPT`), skill reads schemas and executes.
 - **All decisions must be traceable**: Every trade file contains entry_thesis, scoring_breakdown, exit_plan.
-- **Precedents are searchable**: The `search` skill uses `precedents/index.json` to find similar past trades by tags.
 - **PASS decisions are logged**: Even ideas that fail kill screens or score below 6.5 are logged in `trades/passed/` for learning.
 - **Activist sourcing is daily**: Check SEC 13D filings, 13D Monitor, and activist tracker sites daily to maintain 8-12 active events
 
@@ -425,6 +413,6 @@ Check regime state in `CONFIG.json` before opening new positions.
 
 1. **JSON for data, MD for narrative**: Machines read JSON, humans read Markdown.
 2. **Skills as verbs**: Each skill does one thing and does it completely.
-3. **IDs link everything**: Trades reference events, precedents reference trades.
+3. **IDs link everything**: Trades reference events.
 4. **Flat over nested**: Max 2 levels deep to avoid complexity.
 5. **Decision traces compound**: Even PASS decisions are logged for learning.
