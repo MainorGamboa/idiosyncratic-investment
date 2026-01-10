@@ -213,6 +213,23 @@ Skills are implemented as Claude Code skills in `.codex/skills/` (note: skills a
 | `scan` | Find new catalyst events from FDA/SEC/etc. | Weekly to maintain catalyst calendar |
 | `review` | Generate weekly/monthly review report | End of week/month or after significant events |
 
+### Commands vs Skills
+
+**Commands** (like `daily`, `weekly`, `bulk-process`) orchestrate multiple skills in a workflow. Commands are NOT skills - they're workflow definitions that live in `.claude/commands/`:
+
+| Command | Purpose | When to Use |
+|---------|---------|-------------|
+| `daily` | Full trading cycle: regime → monitor → close → scan → process pipeline → batch open | Every market day before open |
+| `weekly` | Review + deep scan + IBKR reconciliation + calibration | Friday after close or Sunday evening |
+| `bulk-process` | Batch scan → screen → analyze → score (NO position management) | Weekly catchup, post-vacation, backlog processing |
+
+**Key differences:**
+- **Skills**: Single-purpose, executable actions (e.g., `screen TICKER`, `open TICKER`)
+- **Commands**: Multi-skill workflows with decision logic (e.g., `daily` runs regime + monitor + scan + process events)
+- **Use bulk-process** for pipeline-only batch processing without opening/closing positions
+- **Use daily** for full autonomous trading cycle including position management
+- **Use weekly** for maintenance, learning, and reconciliation
+
 ### Skill Execution Flow
 
 **Typical workflow for a new idea:**

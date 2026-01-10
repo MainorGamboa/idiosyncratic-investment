@@ -77,16 +77,48 @@
       "financials_duration_days": 90
     }
   },
-  "alerts": {
-    "active_alerts_file": "alerts.json",
-    "archive_file": "alerts_archive.json"
-  },
   "automation": {
     "dry_run": false,
     "auto_approve_orders": false,
     "require_confirmation": true,
     "max_positions": 10,
-    "data_cache_ttl_minutes": 60
+    "max_events_per_day": 5,
+    "batch_preview": true,
+    "data_cache_ttl_minutes": 60,
+    "ibkr_reconciliation": {
+      "enabled": false,
+      "frequency": "weekly",
+      "auto_create_from_ibkr": false,
+      "alert_threshold": "any",
+      "reconciliation_actions": {
+        "orphan_ibkr_positions": "alert_and_ask",
+        "orphan_trade_files": "alert_only",
+        "quantity_mismatches": "alert_and_reconcile",
+        "price_drift": "log_only"
+      }
+    },
+    "batch_processing": {
+      "enabled": true,
+      "show_preview_table": true,
+      "require_confirmation": true,
+      "confirmation_style": "single",
+      "max_batch_size": 10
+    },
+    "auto_close": {
+      "cockroach_rule": true,
+      "thesis_break": true,
+      "stop_loss": true,
+      "info_parity_threshold": 2.0,
+      "require_confirmation_for_info_parity": true
+    },
+    "alerts": {
+      "active_alerts_file": "alerts.json",
+      "archive_file": "alerts_archive.json",
+      "write_to_file": true,
+      "console_output": true,
+      "priority_levels": ["immediate", "daily_digest", "weekly_review"],
+      "consolidate_daily": false
+    }
   },
   "testing": {
     "mock_ibkr": false,

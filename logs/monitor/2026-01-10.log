@@ -1,0 +1,54 @@
+{
+  "timestamp": "2026-01-10T11:48:00Z",
+  "skill": "monitor",
+  "outcome": "COMPLETE",
+  "metrics": {
+    "trades_monitored": 3,
+    "alerts_generated": 0,
+    "actions_required": 0,
+    "total_unrealized_pnl": -39.35,
+    "total_unrealized_pct": -0.012
+  },
+  "trade_details": [
+    {
+      "trade_id": "TRD-20260107-FBIO-PDUFA",
+      "ticker": "FBIO",
+      "archetype": "pdufa",
+      "entry_price": 4.27,
+      "current_price": 4.30,
+      "change_pct": 0.007,
+      "unrealized_pnl": 2.61,
+      "weighted_sum": 0.008,
+      "action": "HOLD",
+      "notes": "PDUFA decision in 4 days (Jan 14). No exit signals."
+    },
+    {
+      "trade_id": "TRD-20260107-LULU-ACTIVIST",
+      "ticker": "LULU",
+      "archetype": "activist",
+      "entry_price": 211.72,
+      "current_price": 203.90,
+      "change_pct": -0.037,
+      "unrealized_pnl": -54.74,
+      "weighted_sum": 1.0,
+      "action": "HOLD",
+      "notes": "Media signal triggered but weighted sum 1.0 < 2.0 threshold. Elliott campaign progressing."
+    },
+    {
+      "trade_id": "TRD-20260107-SWX-ACTIVIST",
+      "ticker": "SWX",
+      "archetype": "activist",
+      "entry_price": 80.43,
+      "current_price": 81.14,
+      "change_pct": 0.009,
+      "unrealized_pnl": 12.78,
+      "weighted_sum": 0.036,
+      "action": "HOLD",
+      "notes": "Yellow flag: Icahn reduced position Q1 2025, but maintains 8.48% stake with board seats."
+    }
+  ],
+  "data_sources": ["Stooq (15-min delay)", "web search (news)"],
+  "data_quality_notes": "IBKR fetch failed for all tickers. Used Stooq fallback. MA-200 and IV data unavailable.",
+  "execution_time_ms": 4500,
+  "notes": "All positions stable. No exit signals triggered. LULU has media coverage but weighted sum below exit threshold. SWX has yellow flag on Icahn stake reduction but thesis intact."
+}

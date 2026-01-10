@@ -60,6 +60,24 @@
       "price": 211.72,
       "action": "OPEN",
       "notes": "Opened position. Elliott campaign active."
+    },
+    {
+      "date": "2026-01-10",
+      "price": 203.90,
+      "change_from_entry_pct": -0.037,
+      "unrealized_pnl": -54.74,
+      "info_parity": {
+        "media": 1,
+        "iv": 0,
+        "price": 0
+      },
+      "weighted_sum": 1.0,
+      "ma_200": null,
+      "above_200_ma": null,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price down -3.7% from entry but well above $190 stop. Media signal TRIGGERED: Multiple mainstream articles (CNBC, Bloomberg, Yahoo Finance) on Elliott $1B+ stake and CEO candidate Jane Nielsen. Weighted sum 1.0 < 2.0 threshold (no exit required). Calvin McDonald stepping down Jan 31, 2026 as expected. Elliott remains engaged with board seats. No thesis breaks detected."
     }
   ]
 }

@@ -1810,3 +1810,276 @@ Price Moved >5%? ───Yes──→ Cancel, Mark "Missed Entry" ───→ 
     ↓ No
 Ask User: Retry or Cancel?
 ```
+---
+
+## 26. IBKR Position Reconciliation
+
+### 26.1 Overview
+
+IBKR position reconciliation ensures that the framework's trade files (`trades/active/*.json`) remain synchronized with actual broker positions. This section defines the detection logic, auto-create templates, reconciliation actions, and error handling.
+
+### 26.2 Discrepancy Detection Logic
+
+#### 26.2.1 Reconciliation Workflow
+
+```
+1. Fetch IBKR Positions
+   └→ Call: IBKRApp.reqPositions() via scripts/ibkr_paper.py
+   └→ Returns: List of positions with ticker, quantity, avgCost, account
+
+2. Load Framework Trade Files
+   └→ Read all: trades/active/*.json
+   └→ Extract: ticker, shares/contracts, entry_price, trade_id
+
+3. Match Positions
+   └→ Primary key: ticker (case-insensitive)
+   └→ Handle: Multiple positions per ticker (require manual resolution)
+
+4. Detect Discrepancies
+   ├─ Orphan IBKR Position: ticker in IBKR, no matching trade file
+   ├─ Orphan Trade File: trade file exists, ticker not in IBKR
+   ├─ Quantity Mismatch: ticker matches, but shares ≠ IBKR quantity
+   └─ Price Drift: entry_price vs avgCost difference (informational only)
+
+5. Generate Reconciliation Report
+   └→ Log to: logs/reconciliation/YYYY-MM-DD.log
+   └→ Alert to: alerts.json (if alert_threshold met)
+```
+
+#### 26.2.2 Discrepancy Types
+
+| Discrepancy | Detection | Severity | Default Action |
+|-------------|-----------|----------|----------------|
+| **Orphan IBKR Position** | ticker in IBKR, no trade file | HIGH | Alert + ask to create trade file |
+| **Orphan Trade File** | trade file exists, no IBKR position | MEDIUM | Alert only (may be pending order) |
+| **Quantity Mismatch** | shares/contracts differ | MEDIUM | Alert + ask to update trade file |
+| **Price Drift** | entry_price ≠ avgCost | LOW | Log only (expected from limit fills) |
+
+### 26.3 Auto-Create Trade File Template
+
+When an orphan IBKR position is detected and user approves auto-creation:
+
+**Template Specification:**
+
+```json
+{
+  "trade_id": "TRD-{current_date}-{TICKER}-UNKNOWN",
+  "ticker": "{TICKER}",
+  "archetype": "unknown",
+  "status": "active",
+  "thesis": {
+    "summary": "AUTO-GENERATED: Position found in IBKR without trade file. Requires manual entry.",
+    "catalyst": "UNKNOWN - ENTER MANUALLY",
+    "catalyst_date": null,
+    "linked_event": null
+  },
+  "scoring": {
+    "final_score": 0,
+    "breakdown": {},
+    "note": "Position opened outside idiosyncratic system. Score unknown."
+  },
+  "decision": {
+    "action": "RECONCILED_FROM_IBKR",
+    "date": "{current_date}",
+    "rationale": "Position exists in IBKR but no trade file found. Auto-created for tracking."
+  },
+  "position": {
+    "entry_date": "UNKNOWN",
+    "entry_price": "{ibkr_avgCost}",
+    "shares": "{ibkr_quantity}",
+    "cost_basis": "{ibkr_avgCost * ibkr_quantity}",
+    "size_percent": "{cost_basis / account_size}",
+    "order_id": null,
+    "ibkr_account": "{ibkr_account}",
+    "source": "ibkr_reconciliation"
+  },
+  "exit_plan": {
+    "target_price": null,
+    "stop_price": null,
+    "info_parity_weights": {
+      "media": 1.0,
+      "iv": 1.0,
+      "price": 1.0
+    },
+    "thesis_break_triggers": ["ENTER MANUALLY"]
+  },
+  "monitoring": [
+    {
+      "date": "{current_date}",
+      "price": "{current_price}",
+      "action": "RECONCILED",
+      "notes": "Auto-created from IBKR position during reconciliation. Thesis and archetype require manual entry."
+    }
+  ]
+}
+```
+
+**File Naming**: `TRD-{YYYYMMDD}-{TICKER}-UNKNOWN.json`
+
+**Post-Creation Actions**:
+1. Write to `trades/active/`
+2. Log to `logs/reconciliation/YYYY-MM-DD.log`
+3. Alert to `alerts.json` with priority "immediate"
+4. User must manually edit: `archetype`, `thesis`, `catalyst`, `exit_plan.thesis_break_triggers`
+
+### 26.4 Reconciliation Action Mapping
+
+Configured via `CONFIG.json → automation.ibkr_reconciliation.reconciliation_actions`:
+
+```json
+{
+  "reconciliation_actions": {
+    "orphan_ibkr_positions": "alert_and_ask",
+    "orphan_trade_files": "alert_only",
+    "quantity_mismatches": "alert_and_reconcile",
+    "price_drift": "log_only"
+  }
+}
+```
+
+**Action Definitions:**
+
+| Action | Behavior |
+|--------|----------|
+| `alert_and_ask` | Display reconciliation table, ask user for confirmation before action |
+| `alert_only` | Write to alerts.json, no automatic changes |
+| `alert_and_reconcile` | Ask user, if confirmed → update trade file with IBKR data |
+| `log_only` | Log to reconciliation report, no alert |
+| `auto_create` | Create trade file automatically without asking (use with caution) |
+| `auto_archive` | Move orphan trade file to trades/passed/ with note |
+
+### 26.5 Error Handling
+
+#### 26.5.1 IBKR API Failures
+
+**Connection Errors:**
+```
+Error: IBKR API connection failed (127.0.0.1:4002)
+Action:
+1. Check if TWS/Gateway is running
+2. Verify port 4002 is correct (paper trading)
+3. Retry connection with 30-second timeout
+4. If 3 consecutive failures → Alert user, skip reconciliation
+5. Log error to logs/reconciliation/YYYY-MM-DD.log
+```
+
+**Data Fetch Errors:**
+```
+Error: reqPositions() returned empty or incomplete data
+Action:
+1. Validate response structure (check for required fields)
+2. If empty but expected positions → Alert user ("IBKR returned no positions")
+3. If partial data → Use what's available, log missing fields
+4. Never auto-create from incomplete data
+```
+
+#### 26.5.2 Multiple Positions Per Ticker
+
+**Scenario**: IBKR has 2 positions for same ticker (e.g., bought at different times)
+
+**Handling**:
+```
+Error: Multiple IBKR positions found for {TICKER}
+Action:
+1. Display both positions with avgCost and quantity
+2. Do NOT auto-match to trade file
+3. Alert user: "Manual resolution required"
+4. User must manually:
+   - Create separate trade files for each position, OR
+   - Consolidate in IBKR before reconciliation
+```
+
+#### 26.5.3 Options Positions
+
+**Scenario**: IBKR position is options contract, trade file expects equity
+
+**Handling**:
+```
+Detection:
+- IBKR secType == "OPT" vs trade file has "shares" field
+
+Action:
+1. Check if trade file has "contracts" field (options trade)
+2. If mismatch (equity file, options IBKR):
+   └→ Alert: "Position type mismatch: equity file vs options IBKR"
+   └→ Manual resolution required
+3. If both options:
+   └→ Match by strike + expiration (not just ticker)
+```
+
+### 26.6 Reconciliation Frequency
+
+**Daily (Optional)**:
+- Quick check: orphan positions only
+- Action: Alert, no auto-create
+- Timing: After monitor step in daily.md (Step 8)
+
+**Weekly (Recommended)**:
+- Full reconciliation: all discrepancy types
+- Action: Alert + ask for auto-create
+- Timing: Step 4 in weekly.md
+- Output: Full report to logs/reconciliation/
+
+**On-Demand**:
+- Manual: `python scripts/ibkr_paper.py positions --reconcile`
+- Use when: Suspecting sync issues, after manual trades in IBKR, before important decisions
+
+### 26.7 Configuration Reference
+
+**Full CONFIG.json Section:**
+
+```json
+{
+  "automation": {
+    "ibkr_reconciliation": {
+      "enabled": false,
+      "frequency": "weekly",
+      "auto_create_from_ibkr": false,
+      "alert_threshold": "any",
+      "reconciliation_actions": {
+        "orphan_ibkr_positions": "alert_and_ask",
+        "orphan_trade_files": "alert_only",
+        "quantity_mismatches": "alert_and_reconcile",
+        "price_drift": "log_only"
+      },
+      "error_handling": {
+        "connection_timeout_seconds": 30,
+        "max_retry_attempts": 3,
+        "skip_on_failure": true,
+        "alert_on_connection_failure": true
+      },
+      "options_handling": {
+        "match_by_strike_expiration": true,
+        "allow_auto_create_options": false
+      }
+    }
+  }
+}
+```
+
+**Key Settings:**
+- `enabled`: Run reconciliation (daily or weekly based on frequency)
+- `frequency`: "daily" | "weekly" | "manual"
+- `auto_create_from_ibkr`: Auto-create trade files without asking (default: false for safety)
+- `alert_threshold`: "any" (all discrepancies) | "critical" (only orphans + qty mismatches)
+
+### 26.8 Implementation Notes
+
+**Future Enhancements:**
+1. **Order ID Linking**: Store IBKR permId in trade files for precise matching
+2. **Real-time Sync**: WebSocket connection for instant position updates
+3. **Two-Way Sync**: Close IBKR positions when trade files are archived
+4. **Batch Reconciliation**: Process multiple discrepancies with single confirmation
+5. **Historical Reconciliation**: Compare past trades with IBKR executions report
+
+**Testing Checklist:**
+- [ ] Test orphan IBKR position detection and auto-create
+- [ ] Test orphan trade file detection (pending order scenario)
+- [ ] Test quantity mismatch reconciliation
+- [ ] Test IBKR connection failure handling
+- [ ] Test multiple positions per ticker handling
+- [ ] Test options position reconciliation
+- [ ] Test reconciliation report generation
+- [ ] Verify alerts.json writes with correct priority
+
+---

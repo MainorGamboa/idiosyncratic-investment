@@ -54,6 +54,24 @@
       "price": 4.27,
       "action": "OPEN",
       "notes": "Opened position. PDUFA in 7 days."
+    },
+    {
+      "date": "2026-01-10",
+      "price": 4.30,
+      "change_from_entry_pct": 0.007,
+      "unrealized_pnl": 2.61,
+      "info_parity": {
+        "media": 0,
+        "iv": 0,
+        "price": 0.008
+      },
+      "weighted_sum": 0.008,
+      "ma_200": null,
+      "above_200_ma": null,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "PDUFA decision in 4 days (Jan 14). Price stable +0.7% from entry. No mainstream media coverage detected. IV data unavailable. 0.8% progress to target (well below 50% threshold). No cockroaches or thesis breaks observed."
     }
   ]
 }
