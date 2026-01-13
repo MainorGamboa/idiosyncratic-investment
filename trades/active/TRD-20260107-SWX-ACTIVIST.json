@@ -97,9 +97,24 @@
       "thesis_breaks": [],
       "action": "HOLD",
       "notes": "Price slightly up to 80.46. No new media signals. Holding."
+    },
+    {
+      "date": "2026-01-10",
+      "price": 81.14,
+      "change_from_entry_pct": 0.009,
+      "unrealized_pnl": 12.78,
+      "info_parity": {
+        "media": 0,
+        "iv": 0,
+        "price": 0.036
+      },
+      "weighted_sum": 0.036,
+      "ma_200": null,
+      "above_200_ma": null,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price up +0.9% from entry. No new mainstream media coverage in January 2026. Yellow flag: Icahn reduced position -21.8% in Q1 2025, but maintains 8.48% stake (above 5% threshold) with 4 board seats secured via cooperation agreement. Board engagement suggests ongoing value realization commitment. 3.6% progress to target (well below 50% threshold). No exit signals triggered."
     }
-  ],
-
-  "precedents": [],
-  "tags": ["activist", "active", "tier-2", "utility", "regulated", "icahn"]
+  ]
 }

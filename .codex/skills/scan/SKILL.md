@@ -9,7 +9,7 @@ description: Find new catalyst events from external sources like FDA calendar, S
 Find new catalyst events from external sources. Populates universe/events.json with upcoming PDUFA dates, merger announcements, activist campaigns, etc.
 
 ## When to Use
-- Weekly (to maintain catalyst calendar)
+- Weekly
 - After major news (M&A wave, regulatory announcements)
 - When exploring new archetype opportunities
 
@@ -74,10 +74,57 @@ Find new catalyst events from external sources. Populates universe/events.json w
 - Expected distribution date
 - Spin ratio
 
-#### Other Sources
-- Liquidation/dissolution notices (SEC Form 8-K)
-- Insider cluster tracking (SEC Form 4 filings)
-- Legislative calendars (congress.gov for bill votes)
+#### Insider Cluster Tracking
+**Source:** sec.gov/cgi-bin/browse-edgar (Form 4)
+
+**Look for:**
+- Clusters: 3+ insiders buying within 2-week window
+- C-suite and board member purchases (CEO, CFO, directors)
+- Open market purchases (exclude option exercises, grants)
+- Distressed context (stock down >30% from highs)
+
+**Extract:**
+- Ticker
+- Insider names and titles
+- Purchase dates
+- Shares purchased
+- Purchase prices
+- Total cluster value
+- Stock context (recent performance)
+
+#### Liquidation / Dissolution
+**Sources:**
+- SEC Form 8-K (dissolution/liquidation votes)
+- SPAC trust discounts (spactrack.net, spachero.com)
+- CEF discounts (cefconnect.com)
+
+**Look for:**
+- SPACs trading below $10 trust value
+- Closed-end funds at discount to NAV >10%
+- Corporate liquidation votes or trustee appointments
+- Biotech with cash >market cap (liquidation candidates)
+
+**Extract:**
+- Ticker
+- Type (SPAC, CEF, corporate, biotech)
+- NAV or trust value per share
+- Current price
+- Discount percentage
+- Liquidation date or vote date (if announced)
+
+#### Legislative Calendars
+**Source:** congress.gov, ballotpedia.org
+
+**Look for:**
+- Bill vote schedules (House/Senate floor votes)
+- State ballot measures (election dates)
+- Regulatory comment period deadlines
+
+**Extract:**
+- Bill number or ballot measure name
+- Vote date or election date
+- Affected sectors/tickers
+- Primary vs secondary beneficiaries
 
 ### Step 2: For Each New Event
 
@@ -214,6 +261,17 @@ Append to `logs/scan/YYYY-MM-DD.log`:
 - **Spin-off Research:** spinoffresearch.com
 - **Company IR:** Investor relations announcements
 
+### Insider
+- **SEC Form 4 Filings:** sec.gov/cgi-bin/browse-edgar
+- **Insider Tracking:** openinsider.com, secform4.com
+- **Cluster Filters:** 3+ insiders, 2-week window, open market purchases only
+
+### Liquidation
+- **SPAC Trust:** spactrack.net, spachero.com
+- **CEF Discounts:** cefconnect.com
+- **SEC Form 8-K:** Dissolution/liquidation votes
+- **Biotech Cash Screens:** Compare cash per share to market cap
+
 ### Legislative
 - **Congress.gov:** Bill tracking and vote schedules
 - **State Ballot Measures:** ballotpedia.org
@@ -227,6 +285,8 @@ Append to `logs/scan/YYYY-MM-DD.log`:
 | Merger Arb | Daily | Deals announced frequently |
 | Activist | Daily | 13D filings can be immediate catalysts |
 | Spin-off | Monthly | Long lead times |
+| Insider | Daily | Form 4 filings continuous; cluster detection requires monitoring |
+| Liquidation | Weekly | SPAC/CEF discounts fluctuate; corporate liquidations less frequent |
 | Legislative | Monthly | Bill schedules months in advance |
 
 ## Related Skills

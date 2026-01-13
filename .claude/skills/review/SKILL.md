@@ -289,5 +289,4 @@ Compare score buckets vs outcomes:
 ## Related Skills
 - `monitor` — Provides data on active positions
 - `close` — Post-mortems feed into lessons learned
-- `search` — Find historical comparisons
 - `regime` — Include regime analysis in review
