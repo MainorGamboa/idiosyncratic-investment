@@ -1,4 +1,32 @@
 #!/usr/bin/env python3
+"""
+IBKR Paper Trading Interface for Options and Stocks.
+
+This module provides a command-line interface to Interactive Brokers TWS/Gateway
+for fetching market data, placing orders, and monitoring positions. It supports:
+
+- Stock quotes and historical data
+- Options quotes with Greeks (IV, delta, gamma, vega, theta)
+- ATM IV discovery for PDUFA scoring
+- Options and stock order placement
+- Position monitoring
+
+Data Type Handling:
+    - Requests delayed market data (type 4) by default for backward compatibility
+    - Auto-detects real-time vs delayed data based on tick types
+    - Warns when using delayed data (OPRA subscription may be inactive)
+    - With OPRA subscription active: Generic tick 106 provides real-time Greeks
+
+Requirements:
+    - IBKR TWS or Gateway running (default: 127.0.0.1:4002)
+    - OPRA subscription for real-time options Greeks (optional, falls back to delayed)
+    - Python packages: ibapi
+
+Usage:
+    python ibkr_paper.py quote SPY
+    python ibkr_paper.py atm_iv SPY --expiration 2026-02-20
+    python ibkr_paper.py quote_option SPY --strike 600 --expiration 2026-02-20 --right CALL
+"""
 import argparse
 import json
 import os
@@ -11,6 +39,8 @@ from ibapi.client import EClient
 from ibapi.contract import Contract
 from ibapi.order import Order
 from ibapi.wrapper import EWrapper
+
+from options_utils import determine_strike_increment, round_to_increment
 
 
 def load_broker_config():
@@ -32,6 +62,11 @@ def resolve_connection_settings():
     }
 
 
+# ============================================================================
+# IBKR CLIENT & CALLBACKS
+# ============================================================================
+
+
 class IBKRApp(EWrapper, EClient):
     def __init__(self):
         EClient.__init__(self, self)
@@ -41,10 +76,12 @@ class IBKRApp(EWrapper, EClient):
         self._positions_done = threading.Event()
         self._mktdata_done = threading.Event()
         self._contract_details_done = threading.Event()
+        self._historical_done = threading.Event()
         self.order_status = {}
         self.positions = []
         self.market_data = {}
         self.contract_details = []
+        self.historical_bars = []
         self.errors = []
 
     def nextValidId(self, orderId):
@@ -95,7 +132,8 @@ class IBKRApp(EWrapper, EClient):
 
     def tickPrice(self, reqId, tickType, price, attrib):
         self.market_data.setdefault(reqId, {})[tickType] = price
-        if tickType in {1, 2, 4, 6}:  # bid, ask, last, high
+        # Include delayed ticks (66/67/68/72) when using market data type 4.
+        if tickType in {1, 2, 4, 6, 66, 67, 68, 72}:  # bid, ask, last, high
             self._mktdata_done.set()
 
     def tickSize(self, reqId, tickType, size):
@@ -170,6 +208,25 @@ class IBKRApp(EWrapper, EClient):
     def contractDetailsEnd(self, reqId):
         self._contract_details_done.set()
 
+    def historicalData(self, reqId, bar):
+        """Callback for historical data bars."""
+        self.historical_bars.append(
+            {
+                "date": bar.date,
+                "open": bar.open,
+                "high": bar.high,
+                "low": bar.low,
+                "close": bar.close,
+                "volume": bar.volume,
+                "wap": bar.wap,
+                "barCount": bar.barCount,
+            }
+        )
+
+    def historicalDataEnd(self, reqId, start, end):
+        """Signal historical data request completion."""
+        self._historical_done.set()
+
 
 def start_app(app, settings, timeout):
     app.connect(settings["host"], settings["port"], settings["client_id"])
@@ -178,6 +235,37 @@ def start_app(app, settings, timeout):
     if not app._ready.wait(timeout):
         app.disconnect()
         raise RuntimeError("IBKR connection timed out waiting for nextValidId.")
+
+
+def _detect_data_type(ticks):
+    """
+    Detect if market data is real-time or delayed based on tick types.
+
+    IBKR sends different tick types depending on whether the user has live
+    subscriptions (e.g., OPRA for options) or is receiving delayed data.
+
+    Real-time ticks: 1 (bid), 2 (ask), 4 (last), 6 (high)
+    Delayed ticks: 66 (bid), 67 (ask), 68 (last), 72 (high)
+
+    Args:
+        ticks: Dict of tick data from app.market_data[req_id]
+
+    Returns:
+        str: "real-time", "delayed", or "unknown"
+    """
+    has_realtime = any(tick_type in ticks for tick_type in [1, 2, 4, 6])
+    has_delayed = any(tick_type in ticks for tick_type in [66, 67, 68, 72])
+
+    if has_delayed and not has_realtime:
+        return "delayed"
+    elif has_realtime:
+        return "real-time"
+    return "unknown"
+
+
+# ============================================================================
+# CONTRACT BUILDERS
+# ============================================================================
 
 
 def build_stock_contract(symbol):
@@ -192,17 +280,21 @@ def build_stock_contract(symbol):
 
 def build_option_contract(symbol, expiration, strike, right="CALL", exchange="SMART"):
     """
-    Build an option contract.
+    Build an option contract object for IBKR API requests.
 
     Args:
-        symbol: Underlying ticker symbol
-        expiration: Expiration date (YYYY-MM-DD format, will be converted to YYYYMMDD)
-        strike: Strike price
+        symbol: Underlying stock ticker (e.g., "SPY")
+        expiration: Expiration date as "YYYY-MM-DD" (converted to YYYYMMDD)
+        strike: Strike price as float
         right: "CALL" or "PUT"
-        exchange: Exchange (default: SMART)
+        exchange: Trading exchange, default "SMART" for best execution
 
     Returns:
-        Contract object for the option
+        ibapi.contract.Contract configured for options
+
+    Example:
+        contract = build_option_contract("SPY", "2026-02-20", 600.0, "CALL")
+        # Creates SPY Feb20'26 600 Call contract
     """
     contract = Contract()
     contract.symbol = symbol
@@ -255,6 +347,11 @@ def resolve_contract(app, ticker, timeout, conid=None):
         if c.primaryExchange == "NASDAQ" and c.currency == "USD":
             return c
     return app.contract_details[0].contract
+
+
+# ============================================================================
+# ORDER PLACEMENT
+# ============================================================================
 
 
 def place_order(args):
@@ -411,6 +508,11 @@ def place_options_order(args):
     print(json.dumps(result, indent=2))
 
 
+# ============================================================================
+# MARKET DATA REQUESTS
+# ============================================================================
+
+
 def quote(args):
     settings = resolve_connection_settings()
     app = IBKRApp()
@@ -424,13 +526,17 @@ def quote(args):
     app.disconnect()
 
     ticks = app.market_data.get(req_id, {})
+    bid = ticks.get(1) or ticks.get(66)
+    ask = ticks.get(2) or ticks.get(67)
+    last = ticks.get(4) or ticks.get(68)
+    high = ticks.get(6) or ticks.get(72)
     result = {
         "ticker": args.ticker,
         "conid": getattr(contract, "conId", None) or None,
-        "bid": ticks.get(1),
-        "ask": ticks.get(2),
-        "last": ticks.get(4),
-        "high": ticks.get(6),
+        "bid": bid,
+        "ask": ask,
+        "last": last,
+        "high": high,
         "errors": app.errors,
     }
     print(json.dumps(result, indent=2))
@@ -466,7 +572,35 @@ def resolve_contract_details(args):
 
 
 def quote_option(args):
-    """Fetch option quote with Greeks."""
+    """
+    Fetch single option quote with Greeks and pricing.
+
+    Requests streaming market data for a specific option contract,
+    waiting for Greeks (IV, delta, gamma, vega, theta) via generic
+    tick "106" and pricing via standard ticks (bid/ask/last).
+
+    Args:
+        args: argparse.Namespace with:
+            - ticker: Stock symbol
+            - expiration: Option expiration (YYYY-MM-DD)
+            - strike: Strike price
+            - right: "CALL" or "PUT"
+            - timeout: Request timeout in seconds
+
+    Returns:
+        Prints JSON to stdout with:
+        - Pricing: bid, ask, last, mid_price
+        - Liquidity: volume (tick 8), open_interest (tick 86)
+        - Greeks: delta, gamma, vega, theta, implied_volatility
+        - underlying_price: From Greeks computation
+        - data_type: "real-time", "delayed", or "unknown"
+        - source: "IBKR Paper"
+        - errors: List of IBKR error messages
+
+    Requirements:
+        - OPRA subscription for real-time Greeks
+        - Streaming mode (snapshot=False) required for generic ticks
+    """
     settings = resolve_connection_settings()
     app = IBKRApp()
     start_app(app, settings, args.timeout)
@@ -481,16 +615,25 @@ def quote_option(args):
     req_id = 1
     # Request delayed market data when live subscriptions aren't available
     app.reqMarketDataType(4)
-    # Request greeks by passing empty string for generic tick types
-    app.reqMktData(req_id, contract, "106", False, False, [])  # 106 = option volume and open interest
+    # Request Greeks via generic tick 106 (IV, delta, gamma, vega, theta)
+    app.reqMktData(req_id, contract, "106", False, False, [])
     app._mktdata_done.wait(args.timeout)
     app.disconnect()
 
     ticks = app.market_data.get(req_id, {})
     greeks = ticks.get("greeks", {})
 
-    bid = ticks.get(1)
-    ask = ticks.get(2)
+    # Detect if we're getting real-time or delayed data
+    data_type = _detect_data_type(ticks)
+    if data_type == "delayed":
+        print(
+            f"WARNING: Using delayed data for {args.ticker} options (OPRA subscription may be inactive)",
+            file=sys.stderr
+        )
+
+    bid = ticks.get(1) or ticks.get(66)  # Real-time or delayed bid
+    ask = ticks.get(2) or ticks.get(67)  # Real-time or delayed ask
+    last = ticks.get(4) or ticks.get(68)  # Real-time or delayed last
     mid_price = ((bid + ask) / 2) if (bid and ask) else None
 
     result = {
@@ -500,7 +643,7 @@ def quote_option(args):
         "right": args.right,
         "bid": bid,
         "ask": ask,
-        "last": ticks.get(4),
+        "last": last,
         "mid_price": mid_price,
         "volume": ticks.get("size_8"),  # Size tick type 8 = volume
         "open_interest": ticks.get("size_86"),  # Size tick type 86 = OI
@@ -510,10 +653,204 @@ def quote_option(args):
         "vega": greeks.get("vega"),
         "implied_volatility": greeks.get("implied_volatility"),
         "underlying_price": greeks.get("underlying_price"),
+        "data_type": data_type,
         "source": "IBKR Paper",
         "errors": app.errors,
     }
     print(json.dumps(result, indent=2))
+
+
+def fetch_historical(args):
+    """Fetch historical daily bars for a ticker."""
+    settings = resolve_connection_settings()
+    app = IBKRApp()
+    start_app(app, settings, args.timeout)
+
+    contract = resolve_contract(app, args.ticker, args.timeout, args.conid)
+
+    app.historical_bars = []
+    app._historical_done.clear()
+
+    app.reqHistoricalData(
+        1,
+        contract,
+        "",
+        f"{args.days} D",
+        "1 day",
+        "TRADES",
+        1,
+        1,
+        False,
+        [],
+    )
+
+    if not app._historical_done.wait(args.timeout):
+        app.disconnect()
+        print(json.dumps({"error": "IBKR historical data timeout", "errors": app.errors}))
+        sys.exit(1)
+
+    app.disconnect()
+
+    result = {
+        "ticker": args.ticker,
+        "bars": app.historical_bars,
+        "count": len(app.historical_bars),
+        "source": "IBKR Paper",
+        "errors": app.errors,
+    }
+    print(json.dumps(result, indent=2))
+
+
+def fetch_atm_iv(args):
+    """
+    Fetch implied volatility from the nearest ATM call option.
+
+    Algorithm:
+    1. Fetch underlying price snapshot
+    2. Calculate candidate strikes (base ± 1,2,3 increments)
+    3. Loop through strikes requesting Greeks (generic tick 106)
+    4. Select first strike with delta in [0.40, 0.60] (ATM range)
+    5. Fallback to closest strike if no ATM found
+
+    Strike increments are based on underlying price:
+    - Price < $50: $2.50 increments
+    - Price $50-$200: $5.00 increments
+    - Price > $200: $10.00 increments
+
+    Args:
+        args: argparse.Namespace with:
+            - ticker: Stock symbol (e.g., "SPY")
+            - expiration: Option expiration date (YYYY-MM-DD)
+            - underlying_price: Optional override for underlying price
+            - timeout: Request timeout in seconds
+            - conid: Optional contract ID override
+
+    Returns:
+        Prints JSON to stdout with:
+        - implied_volatility: IV as decimal (e.g., 0.25 = 25%)
+        - delta: Call delta (0.0-1.0)
+        - strike: Selected strike price
+        - underlying_price: Current stock price
+        - is_atm: Boolean, True if delta in [0.40, 0.60]
+        - data_type: "real-time", "delayed", or "unknown"
+        - source: "IBKR Paper"
+        - errors: List of IBKR error messages
+
+    Requirements:
+        - OPRA subscription active for real-time Greeks
+        - Cannot use snapshot mode with generic tick "106"
+        - Requires streaming data (snapshot=False)
+    """
+    settings = resolve_connection_settings()
+    app = IBKRApp()
+    start_app(app, settings, args.timeout)
+
+    contract = resolve_contract(app, args.ticker, args.timeout, args.conid)
+
+    # Fetch underlying price snapshot
+    app._mktdata_done.clear()
+    req_id = 1
+    app.reqMarketDataType(4)
+    app.reqMktData(req_id, contract, "", True, False, [])
+    app._mktdata_done.wait(args.timeout)
+
+    ticks = app.market_data.get(req_id, {})
+    last = ticks.get(4) or ticks.get(68)
+    bid = ticks.get(1) or ticks.get(66)
+    ask = ticks.get(2) or ticks.get(67)
+    underlying_price = last or ((bid + ask) / 2 if (bid and ask) else None)
+    if underlying_price is None and args.underlying_price is not None:
+        underlying_price = float(args.underlying_price)
+
+    if underlying_price is None:
+        app.disconnect()
+        print(json.dumps({"error": "Missing underlying price", "errors": app.errors}))
+        sys.exit(1)
+
+    increment = determine_strike_increment(underlying_price)
+    base_strike = round_to_increment(underlying_price, increment)
+
+    candidate_strikes = [base_strike]
+    max_steps = 3
+    for offset in range(1, max_steps + 1):
+        candidate_strikes.append(round(base_strike + offset * increment, 2))
+        candidate_strikes.append(round(base_strike - offset * increment, 2))
+
+    candidate_strikes = [strike for strike in candidate_strikes if strike > 0]
+
+    selected = None
+    selected_strike = None
+    selected_delta = None
+    selected_iv = None
+
+    for strike in candidate_strikes:
+        req_id += 1
+        app._mktdata_done.clear()
+        option_contract = build_option_contract(
+            args.ticker,
+            args.expiration,
+            strike,
+            "CALL",
+        )
+        app.reqMarketDataType(4)
+        app.reqMktData(req_id, option_contract, "106", False, False, [])
+        app._mktdata_done.wait(args.timeout)
+
+        option_ticks = app.market_data.get(req_id, {})
+        greeks = option_ticks.get("greeks", {})
+        implied_vol = greeks.get("implied_volatility")
+        delta = greeks.get("delta")
+
+        if implied_vol is None:
+            continue
+
+        selected = option_ticks
+        selected_strike = strike
+        selected_delta = delta
+        selected_iv = implied_vol
+
+        if delta is not None and 0.40 <= delta <= 0.60:
+            break
+
+    app.disconnect()
+
+    if selected is None:
+        print(json.dumps({"error": "No options data available", "errors": app.errors}))
+        sys.exit(1)
+
+    if selected_delta is None or not (0.40 <= selected_delta <= 0.60):
+        print(
+            f"WARNING: Delta {selected_delta} outside ATM range for {args.ticker}",
+            file=sys.stderr,
+        )
+
+    # Detect if we're getting real-time or delayed data
+    data_type = _detect_data_type(selected)
+    if data_type == "delayed":
+        print(
+            f"WARNING: Using delayed data for {args.ticker} options (OPRA subscription may be inactive)",
+            file=sys.stderr
+        )
+
+    result = {
+        "ticker": args.ticker,
+        "strike": selected_strike,
+        "expiration": args.expiration,
+        "right": "CALL",
+        "delta": selected_delta,
+        "implied_volatility": selected_iv,
+        "underlying_price": underlying_price,
+        "is_atm": selected_delta is not None and 0.40 <= selected_delta <= 0.60,
+        "data_type": data_type,
+        "source": "IBKR Paper",
+        "errors": app.errors,
+    }
+    print(json.dumps(result, indent=2))
+
+
+# ============================================================================
+# CLI ARGUMENT PARSING & MAIN
+# ============================================================================
 
 
 def build_parser():
@@ -588,6 +925,19 @@ def build_parser():
         help="Allow limits far from market (IBKR price band override).",
     )
     place_opt.set_defaults(func=place_options_order)
+
+    historical_cmd = subparsers.add_parser("historical", help="Fetch historical daily bars.")
+    historical_cmd.add_argument("ticker", help="Ticker symbol, e.g. SPY")
+    historical_cmd.add_argument("--days", type=int, default=210, help="Calendar days of history to request.")
+    historical_cmd.add_argument("--conid", type=int, default=None, help="Override contract conId.")
+    historical_cmd.set_defaults(func=fetch_historical)
+
+    atm_iv_cmd = subparsers.add_parser("atm_iv", help="Fetch IV from ATM options.")
+    atm_iv_cmd.add_argument("ticker", help="Ticker symbol, e.g. SPY")
+    atm_iv_cmd.add_argument("--expiration", required=True, help="Expiration date (YYYY-MM-DD)")
+    atm_iv_cmd.add_argument("--underlying-price", type=float, default=None, help="Override underlying price.")
+    atm_iv_cmd.add_argument("--conid", type=int, default=None, help="Override contract conId.")
+    atm_iv_cmd.set_defaults(func=fetch_atm_iv)
 
     return parser
 

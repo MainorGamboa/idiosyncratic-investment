@@ -200,6 +200,67 @@ def fetch_from_yahoo(ticker: str) -> Optional[Dict]:
         return None
 
 
+def fetch_historical_yahoo(ticker: str, days: int = 210) -> Optional[list]:
+    """
+    Fetch historical daily bars from Yahoo Finance.
+
+    Returns:
+        List of dicts with keys: date (YYYY-MM-DD), close, volume
+        None if fetch fails
+    """
+    try:
+        url = f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}"
+        params = {
+            "range": f"{days}d",
+            "interval": "1d",
+        }
+        headers = {"User-Agent": "Mozilla/5.0"}
+
+        response = requests.get(url, params=params, headers=headers, timeout=15)
+        response.raise_for_status()
+
+        data = response.json()
+        chart = data.get("chart", {})
+        results = chart.get("result")
+
+        if not results:
+            return None
+
+        result = results[0]
+        timestamps = result.get("timestamp", [])
+        indicators = result.get("indicators", {})
+        quotes = indicators.get("quote", [])
+        if not quotes:
+            return None
+
+        close_values = quotes[0].get("close", [])
+        volume_values = quotes[0].get("volume", [])
+
+        bars = []
+        for idx, ts in enumerate(timestamps):
+            close = close_values[idx] if idx < len(close_values) else None
+            if close is None:
+                continue
+            volume = volume_values[idx] if idx < len(volume_values) else 0
+            date_str = datetime.utcfromtimestamp(ts).date().isoformat()
+            bars.append(
+                {
+                    "date": date_str,
+                    "close": float(close),
+                    "volume": int(volume or 0),
+                }
+            )
+
+        return bars
+
+    except requests.RequestException as e:
+        print(f"Yahoo historical fetch error for {ticker}: {e}", file=sys.stderr)
+        return None
+    except (KeyError, ValueError, TypeError) as e:
+        print(f"Yahoo historical data parse error for {ticker}: {e}", file=sys.stderr)
+        return None
+
+
 def fetch_price(ticker: str, use_cache: bool = True) -> Optional[Dict]:
     """
     Fetch price with graceful degradation across sources.

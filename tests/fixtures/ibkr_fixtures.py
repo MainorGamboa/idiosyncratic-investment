@@ -9,6 +9,7 @@ Provides realistic responses for:
 """
 
 import json
+from datetime import datetime, timedelta
 
 
 class IBKRMockResponses:
@@ -297,6 +298,94 @@ class IBKRMockResponses:
             "underlying_price": 177.50,
             "timestamp": "2026-01-08T14:30:00Z",
             "source": "IBKR Paper"
+        }
+
+    @staticmethod
+    def valid_historical_data_spy():
+        """Valid historical bars for SPY (205 trading days)."""
+        start_date = datetime(2025, 3, 1)
+        bars = []
+        for idx in range(205):
+            date_str = (start_date + timedelta(days=idx)).strftime("%Y-%m-%d")
+            close = 400 + idx * 0.5
+            bars.append(
+                {
+                    "date": date_str,
+                    "open": close - 1,
+                    "high": close + 1,
+                    "low": close - 2,
+                    "close": close,
+                    "volume": 1000000 + idx * 1000,
+                    "wap": close,
+                    "barCount": 1,
+                }
+            )
+        return {
+            "ticker": "SPY",
+            "bars": bars,
+            "count": len(bars),
+            "source": "IBKR Paper",
+            "errors": [],
+        }
+
+    @staticmethod
+    def insufficient_historical_data():
+        """Insufficient historical bars (120 trading days)."""
+        start_date = datetime(2025, 6, 1)
+        bars = []
+        for idx in range(120):
+            date_str = (start_date + timedelta(days=idx)).strftime("%Y-%m-%d")
+            close = 50 + idx * 0.2
+            bars.append(
+                {
+                    "date": date_str,
+                    "open": close - 0.5,
+                    "high": close + 0.5,
+                    "low": close - 1,
+                    "close": close,
+                    "volume": 200000 + idx * 500,
+                    "wap": close,
+                    "barCount": 1,
+                }
+            )
+        return {
+            "ticker": "NEWIPO",
+            "bars": bars,
+            "count": len(bars),
+            "source": "IBKR Paper",
+            "errors": [],
+        }
+
+    @staticmethod
+    def valid_atm_iv_spy():
+        """ATM IV response with delta in range."""
+        return {
+            "ticker": "SPY",
+            "strike": 500.0,
+            "expiration": "2026-02-20",
+            "right": "CALL",
+            "delta": 0.52,
+            "implied_volatility": 0.18,
+            "underlying_price": 500.25,
+            "is_atm": True,
+            "source": "IBKR Paper",
+            "errors": [],
+        }
+
+    @staticmethod
+    def invalid_iv_not_atm():
+        """IV response with delta outside ATM range."""
+        return {
+            "ticker": "QQQ",
+            "strike": 420.0,
+            "expiration": "2026-04-17",
+            "right": "CALL",
+            "delta": 0.28,
+            "implied_volatility": 0.22,
+            "underlying_price": 405.75,
+            "is_atm": False,
+            "source": "IBKR Paper",
+            "errors": [],
         }
 
 
