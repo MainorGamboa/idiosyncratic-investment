@@ -542,6 +542,156 @@
       ],
       "framework_assessment": "Re-screening ATRA (previously screened 2026-01-06 with cash runway failure) reveals even more catastrophic kill screen failures. M-Score and Z-Score both show extreme anomalies. Company has negative equity with liabilities exceeding assets by 2x. Both universal kill screens failed by wide margins.",
       "notes": "Re-analysis of ATRA reveals additional kill screen failures beyond Jan 6 screening. Company has negative stockholders' equity and both M-Score and Z-Score show catastrophic levels. Prior screening flagged 1.2-month cash runway; this analysis confirms severe insolvency via M-Score/Z-Score anomalies."
+    },
+    {
+      "date": "2026-01-14",
+      "ticker": "SWX",
+      "company": "Southwest Gas Holdings, Inc.",
+      "archetype": "activist",
+      "event_id": "EVT-2026-037",
+      "kill_screens_passed": false,
+      "failed_screens": [
+        {
+          "screen": "Beneish M-Score",
+          "value": -1.0293,
+          "threshold": -1.78,
+          "operator": "<=",
+          "result": "FAIL - M-Score above threshold"
+        },
+        {
+          "screen": "Altman Z-Score",
+          "value": 0.6592,
+          "threshold": 1.81,
+          "operator": ">=",
+          "result": "FAIL - Z-Score below threshold"
+        }
+      ],
+      "result": "PASS",
+      "reason": "Failed both universal kill screens on updated data fetch.",
+      "financial_summary": {
+        "market_cap": "$5.99B",
+        "current_price": "$83.00"
+      },
+      "notes": "Re-screened with data_fetcher; both M-Score and Z-Score failed."
+    },
+    {
+      "date": "2026-01-14",
+      "ticker": "ATRA",
+      "company": "Atara Biotherapeutics, Inc.",
+      "archetype": "pdufa",
+      "event_id": "EVT-2026-033",
+      "kill_screens_passed": false,
+      "failed_screens": [
+        {
+          "screen": "PDUFA Financial Health",
+          "metric": "cash_runway_months",
+          "value": 1.5,
+          "threshold": 18,
+          "operator": ">=",
+          "result": "FAIL - Cash runway below threshold"
+        },
+        {
+          "screen": "PDUFA Financial Health",
+          "metric": "debt_to_equity",
+          "value": 999,
+          "threshold": 0.75,
+          "operator": "<",
+          "result": "FAIL - Debt-to-equity above threshold"
+        }
+      ],
+      "result": "PASS",
+      "reason": "Failed PDUFA financial health kill screens on updated data fetch.",
+      "financial_summary": {
+        "market_cap": "$33.17M",
+        "current_price": "$4.60"
+      },
+      "notes": "Re-screened with data_fetcher; cash runway and debt-to-equity failed."
+    },
+    {
+      "date": "2026-01-14",
+      "ticker": "BILL",
+      "company": "BILL Holdings, Inc.",
+      "archetype": "activist",
+      "event_id": "EVT-2026-032",
+      "kill_screens_passed": false,
+      "failed_screens": [
+        {
+          "screen": "Beneish M-Score",
+          "value": -0.5773,
+          "threshold": -1.78,
+          "operator": "<=",
+          "result": "FAIL - M-Score above threshold"
+        },
+        {
+          "screen": "Altman Z-Score",
+          "value": 0.6580,
+          "threshold": 1.81,
+          "operator": ">=",
+          "result": "FAIL - Z-Score below threshold"
+        }
+      ],
+      "result": "PASS",
+      "reason": "Failed both universal kill screens on updated data fetch.",
+      "financial_summary": {
+        "market_cap": "$5.19B",
+        "current_price": "$50.39"
+      },
+      "notes": "Re-screened with data_fetcher; both M-Score and Z-Score failed."
+    },
+    {
+      "date": "2026-01-14",
+      "ticker": "NCPL",
+      "company": "Netcapital Inc.",
+      "archetype": "activist",
+      "event_id": "EVT-2026-015",
+      "kill_screens_passed": false,
+      "failed_screens": [
+        {
+          "screen": "Beneish M-Score",
+          "value": -0.0662,
+          "threshold": -1.78,
+          "operator": "<=",
+          "result": "FAIL - M-Score above threshold"
+        },
+        {
+          "screen": "Altman Z-Score",
+          "value": -2.0729,
+          "threshold": 1.81,
+          "operator": ">=",
+          "result": "FAIL - Z-Score below threshold"
+        }
+      ],
+      "result": "PASS",
+      "reason": "Failed both universal kill screens on updated data fetch.",
+      "financial_summary": {
+        "market_cap": "$3.59M",
+        "current_price": "$0.73"
+      },
+      "notes": "Re-screened with data_fetcher; both M-Score and Z-Score failed."
+    },
+    {
+      "date": "2026-01-14",
+      "ticker": "CWAN",
+      "company": "Clearwater Analytics Holdings, Inc.",
+      "archetype": "activist",
+      "event_id": "EVT-2026-031",
+      "kill_screens_passed": false,
+      "failed_screens": [
+        {
+          "screen": "Altman Z-Score",
+          "value": 0.3424,
+          "threshold": 1.81,
+          "operator": ">=",
+          "result": "FAIL - Z-Score below threshold"
+        }
+      ],
+      "result": "PASS",
+      "reason": "Failed Z-Score kill screen on updated data fetch.",
+      "financial_summary": {
+        "market_cap": "N/A",
+        "current_price": "$24.12"
+      },
+      "notes": "Re-screened with data_fetcher; Z-Score failed."
     }
   ]
 }

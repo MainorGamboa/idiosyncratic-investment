@@ -1,5 +1,34 @@
 {
-  "archived_alerts": [],
+  "archived_alerts": [
+    {
+      "id": "ALERT-20260113142700",
+      "timestamp": "2026-01-13T14:27:00Z",
+      "priority": "immediate",
+      "type": "catalyst_occurred",
+      "trade_id": "TRD-20260107-FBIO-PDUFA",
+      "ticker": "FBIO",
+      "message": "FDA APPROVED ZYCUBO on Jan 13 (1 day early). Catalyst occurred - FULL EXIT required immediately.",
+      "details": {
+        "current_price": 3.94,
+        "entry_price": 4.27,
+        "unrealized_pnl_dollars": -28.71,
+        "unrealized_pnl_pct": -0.077,
+        "catalyst": "FDA Approval (PDUFA scheduled Jan 14)",
+        "catalyst_outcome": "APPROVED - First and only treatment for Menkes disease",
+        "exit_trigger": "Catalyst occurred = thesis complete",
+        "weighted_sum": 0.5,
+        "signals": {
+          "media": true,
+          "iv": false,
+          "price": false
+        }
+      },
+      "action_required": true,
+      "acknowledged": true,
+      "acknowledged_date": "2026-01-13T14:35:00Z",
+      "resolution": "Position closed via market order at $3.86. Final P&L: -$35.67 (-9.6%). Post-mortem completed."
+    }
+  ],
   "metadata": {
     "created": "2025-01-05",
     "version": "1.0",

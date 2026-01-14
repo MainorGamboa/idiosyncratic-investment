@@ -1,0 +1,39 @@
+{
+  "ticker": "SWX",
+  "date": "2026-01-14",
+  "archetype": "activist",
+  "event_id": "EVT-2026-037",
+  "result": "PASS",
+  "reason": "Kill screens failed (M-Score and Z-Score below thresholds).",
+  "kill_screens": {
+    "m_score": {
+      "value": -1.0292542805760696,
+      "threshold": -1.78,
+      "pass": false
+    },
+    "z_score": {
+      "value": 0.6591652733643224,
+      "threshold": 1.81,
+      "pass": false
+    }
+  },
+  "market_data": {
+    "price": 83.0,
+    "price_source": "Stooq (15-min delay)",
+    "market_cap": 5991013787.0,
+    "shares_outstanding": 72180889.0
+  },
+  "financials": {
+    "total_assets": 10328579000.0,
+    "total_liabilities": 0.0,
+    "working_capital": 438790000.0,
+    "revenue": 3842308000.0,
+    "ebit": 315220000.0,
+    "net_income": 371463000.0
+  },
+  "data_sources": [
+    "Stooq (15-min delay)",
+    "SEC XBRL API"
+  ],
+  "analysis_notes": "M-Score -1.03 exceeds -1.78 threshold and Z-Score 0.66 is below 1.81; automatic PASS per kill screens."
+}

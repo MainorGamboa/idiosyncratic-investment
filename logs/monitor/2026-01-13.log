@@ -1,0 +1,54 @@
+{
+  "timestamp": "2026-01-13T14:27:00Z",
+  "skill": "monitor",
+  "outcome": "ALERT_GENERATED",
+  "metrics": {
+    "trades_monitored": 3,
+    "alerts_generated": 1,
+    "actions_required": 1,
+    "exit_signals": {
+      "catalyst_occurred": 1,
+      "info_parity_exit": 0,
+      "thesis_breaks": 0,
+      "cockroaches": 0
+    }
+  },
+  "trades": [
+    {
+      "trade_id": "TRD-20260107-FBIO-PDUFA",
+      "ticker": "FBIO",
+      "action": "FULL_EXIT",
+      "trigger": "catalyst_occurred",
+      "price": 3.94,
+      "entry_price": 4.27,
+      "unrealized_pnl": -28.71,
+      "weighted_sum": 0.5,
+      "notes": "FDA approved ZYCUBO Jan 13 (1 day early). Thesis complete."
+    },
+    {
+      "trade_id": "TRD-20260107-LULU-ACTIVIST",
+      "ticker": "LULU",
+      "action": "HOLD",
+      "trigger": "none",
+      "price": 212.49,
+      "entry_price": 211.72,
+      "unrealized_pnl": 5.39,
+      "weighted_sum": 1.0,
+      "notes": "Below 200-MA, defensive posture. Media continues. No exit signal."
+    },
+    {
+      "trade_id": "TRD-20260107-SWX-ACTIVIST",
+      "ticker": "SWX",
+      "action": "HOLD",
+      "trigger": "none",
+      "price": 81.79,
+      "entry_price": 80.43,
+      "unrealized_pnl": 24.48,
+      "weighted_sum": 0.0,
+      "notes": "Above 200-MA, strong technical positioning. No exit signals."
+    }
+  ],
+  "data_sources": ["IBKR Paper", "Stooq", "Yahoo Finance", "Web Search"],
+  "execution_time_ms": 4800,
+  "notes": "CRITICAL: FBIO FDA approval 1 day early. Immediate exit required per protocol."
+}

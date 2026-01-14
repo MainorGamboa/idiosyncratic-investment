@@ -115,6 +115,24 @@
       "thesis_breaks": [],
       "action": "HOLD",
       "notes": "Price up +0.9% from entry. No new mainstream media coverage in January 2026. Yellow flag: Icahn reduced position -21.8% in Q1 2025, but maintains 8.48% stake (above 5% threshold) with 4 board seats secured via cooperation agreement. Board engagement suggests ongoing value realization commitment. 3.6% progress to target (well below 50% threshold). No exit signals triggered."
+    },
+    {
+      "date": "2026-01-13",
+      "price": 81.79,
+      "change_from_entry_pct": 0.017,
+      "unrealized_pnl": 24.48,
+      "info_parity": {
+        "media": 0,
+        "iv": 0,
+        "price": 0.069
+      },
+      "weighted_sum": 0.0,
+      "ma_200": 76.87,
+      "above_200_ma": true,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price up +1.7% from entry. Above 200-day MA ($81.79 > $76.87) = strong technical positioning. No new mainstream media coverage in January 2026. Icahn maintains 8.48% stake with 4 board seats per cooperation agreement. 6.9% progress to target (well below 50% threshold). No exit signals triggered. Position performing as expected. Data sources: IBKR Paper (price), Yahoo Finance (200-MA), web search (media)."
     }
   ]
 }

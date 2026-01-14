@@ -417,7 +417,7 @@
       "archetype": "activist",
       "status": "tracking",
       "notes": "Tier-1 activist. Elliott acquired $1B+ stake (Dec 18, 2025) and proposed CEO candidate. High-priority campaign targeting leadership change.",
-      "linked_idea": null,
+      "linked_idea": "TRD-20260114-LULU-ACTIVIST",
       "source": "CNBC, SEC 13D filing",
       "discovered_date": "2026-01-02",
       "priority": "high",
@@ -478,11 +478,13 @@
       "date": "2026-01-14",
       "date_type": "hard",
       "archetype": "pdufa",
-      "status": "tracking",
-      "notes": "Rolling NDA submission completed.",
-      "linked_idea": null,
+      "status": "completed",
+      "notes": "APPROVED Jan 13, 2026 (1 day early). ZYCUBO (copper histidinate) approved as first and only treatment for Menkes disease. Granted Rare Pediatric Disease Voucher. Linked to TRD-20260107-FBIO-PDUFA (closed -9.6% on sell-the-news).",
+      "linked_idea": "TRD-20260107-FBIO-PDUFA",
       "source": "FDA PDUFA calendar, Fortress Biotech IR",
-      "discovered_date": "2026-01-06"
+      "discovered_date": "2026-01-06",
+      "completion_date": "2026-01-13",
+      "outcome": "approved"
     },
     {
       "id": "EVT-2026-035",

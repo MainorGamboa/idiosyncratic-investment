@@ -1,0 +1,155 @@
+{
+  "trade_id": "TRD-20260114-LULU-ACTIVIST",
+  "ticker": "LULU",
+  "archetype": "activist",
+  "status": "active",
+  "instrument_type": "equity",
+
+  "thesis": {
+    "summary": "Elliott Management (Tier-1, $1B+ stake, ~4% ownership) pushing for CEO replacement following Calvin McDonald's departure (Jan 31, 2026). Jane Nielsen (former Ralph Lauren CFO/COO) proposed as CEO candidate with proven brand turnaround track record. Stock down -47.66% in 2025 creates compelling entry point. Market underpricing successful turnaround value.",
+    "catalyst": "CEO replacement with Jane Nielsen or equivalent high-caliber candidate",
+    "catalyst_date": "2026-Q2 (estimated, typical activist CEO search 3-6 months)",
+    "catalyst_type": "activist_campaign",
+    "linked_event": "EVT-2026-030",
+    "activist_tier": "tier_1",
+    "activist_firm": "Elliott Management"
+  },
+
+  "scoring": {
+    "catalyst": 1.5,
+    "mispricing": 2.0,
+    "noise_survival": 2.0,
+    "downside_floor": 1.5,
+    "risk_reward": 2.0,
+    "info_half_life": 0.5,
+    "base_score": 9.5,
+    "adjustments": [
+      {
+        "type": "activist_tier_1",
+        "value": 1.0,
+        "reason": "Elliott Management Tier-1 activist, 83% historical success rate"
+      }
+    ],
+    "final_score": 10.5
+  },
+
+  "decision": {
+    "action": "BUY",
+    "date": "2026-01-14",
+    "score": 10.5,
+    "threshold": 8.25,
+    "rationale": "Score 10.5 significantly exceeds BUY threshold of 8.25. High-conviction activist setup with Tier-1 sponsor (Elliott Management), clear value creation path (CEO upgrade via Jane Nielsen), stock at multi-year lows (-47.66% in 2025). Exceptional financial health (Z-Score 7.88). McDonald departure Jan 31 creates near-term inflection point."
+  },
+
+  "position": {
+    "entry_date": "2026-01-14",
+    "entry_price": 212.20,
+    "shares": 7,
+    "cost_basis": 1485.40,
+    "size_percent": 0.0594,
+    "archetype_max_percent": 0.06,
+    "stop_price": 140.77,
+    "target_price": 290.00,
+    "max_loss_dollars": 500,
+    "max_loss_percent": 0.02,
+    "upside_target_percent": 0.367,
+    "risk_reward_ratio": 1.09
+  },
+
+  "exit_plan": {
+    "info_parity_weights": {
+      "media": 1.0,
+      "iv": 0.5,
+      "price": 1.0,
+      "note": "Activist archetype weights from schema/exits.json"
+    },
+    "info_parity_thresholds": {
+      "watch": 2.0,
+      "exit_50_percent": 2.0,
+      "full_exit": 3.0
+    },
+    "hard_exit_triggers": [
+      {
+        "trigger": "cockroach_rule",
+        "description": "First sign of campaign trouble (Elliott withdraws, proxy fight fails, etc.)",
+        "action": "EXIT immediately"
+      },
+      {
+        "trigger": "thesis_break",
+        "description": "Elliott withdraws campaign, Nielsen declines candidacy, or board installs weak CEO",
+        "action": "EXIT immediately regardless of price"
+      },
+      {
+        "trigger": "board_entrenchment",
+        "description": "Poison pill, anti-activist measures, or settlement without Nielsen",
+        "action": "EXIT immediately"
+      },
+      {
+        "trigger": "stop_loss",
+        "description": "Price falls to $140.77 (-33.7% from entry)",
+        "action": "EXIT to limit loss to 2% of portfolio"
+      }
+    ],
+    "positive_catalysts": [
+      {
+        "event": "Jane Nielsen appointed CEO",
+        "action": "Hold, likely exit 50% on announcement, let remainder run on operational turnaround"
+      },
+      {
+        "event": "Strong CEO candidate appointed (not Nielsen)",
+        "action": "Evaluate candidate quality, likely exit 50% and reassess"
+      },
+      {
+        "event": "Elliott increases stake or adds board seats",
+        "action": "Positive signal, continue holding"
+      },
+      {
+        "event": "Stock reaches $290 target",
+        "action": "Exit 50%, trail stop on remainder"
+      }
+    ]
+  },
+
+  "monitoring": [
+    {
+      "date": "2026-01-14",
+      "price": 212.20,
+      "change_from_entry_pct": 0.00,
+      "unrealized_pnl": 0.00,
+      "info_parity": {
+        "media": 1,
+        "iv": 0,
+        "price": 0
+      },
+      "weighted_sum": 1.0,
+      "ma_200": 218.81,
+      "above_200_ma": false,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Same-day entry monitoring. Price unchanged at entry $212.20. Media signal TRIGGERED: Extensive mainstream coverage (CNBC 'How activist Elliott can help reinvigorate athleisure giant', Yahoo Finance, WWD, Retail Dive, Seeking Alpha, Globe and Mail, FinancialContent) on Elliott $1B+ stake and Jane Nielsen CEO candidacy. Weighted sum 1.0 < 2.0 threshold (no exit required). Below 200-day MA ($212.20 < $218.81) = DEFENSIVE posture recommended but position just opened. McDonald departing Jan 31 (18 days). Elliott campaign progressing as expected with strong media engagement. Q4 guidance raised to high end of range following strong holiday sales (positive operational signal). Data sources: Yahoo Finance (price, 200-MA), web search (media)."
+    }
+  ],
+
+  "metadata": {
+    "created_by": "open_skill",
+    "created_at": "2026-01-14T00:00:00Z",
+    "watchlist_file": "universe/watchlist/LULU.md",
+    "kill_screens": {
+      "m_score": -1.97,
+      "z_score": 7.88,
+      "market_cap": 24500000000,
+      "all_passed": true
+    },
+    "activist_campaign_details": {
+      "disclosure_date": "2025-12-18",
+      "stake_size_dollars": 1000000000,
+      "ownership_percent": 4.0,
+      "ceo_departure_date": "2026-01-31",
+      "interim_ceos": ["Meghan Frank", "André Maestrini"],
+      "proposed_ceo_candidate": "Jane Nielsen (former Ralph Lauren CFO/COO)",
+      "market_reaction_on_disclosure": "+6%"
+    },
+    "notes": "Elliott Management Tier-1 activist campaign. McDonald departing Jan 31, 2026. Jane Nielsen (Ralph Lauren turnaround specialist) proposed as CEO candidate. Stock -47.66% in 2025 from $423.32 to $212.20. Trading at 14.23 P/E vs historical premium multiples."
+  }
+}
