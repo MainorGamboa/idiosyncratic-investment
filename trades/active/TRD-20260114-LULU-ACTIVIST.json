@@ -128,6 +128,24 @@
       "thesis_breaks": [],
       "action": "HOLD",
       "notes": "Same-day entry monitoring. Price unchanged at entry $212.20. Media signal TRIGGERED: Extensive mainstream coverage (CNBC 'How activist Elliott can help reinvigorate athleisure giant', Yahoo Finance, WWD, Retail Dive, Seeking Alpha, Globe and Mail, FinancialContent) on Elliott $1B+ stake and Jane Nielsen CEO candidacy. Weighted sum 1.0 < 2.0 threshold (no exit required). Below 200-day MA ($212.20 < $218.81) = DEFENSIVE posture recommended but position just opened. McDonald departing Jan 31 (18 days). Elliott campaign progressing as expected with strong media engagement. Q4 guidance raised to high end of range following strong holiday sales (positive operational signal). Data sources: Yahoo Finance (price, 200-MA), web search (media)."
+    },
+    {
+      "date": "2026-01-15",
+      "price": 203.91,
+      "change_from_entry_pct": -0.039,
+      "unrealized_pnl": -58.03,
+      "info_parity": {
+        "media": 1,
+        "iv": 0,
+        "price": 0
+      },
+      "weighted_sum": 1.0,
+      "ma_200": 217.96,
+      "above_200_ma": false,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price down -3.9% from entry at $203.91, well above $140.77 stop. Media signal TRIGGERED: Heavy mainstream coverage (CNBC, Yahoo Finance, Business of Fashion, Seeking Alpha) on Elliott $1B+ stake and Jane Nielsen CEO candidacy. Below 200-day MA ($203.91 < $217.96) = DEFENSIVE posture. Weighted sum 1.0 < 2.0 threshold (no exit required). McDonald departure Jan 31 (16 days away). Elliott campaign progressing. No thesis breaks detected. Data sources: IBKR Paper (price), Yahoo Finance (200-MA), web search (media)."
     }
   ],
 

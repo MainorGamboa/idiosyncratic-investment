@@ -133,6 +133,24 @@
       "thesis_breaks": [],
       "action": "HOLD",
       "notes": "Price up +1.7% from entry. Above 200-day MA ($81.79 > $76.87) = strong technical positioning. No new mainstream media coverage in January 2026. Icahn maintains 8.48% stake with 4 board seats per cooperation agreement. 6.9% progress to target (well below 50% threshold). No exit signals triggered. Position performing as expected. Data sources: IBKR Paper (price), Yahoo Finance (200-MA), web search (media)."
+    },
+    {
+      "date": "2026-01-15",
+      "price": 86.01,
+      "change_from_entry_pct": 0.069,
+      "unrealized_pnl": 100.44,
+      "info_parity": {
+        "media": 0,
+        "iv": 0,
+        "price": 0.285
+      },
+      "weighted_sum": 0.285,
+      "ma_200": 76.99,
+      "above_200_ma": true,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Strong performance! Price up +6.9% from entry at $86.01, well above $73 stop. Above 200-day MA ($86.01 > $76.99) = strong technical positioning. No new mainstream media coverage in January 2026 (info parity NOT triggered). Icahn maintains 8.48% stake with 4 board seats via amended cooperation agreement through 2026. 28.5% progress to target (below 50% threshold). No exit signals triggered. Pure-play utility value thesis intact. Data sources: Stooq (price), Yahoo Finance (200-MA), web search (media)."
     }
   ]
 }
