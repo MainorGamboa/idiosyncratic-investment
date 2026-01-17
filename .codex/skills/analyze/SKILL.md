@@ -92,28 +92,49 @@ For the archetype, check ALL applicable kill screens:
 
 ### Step 2a: Archetype-Specific Data Gathering (v1.1)
 
-**data_fetcher.py now automatically gathers archetype-specific data:**
+**data_fetcher.py returns `manual_checks_required` listing what agent must verify:**
+
+**AUTOMATED by data_fetcher.py:**
+- Price data (IBKR → Stooq → Yahoo)
+- M-Score and Z-Score calculations (SEC API)
+- PDUFA financial health screens (cash runway, D/E, net cash)
+- openFDA enforcement actions search
+
+**MANUAL LOOKUP REQUIRED (agent performs web search/fetch):**
 
 **For PDUFA archetype:**
-- Check Form 483 with OAI (affects scoring: -1.0pt if present)
-- Check EMA approval status (affects scoring: +0.5pt if approved)
-- Note: These are scoring modifiers, not kill screens
-- Manual verification may be required (see data_fetcher output)
+- **Form 483 with OAI**: Search FDA FOIA Reading Room
+  - URL: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/fda-warning-letters
+  - Impact: -1.0pt scoring modifier if OAI present
+- **EMA approval**: Search EMA medicines database
+  - URL: https://www.ema.europa.eu/en/medicines
+  - Impact: +0.5pt scoring modifier if approved
+- **CRL classification**: Check company 8-K filings or FDA FOIA
+  - Class 1 (manufacturing) = 2 month timeline
+  - Class 2 (efficacy) = 6 month timeline
 
 **For Insider archetype:**
-- Validate insider cluster quality (kill screen KS-008)
-- Fetch 3-year Form 4 history for each insider
-- Classify routine vs opportunistic traders
-- Count only opportunistic insiders toward 3+ threshold
+- **Insider cluster validation** (kill screen KS-008)
+  - Source: https://openinsider.com or SEC EDGAR Form 4
+  - Fetch 3-year trading history for each insider
+  - Use `scripts/insider_analysis.py classify_routine` to identify routine traders
+  - Count only opportunistic (non-routine) insiders
+  - PASS requires 3+ opportunistic insiders
 
 **For Activist/Spin-off archetypes:**
-- Check WARN Act filings (state databases)
-- Activist: WARN with "loss of contract" = exit signal (not kill screen)
-- Spin-off: WARN at SpinCo = reduce position size 50%
+- **WARN Act filings**: Search state labor department databases
+  - California: https://edd.ca.gov/en/Jobs_and_Training/Layoff_Services_WARN
+  - New York: https://dol.ny.gov/warn-notices
+  - Or search: "[company name] WARN Act notice"
+  - If found, use `scripts/warn_act_checker.py analyze_language` to check for contract loss
+  - Activist: WARN with "loss of contract" = exit signal
+  - Spin-off: WARN at SpinCo = reduce position size 50%
 
 **For Merger Arb:**
-- Note: Second request, CFIUS, and China-connected checks happen during scoring
-- Not part of kill screens, but tracked for scoring adjustments
+- **Second request status**: Check FTC/DOJ press releases
+- **CFIUS exposure**: Check for national security concerns
+- **China-connected buyer**: Research buyer ownership/ties
+- Note: These are scoring modifiers, not kill screens
 
 ### Step 2b: Data Validation & Anomaly Detection
 

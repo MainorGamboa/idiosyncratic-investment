@@ -80,11 +80,61 @@ Display fetched data to user:
 Reference: `schema/kill_screens.json`
 
 For the archetype, check ALL applicable kill screens:
-- All archetypes: M-Score, Z-Score
-- Merger Arb: Hostile deal, Spread < 2.5%
-- Legislative: Macro conflict
+- **All archetypes**: M-Score, Z-Score, Market cap ceiling
+- **Merger Arb**: Hostile deal, Spread < 2.5%
+- **Legislative**: Macro conflict
+- **Insider** (v1.1): Insider Cluster Quality (KS-008) - requires 3+ opportunistic insiders
+  - Routine traders excluded (trades in same month annually for 3+ years)
+  - Uses `scripts/insider_analysis.py` to validate cluster
+- **PDUFA**: Financial health (18mo cash runway, D/E <0.75, net cash position)
 
 **If ANY kill screen fails → PASS. Stop here.**
+
+### Step 2a: Archetype-Specific Data Gathering (v1.1)
+
+**data_fetcher.py returns `manual_checks_required` listing what agent must verify:**
+
+**AUTOMATED by data_fetcher.py:**
+- Price data (IBKR → Stooq → Yahoo)
+- M-Score and Z-Score calculations (SEC API)
+- PDUFA financial health screens (cash runway, D/E, net cash)
+- openFDA enforcement actions search
+
+**MANUAL LOOKUP REQUIRED (agent performs web search/fetch):**
+
+**For PDUFA archetype:**
+- **Form 483 with OAI**: Search FDA FOIA Reading Room
+  - URL: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/fda-warning-letters
+  - Impact: -1.0pt scoring modifier if OAI present
+- **EMA approval**: Search EMA medicines database
+  - URL: https://www.ema.europa.eu/en/medicines
+  - Impact: +0.5pt scoring modifier if approved
+- **CRL classification**: Check company 8-K filings or FDA FOIA
+  - Class 1 (manufacturing) = 2 month timeline
+  - Class 2 (efficacy) = 6 month timeline
+
+**For Insider archetype:**
+- **Insider cluster validation** (kill screen KS-008)
+  - Source: https://openinsider.com or SEC EDGAR Form 4
+  - Fetch 3-year trading history for each insider
+  - Use `scripts/insider_analysis.py classify_routine` to identify routine traders
+  - Count only opportunistic (non-routine) insiders
+  - PASS requires 3+ opportunistic insiders
+
+**For Activist/Spin-off archetypes:**
+- **WARN Act filings**: Search state labor department databases
+  - California: https://edd.ca.gov/en/Jobs_and_Training/Layoff_Services_WARN
+  - New York: https://dol.ny.gov/warn-notices
+  - Or search: "[company name] WARN Act notice"
+  - If found, use `scripts/warn_act_checker.py analyze_language` to check for contract loss
+  - Activist: WARN with "loss of contract" = exit signal
+  - Spin-off: WARN at SpinCo = reduce position size 50%
+
+**For Merger Arb:**
+- **Second request status**: Check FTC/DOJ press releases
+- **CFIUS exposure**: Check for national security concerns
+- **China-connected buyer**: Research buyer ownership/ties
+- Note: These are scoring modifiers, not kill screens
 
 ### Step 2b: Data Validation & Anomaly Detection
 
@@ -170,7 +220,14 @@ If screens pass, create `universe/watchlist/{TICKER}.md`:
 ## Kill Screens
 - [x] M-Score: {value} (PASS)
 - [x] Z-Score: {value} (PASS)
-- [x] Other applicable screens...
+- [x] Market cap: {value} (< threshold)
+- [x] Archetype-specific: {list archetype kill screens}
+
+**v1.1 Archetype-Specific Data:**
+- **PDUFA**: Form 483 with OAI: {Yes/No}, EMA approved: {Yes/No}
+- **Insider**: Opportunistic insiders: {count}, Routine insiders: {count}
+- **Activist/Spin-off**: WARN filing: {Yes/No}
+- **Merger Arb**: Note any second request, CFIUS, or China exposure
 
 ## Options Analysis
 **Archetype Supports Options:** {Yes/No}
