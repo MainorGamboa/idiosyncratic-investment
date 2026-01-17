@@ -1,0 +1,39 @@
+{
+  "ticker": "NCPL",
+  "date": "2026-01-14",
+  "archetype": "activist",
+  "event_id": "EVT-2026-015",
+  "result": "PASS",
+  "reason": "Kill screens failed (M-Score and Z-Score below thresholds).",
+  "kill_screens": {
+    "m_score": {
+      "value": -0.06619599711148189,
+      "threshold": -1.78,
+      "pass": false
+    },
+    "z_score": {
+      "value": -2.0729332901377027,
+      "threshold": 1.81,
+      "pass": false
+    }
+  },
+  "market_data": {
+    "price": 0.7301,
+    "price_source": "Stooq (15-min delay)",
+    "market_cap": 3590558.0599,
+    "shares_outstanding": 4917899.0
+  },
+  "financials": {
+    "total_assets": 25439398.0,
+    "total_liabilities": 4002600.0,
+    "working_capital": -1500153.0,
+    "revenue": 241134.0,
+    "ebit": -5405105.0,
+    "net_income": -5771541.0
+  },
+  "data_sources": [
+    "Stooq (15-min delay)",
+    "SEC XBRL API"
+  ],
+  "analysis_notes": "M-Score -0.07 exceeds -1.78 threshold and Z-Score -2.07 is below 1.81; automatic PASS per kill screens."
+}

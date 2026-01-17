@@ -1,0 +1,119 @@
+{
+  "timestamp": "2026-01-13T00:00:00Z",
+  "skill": "screen",
+  "ticker": "ATRA",
+  "archetype": "pdufa",
+  "outcome": "EVENT_COMPLETED",
+  "event_id": "EVT-2026-033",
+  "metrics": {
+    "catalyst_date": "2026-01-10",
+    "actual_outcome": "CRL (Complete Response Letter)",
+    "stock_reaction": "-56%",
+    "kill_screens_passed": "N/A - Event already occurred"
+  },
+  "data_sources": ["Web search", "SEC filings", "Business Wire"],
+  "execution_time_ms": 0,
+  "notes": "ATRA PDUFA already occurred on Jan 10, 2026 with FDA rejection. Stock plunged 56%. Event should be marked completed in events.json, NOT screened for new trade. Skipping to next event."
+},
+{
+  "timestamp": "2026-01-13T00:05:00Z",
+  "skill": "screen",
+  "ticker": "TVTX",
+  "archetype": "pdufa",
+  "outcome": "EVENT_IN_PROGRESS",
+  "event_id": "EVT-2026-002",
+  "metrics": {
+    "catalyst_date": "2026-01-13",
+    "actual_outcome": "PENDING (decision occurring today)",
+    "kill_screens_passed": "N/A - Catalyst occurring NOW"
+  },
+  "data_sources": ["Web search", "Business Wire", "Travere IR"],
+  "execution_time_ms": 0,
+  "notes": "TVTX PDUFA date is TODAY (Jan 13, 2026). Decision pending. Too late to enter position before catalyst. Event should be monitored for outcome but NOT screened for new trade. Skipping to next event."
+},
+{
+  "timestamp": "2026-01-13T00:10:00Z",
+  "skill": "screen",
+  "ticker": "AQST",
+  "archetype": "pdufa",
+  "outcome": "CATALYST_COMPROMISED",
+  "event_id": "EVT-2026-001",
+  "metrics": {
+    "catalyst_date": "2026-01-31",
+    "actual_pdufa_date": "2026-01-31 (not Jan 6)",
+    "fda_status": "Deficiency letter issued Jan 9, 2026",
+    "approval_probability": "Significantly reduced"
+  },
+  "data_sources": ["GlobeNewswire", "Aquestive IR"],
+  "execution_time_ms": 0,
+  "notes": "AQST PDUFA is Jan 31, 2026 (events.json has wrong date). FDA issued deficiency letter Jan 9 stating deficiencies preclude labeling discussions. This is a CRL warning signal. Approval probability significantly reduced. NOT a viable screening candidate given recent negative signal. Skipping."
+},
+{
+  "timestamp": "2026-01-13T00:15:00Z",
+  "skill": "screen",
+  "ticker": "LULU",
+  "archetype": "activist",
+  "outcome": "PASS",
+  "event_id": "EVT-2026-030",
+  "metrics": {
+    "m_score": -1.97,
+    "m_score_threshold": -1.78,
+    "m_score_passed": true,
+    "z_score": 7.88,
+    "z_score_threshold": 1.81,
+    "z_score_passed": true,
+    "market_cap": 24500000000,
+    "market_cap_threshold": 50000000000,
+    "market_cap_passed": true,
+    "kill_screens_passed": true
+  },
+  "data_sources": ["GuruFocus", "ValueInvesting.io"],
+  "execution_time_ms": 1200,
+  "notes": "All kill screens PASSED. Elliott Tier-1 activist, $1B+ stake, CEO replacement proposal. Strong financial health (Z-Score 7.88, M-Score -1.97). Ready for full analyze and score. Next step: Run 'analyze LULU'"
+},
+{
+  "timestamp": "2026-01-13T00:20:00Z",
+  "skill": "screen",
+  "ticker": "SWX",
+  "archetype": "activist",
+  "outcome": "FAIL",
+  "event_id": "EVT-2026-037",
+  "metrics": {
+    "m_score": -13.85,
+    "m_score_threshold": -1.78,
+    "m_score_passed": true,
+    "m_score_note": "Extreme value suggests data quality issue but passes threshold",
+    "z_score": 1.5,
+    "z_score_threshold": 2.5,
+    "z_score_industry": "utilities",
+    "z_score_passed": false,
+    "market_cap": 5630000000,
+    "market_cap_threshold": 50000000000,
+    "market_cap_passed": true,
+    "kill_screens_passed": false,
+    "failed_screens": ["altman_z_score"]
+  },
+  "data_sources": ["GuruFocus"],
+  "execution_time_ms": 800,
+  "notes": "FAILED Z-Score kill screen. SWX is a utility company requiring adjusted Z-Score threshold of 2.5 (vs 1.81 standard). Actual Z-Score 1.5 < 2.5 = FAIL. Additionally, company revised financial statements due to tax errors in Q2/Q3 2025. Automatic PASS decision. Will NOT analyze or score."
+},
+{
+  "timestamp": "2026-01-13T00:25:00Z",
+  "skill": "analyze",
+  "ticker": "LULU",
+  "archetype": "activist",
+  "outcome": "PASS",
+  "event_id": "EVT-2026-030",
+  "metrics": {
+    "price": 212.20,
+    "price_source": "Yahoo Finance",
+    "market_cap": 24500000000,
+    "m_score": -1.97,
+    "z_score": 7.88,
+    "kill_screens_passed": true,
+    "watchlist_file_updated": true
+  },
+  "data_sources": ["Yahoo Finance", "GuruFocus", "ValueInvesting.io", "CNBC"],
+  "execution_time_ms": 2800,
+  "notes": "All kill screens PASSED. Watchlist file updated with latest activist campaign details. Elliott Tier-1, $1B+ stake, McDonald departing Jan 31. Ready for scoring. Next step: Run 'score LULU'"
+}

@@ -1,0 +1,261 @@
+{
+  "overview": {
+    "purpose": "Define options strategies for each archetype in the idiosyncratic trading framework",
+    "version": "1.0",
+    "integration": "Used by analyze and score skills to recommend options vs equity",
+    "philosophy": "Options provide leverage and defined risk for binary catalysts with known timelines"
+  },
+
+  "archetype_strategies": {
+    "pdufa": {
+      "enabled": true,
+      "priority": "high",
+      "rationale": "Binary catalyst with defined date - perfect for options. 92% approval rate justifies directional bet.",
+      "recommended_strategies": [
+        {
+          "name": "long_calls",
+          "description": "Buy ATM or 1 strike OTM calls expiring after PDUFA date",
+          "use_case": "Primary strategy - simple directional bet on approval",
+          "complexity": "simple",
+          "max_loss": "premium_paid",
+          "max_gain": "unlimited",
+          "break_even": "strike + premium",
+          "delta_range": [0.40, 0.60]
+        },
+        {
+          "name": "call_debit_spread",
+          "description": "Buy ATM call, sell OTM call to reduce cost",
+          "use_case": "When IV is high or want to reduce premium outlay",
+          "complexity": "moderate",
+          "max_loss": "net_debit",
+          "max_gain": "strike_width - net_debit",
+          "break_even": "long_strike + net_debit",
+          "spread_width": "10-20% OTM"
+        }
+      ],
+      "expiration_rules": {
+        "min_dte": 21,
+        "optimal_dte_range": [60, 90],
+        "buffer_after_catalyst": 7,
+        "rule": "First monthly expiration AFTER PDUFA date + 7 days minimum"
+      },
+      "strike_selection": {
+        "primary": "ATM (delta 0.50)",
+        "aggressive": "1 strike OTM (delta 0.40-0.45)",
+        "conservative": "1 strike ITM (delta 0.60-0.65)"
+      },
+      "position_sizing": {
+        "max_premium_at_risk": 0.015,
+        "effective_notional_cap": 0.05,
+        "leverage_multiplier": "3-5x on premium",
+        "note": "Same 1.5% risk as equity, but 3-5x notional exposure"
+      },
+      "entry_timing": "Immediately after watchlist creation and BUY/CONDITIONAL score",
+      "exit_rules": {
+        "info_parity_threshold_adjustment": -0.5,
+        "note": "Exit at 1.5 weighted sum (vs 2.0 for equity) due to theta decay"
+      }
+    },
+
+    "activist": {
+      "enabled": true,
+      "priority": "high",
+      "rationale": "Long timeline (3-12 months) suits LEAPS. Tier-1 83% success rate justifies leverage.",
+      "tier_restrictions": {
+        "tier_1": "Approved for options",
+        "tier_2": "Approved for options (slightly smaller position)",
+        "tier_3": "Equity only - insufficient conviction for leverage"
+      },
+      "recommended_strategies": [
+        {
+          "name": "leaps_calls",
+          "description": "12-18 month calls on 13D filing",
+          "use_case": "Tier-1 activists only - high conviction campaigns",
+          "complexity": "simple",
+          "max_loss": "premium_paid",
+          "max_gain": "unlimited",
+          "delta_range": [0.50, 0.70]
+        }
+      ],
+      "expiration_rules": {
+        "min_dte": 180,
+        "optimal_dte_range": [365, 540],
+        "rationale": "Campaigns take 3-12 months, need time decay buffer"
+      },
+      "strike_selection": {
+        "primary": "ATM to 5% OTM",
+        "note": "Activists typically drive 15-30% gains, don't need deep OTM strikes"
+      },
+      "position_sizing": {
+        "tier_1": {
+          "max_premium_at_risk": 0.04,
+          "effective_notional_cap": 0.10
+        },
+        "tier_2": {
+          "max_premium_at_risk": 0.03,
+          "effective_notional_cap": 0.08
+        },
+        "tier_3": {
+          "max_premium_at_risk": 0,
+          "note": "Use equity only"
+        }
+      },
+      "entry_timing": "Within 5 days of 13D filing",
+      "exit_rules": {
+        "settlement_announcement": "Close 50% on settlement or standstill",
+        "board_seat_achieved": "Consider taking profits",
+        "campaign_ends": "Exit all positions"
+      }
+    },
+
+    "merger_arb": {
+      "enabled": true,
+      "priority": "moderate",
+      "rationale": "Use options only for wide spreads (>8%) to justify complexity",
+      "spread_threshold": 0.08,
+      "recommended_strategies": [
+        {
+          "name": "long_calls_target",
+          "description": "Buy calls on target at current price, capture spread compression",
+          "use_case": "Wide spreads >8% with 4-8 month timeline",
+          "complexity": "simple",
+          "max_loss": "premium_paid",
+          "max_gain": "deal_price - strike - premium"
+        },
+        {
+          "name": "risk_reversal",
+          "description": "Short puts at current price, long calls at deal price",
+          "use_case": "High conviction deals, reduce net cost",
+          "complexity": "advanced",
+          "max_loss": "potentially unlimited on put side",
+          "max_gain": "call spread width",
+          "note": "Advanced traders only"
+        }
+      ],
+      "expiration_rules": {
+        "min_dte": 30,
+        "buffer_after_close": 60,
+        "rule": "Expiration 1-2 months AFTER expected deal close"
+      },
+      "strike_selection": {
+        "long_calls": "Strike at current target price or 1 strike below",
+        "target_price": "Deal price (may not have exact strike, use closest)"
+      },
+      "position_sizing": {
+        "max_premium_at_risk": 0.02,
+        "effective_notional_cap": 0.06,
+        "note": "Smaller than equity (3%) due to added complexity"
+      },
+      "entry_timing": "After kill screens pass and spread confirmed >8%",
+      "exit_rules": {
+        "spread_compression": "Exit when spread <3% remaining",
+        "deal_break_risk": "Cockroach rule applies - exit on first wobble"
+      }
+    },
+
+    "insider": {
+      "enabled": true,
+      "priority": "moderate",
+      "rationale": "Use selectively for high-conviction clusters only (higher bar than equity)",
+      "enhanced_thresholds": {
+        "min_cluster_size": 5,
+        "min_aggregate_purchase_usd": 1000000,
+        "min_score": 8.5,
+        "note": "Higher requirements than equity (cluster 3+, score 8.25)"
+      },
+      "recommended_strategies": [
+        {
+          "name": "long_calls_6_12mo",
+          "description": "6-12 month calls on volume surge signal",
+          "use_case": "High conviction insider clusters with volume confirmation",
+          "complexity": "simple",
+          "max_loss": "premium_paid",
+          "max_gain": "unlimited"
+        }
+      ],
+      "expiration_rules": {
+        "min_dte": 120,
+        "optimal_dte_range": [180, 365],
+        "rationale": "Wait for volume surge signal (up to 90 days), need time buffer"
+      },
+      "strike_selection": {
+        "primary": "ATM",
+        "note": "Insider clusters suggest 20-40% upside, ATM captures this"
+      },
+      "position_sizing": {
+        "max_premium_at_risk": 0.03,
+        "effective_notional_cap": 0.08,
+        "note": "Smaller than equity (5%) due to lower base rate (65-70%)"
+      },
+      "entry_timing": "Wait for volume surge >2x average (framework rule), then enter options",
+      "exit_rules": {
+        "volume_signal_fails": "If no volume surge within 90 days, close position",
+        "target_hit": "Exit 50% on 25% gain, let rest run"
+      }
+    },
+
+    "spinoff": {
+      "enabled": false,
+      "priority": "none",
+      "rationale": "Options market typically doesn't exist until 60-90 days post-spin",
+      "issues": [
+        "Newly listed companies have no options for 30-90 days",
+        "Framework requires entry days 30-60 (forced selling period)",
+        "When options finally available, forced selling window has passed",
+        "Low liquidity and wide spreads even after listing"
+      ],
+      "recommendation": "Use equity only for this archetype"
+    },
+
+    "liquidation": {
+      "enabled": false,
+      "priority": "none",
+      "rationale": "SPACs near NAV have minimal volatility - options offer no advantage",
+      "issues": [
+        "SPACs trading $9.80-$10.20 have minimal implied volatility",
+        "Options premiums often exceed potential gain ($0.20-$0.40 upside)",
+        "Better to use equity and capture discount compression directly",
+        "Options market illiquid on most SPACs"
+      ],
+      "recommendation": "Use equity only for this archetype"
+    },
+
+    "legislative": {
+      "enabled": false,
+      "priority": "none",
+      "rationale": "Uncertain timelines and theta decay make options unsuitable",
+      "issues": [
+        "Bills can stall, delay, or fail - no defined catalyst date",
+        "Secondary beneficiaries (preferred targets) often lack liquid options",
+        "Time decay works against position on uncertain timelines",
+        "Entry is 3-6 months pre-passage but timing unpredictable"
+      ],
+      "recommendation": "Use equity only for this archetype"
+    }
+  },
+
+  "strategy_selection_logic": {
+    "step_1": "Check if archetype.enabled = true",
+    "step_2": "Verify idea meets enhanced thresholds (if applicable)",
+    "step_3": "Check options liquidity kill screens (options_kill_screens.json)",
+    "step_4": "Compare breakeven analysis: stock move needed vs premium cost",
+    "step_5": "If options pass all checks AND offer better risk/reward, recommend options",
+    "step_6": "Otherwise default to equity",
+    "note": "analyze skill should present BOTH options and equity as alternatives with pros/cons"
+  },
+
+  "breakeven_analysis_template": {
+    "stock_move_needed_pct": "(strike + premium - current_price) / current_price",
+    "premium_as_pct_of_notional": "premium / (shares * current_price)",
+    "effective_leverage": "notional_exposure / premium_paid",
+    "comparison": "If stock_move_needed < mispricing_gap AND leverage > 3x, options favorable"
+  },
+
+  "notes": [
+    "Options are TOOLS, not replacements - use when they offer clear advantage",
+    "Theta decay is the enemy - only use when catalyst timeline is DEFINED",
+    "Liquidity is critical - wide spreads eliminate edge",
+    "Start with PDUFA and Tier-1 Activist - these have highest success probability",
+    "Track options performance separately to validate strategy over time"
+  ]
+}

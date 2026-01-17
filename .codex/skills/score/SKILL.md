@@ -231,4 +231,3 @@ Append to `logs/score/YYYY-MM-DD.log`:
 ## Related Skills
 - `analyze` — Creates watchlist (run before score)
 - `open` — Opens position (run after BUY decision)
-- `search` — Find precedents for calibration

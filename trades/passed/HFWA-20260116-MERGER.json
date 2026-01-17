@@ -1,0 +1,9 @@
+{
+  "trade_id": "TRD-20260116-HFWA-MERGER",
+  "ticker": "HFWA",
+  "archetype": "merger_arb",
+  "status": "passed",
+  "reason": "kill_screen_failed",
+  "details": "Target (Olympic Bancorp) is not publicly traded / insufficient liquidity for retail arb position.",
+  "date": "2026-01-16"
+}

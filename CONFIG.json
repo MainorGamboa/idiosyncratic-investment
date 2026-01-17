@@ -16,17 +16,56 @@
     "max_positions": 10,
     "kellner_rule": "Max 2% portfolio loss per trade"
   },
+  "options_risk": {
+    "enabled": true,
+    "max_premium_at_risk_total": 0.10,
+    "max_notional_exposure": 0.30,
+    "max_options_positions": 5,
+    "max_single_position_premium": 0.04,
+    "min_liquidity": {
+      "open_interest": 100,
+      "avg_daily_volume": 20,
+      "bid_ask_spread_pct": 0.10
+    },
+    "expiration_rules": {
+      "min_dte": 21,
+      "max_dte": 540,
+      "buffer_days_after_catalyst": 7
+    },
+    "allowed_archetypes": ["pdufa", "activist", "merger_arb", "insider"],
+    "allowed_strategies": ["long_call", "call_debit_spread", "leaps_calls"],
+    "regime_adjustments": {
+      "vix_20_30": {
+        "position_reduction": 0.25,
+        "note": "Reduce new options positions by 25% in elevated VIX"
+      },
+      "vix_above_30": {
+        "position_reduction": 0.50,
+        "note": "Reduce new options positions by 50% in crisis VIX"
+      },
+      "hy_oas_widening_100bp": {
+        "merger_arb_options": "pause",
+        "note": "Pause new merger arb options when credit spreads widen"
+      }
+    },
+    "monitoring": {
+      "theta_decay_alert_pct": 0.01,
+      "approaching_expiration_days": 30,
+      "premium_limit_warning_pct": 0.08
+    },
+    "note": "Options provide leverage for binary catalysts. See schema/options_*.json for detailed rules."
+  },
   "regime": {
-    "vix": 15.07,
+    "vix": 16.18,
     "vix_level": "15-20",
     "vix_action": "Normal operations",
-    "hy_oas_bps": 301,
+    "hy_oas_bps": 276,
     "hy_oas_baseline": 284,
     "credit_condition": "stable",
     "credit_action": "Normal operations",
     "correlation_elevated": false,
     "alerts": [],
-    "last_updated": "2026-01-07T09:00:00Z"
+    "last_updated": "2026-01-16T09:00:00Z"
   },
   "framework_version": "1.1",
   "schema_format_version": "1.1",
@@ -42,6 +81,25 @@
       "financials_duration_days": 90,
       "regulatory_duration_days": 30,
       "insider_duration_days": 7
+    },
+        "event_sources": {
+      "free": {
+        "sec_edgar": { "enabled": true, "forms": ["4", "13D", "8-K", "10"] },
+        "openinsider": { "enabled": true, "note": "Form 4 aggregation, cluster detection" },
+        "biopharmcatalyst": { "enabled": true, "note": "PDUFA dates, AdCom schedules" },
+        "fda_gov": { "enabled": true, "note": "Official approvals/CRLs" },
+        "ftc_doj_gov": { "enabled": true, "note": "Merger review press releases" },
+        "congress_gov": { "enabled": true, "note": "Bill status, vote schedules" },
+        "clark_street_value": { "enabled": true, "note": "Liquidation/micro-cap analysis" },
+        "finviz_insider": { "enabled": true, "note": "Quick insider filtering" },
+        "spactrack": { "enabled": true, "note": "SPAC trust values" },
+        "cefconnect": { "enabled": true, "note": "CEF NAV discounts" }
+      },
+      "paid": {
+        "inside_arbitrage": { "enabled": false, "cost": "$299/yr", "priority": 1, "note": "Covers 5 archetypes" },
+        "stat_news": { "enabled": false, "cost": "$299/yr", "priority": 2, "note": "PDUFA regulatory analysis" },
+        "barrons": { "enabled": false, "cost": "$100-200/yr", "priority": 3, "note": "Weekly insider column" }
+      }
     }
   },
   "external_apis": {
@@ -71,21 +129,76 @@
       "note": "State WARN databases vary. Some have APIs, most require web scraping."
     }
   },
-  "alerts": {
-    "active_alerts_file": "alerts.json",
-    "archive_file": "alerts_archive.json"
-  },
   "automation": {
     "dry_run": false,
     "auto_approve_orders": false,
     "require_confirmation": true,
     "max_positions": 10,
-    "data_cache_ttl_minutes": 60
+    "max_events_per_day": 5,
+    "batch_preview": true,
+    "data_cache_ttl_minutes": 60,
+    "ibkr_reconciliation": {
+      "enabled": false,
+      "frequency": "weekly",
+      "auto_create_from_ibkr": false,
+      "alert_threshold": "any",
+      "reconciliation_actions": {
+        "orphan_ibkr_positions": "alert_and_ask",
+        "orphan_trade_files": "alert_only",
+        "quantity_mismatches": "alert_and_reconcile",
+        "price_drift": "log_only"
+      }
+    },
+    "batch_processing": {
+      "enabled": true,
+      "show_preview_table": true,
+      "require_confirmation": true,
+      "confirmation_style": "single",
+      "max_batch_size": 10
+    },
+    "auto_close": {
+      "cockroach_rule": true,
+      "thesis_break": true,
+      "stop_loss": true,
+      "info_parity_threshold": 2.0,
+      "require_confirmation_for_info_parity": true
+    },
+    "alerts": {
+      "active_alerts_file": "alerts.json",
+      "archive_file": "alerts_archive.json",
+      "write_to_file": true,
+      "console_output": true,
+      "priority_levels": ["immediate", "daily_digest", "weekly_review"],
+      "consolidate_daily": false
+    }
   },
   "testing": {
     "mock_ibkr": false,
     "use_fixtures": false,
     "log_level": "INFO"
   },
-  "notes": "v1.1 - Archetype-Specific Modifiers Enhancement. Added new scoring modifiers, insider cluster quality kill screen, updated base rates, and enhanced data sources. See schema/CHANGELOG.md for details."
+  "data_quality": {
+    "greeks_validation": {
+      "iv_range": [0.10, 3.00],
+      "delta_range_calls": [0.01, 1.00],
+      "theta_range_long": [-10.0, 0.0],
+      "gamma_range": [0.0, 1.0],
+      "vega_range": [0.0, 10.0]
+    },
+    "pricing_validation": {
+      "max_bid_ask_spread_pct": 0.15,
+      "min_bid": 0.01,
+      "min_ask": 0.01
+    },
+    "liquidity_validation": {
+      "min_open_interest": 50,
+      "min_daily_volume": 10
+    },
+    "circuit_breaker": {
+      "consecutive_failures_threshold": 3,
+      "timeout_threshold_per_hour": 3,
+      "auto_reset_after_hours": 24
+    }
+  },
+  "notes": "See TECHNICAL_SPEC.md for implementation details."
 }

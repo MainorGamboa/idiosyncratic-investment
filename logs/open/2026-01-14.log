@@ -1,0 +1,36 @@
+{
+  "timestamp": "2026-01-14T00:00:00Z",
+  "skill": "open",
+  "trade_id": "TRD-20260114-LULU-ACTIVIST",
+  "ticker": "LULU",
+  "archetype": "activist",
+  "outcome": "SUCCESS",
+  "event_id": "EVT-2026-030",
+  "metrics": {
+    "entry_price": 212.20,
+    "shares": 7,
+    "position_value": 1485.40,
+    "position_pct": 0.0594,
+    "archetype_max_pct": 0.06,
+    "score": 10.5,
+    "binding_constraint": "archetype_cap",
+    "stop_price": 140.77,
+    "target_price": 290.00,
+    "max_loss_dollars": 500,
+    "max_loss_pct": 0.02,
+    "activist_tier": "tier_1",
+    "activist_firm": "Elliott Management"
+  },
+  "order_details": {
+    "order_type": "LIMIT",
+    "limit_price": 212.20,
+    "time_in_force": "DAY",
+    "status": "FILLED",
+    "fill_price": 212.20,
+    "fill_time": "2026-01-14T00:00:00Z",
+    "note": "User confirmed execution via open skill"
+  },
+  "data_sources": ["Yahoo Finance (price)", "GuruFocus (financials)", "CNBC (activist details)"],
+  "execution_time_ms": 2100,
+  "notes": "BUY decision executed. Elliott Management Tier-1 activist campaign targeting CEO replacement. McDonald departing Jan 31, 2026. Jane Nielsen proposed as CEO candidate. Stock -47.66% in 2025 creates compelling entry. Position sized at 5.94% (just under 6% archetype cap). Next step: Run 'monitor' daily to track position."
+}

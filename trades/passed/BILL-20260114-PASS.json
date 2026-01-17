@@ -1,0 +1,39 @@
+{
+  "ticker": "BILL",
+  "date": "2026-01-14",
+  "archetype": "activist",
+  "event_id": "EVT-2026-032",
+  "result": "PASS",
+  "reason": "Kill screens failed (M-Score and Z-Score below thresholds).",
+  "kill_screens": {
+    "m_score": {
+      "value": -0.5773161114842484,
+      "threshold": -1.78,
+      "pass": false
+    },
+    "z_score": {
+      "value": 0.6579645541180665,
+      "threshold": 1.81,
+      "pass": false
+    }
+  },
+  "market_data": {
+    "price": 50.39,
+    "price_source": "Stooq (15-min delay)",
+    "market_cap": 5190774680.0,
+    "shares_outstanding": 103012000.0
+  },
+  "financials": {
+    "total_assets": 10151245000.0,
+    "total_liabilities": 6268534000.0,
+    "working_capital": 2951589000.0,
+    "revenue": 395741000.0,
+    "ebit": -20719000.0,
+    "net_income": -2962000.0
+  },
+  "data_sources": [
+    "Stooq (15-min delay)",
+    "SEC XBRL API"
+  ],
+  "analysis_notes": "M-Score -0.58 exceeds -1.78 threshold and Z-Score 0.66 is below 1.81; automatic PASS per kill screens."
+}

@@ -1,0 +1,28 @@
+{
+  "timestamp": "2026-01-13T14:35:00Z",
+  "skill": "close",
+  "trade_id": "TRD-20260107-FBIO-PDUFA",
+  "ticker": "FBIO",
+  "archetype": "pdufa",
+  "outcome": "LOSS",
+  "metrics": {
+    "return_pct": -0.096,
+    "return_usd": -35.67,
+    "hold_days": 6,
+    "entry_price": 4.27,
+    "exit_price": 3.86,
+    "thesis_correct": true,
+    "catalyst_outcome": "approved",
+    "price_reaction": "sell_the_news"
+  },
+  "exit_details": {
+    "order_id": 12,
+    "order_type": "MKT",
+    "shares": 87,
+    "avg_fill_price": 3.86,
+    "exit_reason": "catalyst_complete"
+  },
+  "data_sources": ["IBKR Paper (exit order)", "Stooq (price confirmation)"],
+  "execution_time_ms": 3400,
+  "notes": "FDA approved ZYCUBO Jan 13 (1 day early). Correct thesis but sell-the-news reaction. Small-cap PDUFA pattern: approval priced in. Post-mortem documents calibration insights for future small-cap PDUFA scoring."
+}

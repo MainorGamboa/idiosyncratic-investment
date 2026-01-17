@@ -1,6 +1,6 @@
 ---
 name: monitor
-description: Update all active trades with current data and check exit signals. Evaluates info parity signals and hard exit triggers. Use daily as part of morning routine, or when significant market moves occur.
+description: Update all active trades with current data and check exit signals. Evaluates info parity signals and hard exit triggers.
 ---
 
 # Monitor Skill
@@ -9,7 +9,7 @@ description: Update all active trades with current data and check exit signals. 
 Update all active trades with current data, check exit signals.
 
 ## When to Use
-- Daily (morning routine)
+- Daily
 - When significant market move occurs
 - Before major catalyst dates
 
@@ -33,7 +33,7 @@ Read all files in `trades/active/`
 
 **AUTOMATION: Use data_fetcher.py to fetch current market data**
 
-For each active trade, run:
+**For Equity Positions:**
 ```bash
 python scripts/data_fetcher.py fetch_price {TICKER}
 python scripts/data_fetcher.py fetch_market_data {TICKER}
@@ -52,6 +52,35 @@ Display fetched data:
 - IV current vs historical average
 - Data quality and sources used
 
+**For Options Positions (Additional Checks):**
+```bash
+python scripts/data_fetcher.py fetch_options_data {TICKER} \
+  --strike {strike} \
+  --expiration {expiration}
+```
+
+This additionally fetches:
+- Current options bid/ask/mid price
+- Current Greeks (delta, theta, gamma, vega)
+- Current IV and IV percentile
+- Open interest changes
+- Underlying stock price
+
+Calculate and display:
+- Current option value vs premium paid (% change)
+- Unrealized P&L in dollars
+- Current theta decay per day (and as % of remaining premium)
+- Current delta (directional exposure)
+- Days to expiration (DTE) remaining
+- Daily theta as % of portfolio
+- Total premium remaining vs premium paid
+
+**Options-Specific Alerts:**
+1. **Approaching Expiration**: DTE < 30 days → WARN "Consider rolling or closing"
+2. **High Theta Decay**: Daily theta > 5% of remaining premium → WARN "Accelerating time decay"
+3. **Delta Shift**: Delta changed >0.20 from entry → INFO "Directional exposure changed significantly"
+4. **Catalyst Passed**: If catalyst_date < today AND position still open → ALERT "Catalyst occurred, close position"
+
 #### B. Check Info Parity Signals
 
 | Signal | Threshold | Check |
@@ -63,11 +92,16 @@ Display fetched data:
 #### C. Calculate Weighted Sum
 ```
 weights = trade.exit_plan.info_parity_weights
-weighted_sum = 
+weighted_sum =
   (media_triggered * weights.media) +
   (iv_triggered * weights.iv) +
   (price_triggered * weights.price)
 ```
+
+**Options-Specific Adjustments:**
+- For options positions, use lower thresholds from trade.options_exit_plan.info_parity_thresholds
+- Typical options thresholds: exit_50% = 1.5 (vs 2.0 equity), full_exit = 2.5 (vs 3.0 equity)
+- Rationale: Theta decay penalizes holding too long, exit earlier on info parity
 
 #### D. Check Hard Exit Triggers
 
@@ -86,6 +120,8 @@ weighted_sum =
 
 #### E. Determine Action
 
+**For Equity:**
+
 | Condition | Action |
 |-----------|--------|
 | weighted_sum >= 3.0 | FULL EXIT |
@@ -95,7 +131,23 @@ weighted_sum =
 | Below 200-day MA | DEFENSIVE (tighten stop) |
 | weighted_sum < 2.0 | HOLD (continue monitoring) |
 
+**For Options (Use Lower Thresholds):**
+
+| Condition | Action |
+|-----------|--------|
+| weighted_sum >= 2.5 | FULL EXIT |
+| weighted_sum >= 1.5 | EXIT 50% |
+| Cockroach observed | FULL EXIT |
+| Thesis break | FULL EXIT |
+| Catalyst passed | FULL EXIT (don't hold post-catalyst) |
+| DTE < 14 days | CLOSE or ROLL (avoid expiration week) |
+| Daily theta > 5% remaining premium | REVIEW (accelerating decay) |
+| DTE < 30 days | WARN (approaching expiration) |
+| weighted_sum < 1.5 | HOLD (continue monitoring) |
+
 ### Step 3: Update Trade File
+
+**For Equity:**
 
 Add monitoring entry:
 
@@ -114,6 +166,60 @@ Add monitoring entry:
   "cockroaches": [],
   "action": "HOLD",
   "notes": "No mainstream coverage. IV normal. 19% to target."
+}
+```
+
+**For Options:**
+
+Add monitoring entry to `monitoring` array AND Greeks snapshot to `options_greeks_history`:
+
+```json
+{
+  "date": "2025-01-15",
+  "underlying_price": 128.00,
+  "option_mid_price": 4.20,
+  "premium_paid": 3.50,
+  "unrealized_pnl_dollars": 350,
+  "unrealized_pnl_pct": 0.20,
+  "dte_remaining": 65,
+  "info_parity": {
+    "media": 0,
+    "iv": 0,
+    "price": 0.19
+  },
+  "weighted_sum": 0.19,
+  "greeks": {
+    "delta": 0.58,
+    "theta": -2.80,
+    "gamma": 0.05,
+    "vega": 0.18,
+    "iv": 0.72,
+    "iv_percentile": 68
+  },
+  "theta_per_day_pct_remaining": 0.019,
+  "theta_per_day_pct_portfolio": 0.00028,
+  "ma_200": 115.00,
+  "above_200_ma": true,
+  "catalyst_occurred": false,
+  "approaching_expiration": false,
+  "cockroaches": [],
+  "action": "HOLD",
+  "notes": "No info parity signals. Theta decay 1.9%/day of remaining premium (normal). 65 DTE remaining."
+}
+```
+
+Append to `options_greeks_history`:
+```json
+{
+  "date": "2025-01-15",
+  "underlying_price": 128.00,
+  "option_price": 4.20,
+  "delta": 0.58,
+  "theta": -2.80,
+  "gamma": 0.05,
+  "vega": 0.18,
+  "iv": 0.72,
+  "dte": 65
 }
 ```
 
@@ -219,7 +325,6 @@ Append to `logs/monitor/YYYY-MM-DD.log`:
 ```
 
 ## Rules
-- Run daily at minimum
 - Check hard exits BEFORE info parity
 - Always log monitoring entry, even if no action
 - Note any cockroaches, even minor ones

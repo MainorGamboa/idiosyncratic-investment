@@ -40,9 +40,5 @@ CUTX-101 is a treatment for Menkes Disease, a fatal rare pediatric disorder with
 - **Dilution:** Biotech always a risk, though cash runway is decent.
 - **Regulatory:** Unexpected new data requests.
 
-## 5. Precedents
-- **Protalix (PLX):** CRL for manufacturing, approved on resubmission.
-- **Vericel (VCEL):** Manufacturing remediation leading to approval.
-
-## 6. Decision Log
+## 5. Decision Log
 - **2026-01-07:** Added to watchlist. Passed kill screens. High priority (7 days to PDUFA).

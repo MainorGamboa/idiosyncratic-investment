@@ -60,11 +60,78 @@
       "price": 211.72,
       "action": "OPEN",
       "notes": "Opened position. Elliott campaign active."
+    },
+    {
+      "date": "2026-01-10",
+      "price": 203.90,
+      "change_from_entry_pct": -0.037,
+      "unrealized_pnl": -54.74,
+      "info_parity": {
+        "media": 1,
+        "iv": 0,
+        "price": 0
+      },
+      "weighted_sum": 1.0,
+      "ma_200": null,
+      "above_200_ma": null,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price down -3.7% from entry but well above $190 stop. Media signal TRIGGERED: Multiple mainstream articles (CNBC, Bloomberg, Yahoo Finance) on Elliott $1B+ stake and CEO candidate Jane Nielsen. Weighted sum 1.0 < 2.0 threshold (no exit required). Calvin McDonald stepping down Jan 31, 2026 as expected. Elliott remains engaged with board seats. No thesis breaks detected."
+    },
+    {
+      "date": "2026-01-13",
+      "price": 212.49,
+      "change_from_entry_pct": 0.0036,
+      "unrealized_pnl": 5.39,
+      "info_parity": {
+        "media": 1,
+        "iv": 0,
+        "price": 0.016
+      },
+      "weighted_sum": 1.0,
+      "ma_200": 218.81,
+      "above_200_ma": false,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price up +0.36% from entry, now positive territory. Media signal continues: CNBC 'How activist Elliott can help reinvigorate athleisure giant', Bloomberg, Yahoo Finance, WWD coverage of Elliott $1B+ stake and Jane Nielsen CEO candidacy. Below 200-day MA ($212.49 < $218.81) = DEFENSIVE posture recommended. Weighted sum 1.0 < 2.0 threshold (no exit required). 1.6% progress to target. Elliott campaign progressing as expected with CEO transition Jan 31. Data sources: Stooq (price), Yahoo Finance (200-MA), web search (media)."
+    },
+    {
+      "date": "2026-01-15",
+      "price": 203.91,
+      "change_from_entry_pct": -0.037,
+      "unrealized_pnl": -54.67,
+      "info_parity": {
+        "media": 1,
+        "iv": 0,
+        "price": 0
+      },
+      "weighted_sum": 1.0,
+      "ma_200": 217.96,
+      "above_200_ma": false,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price down -3.7% from entry at $203.91, still well above $190 stop. Media signal TRIGGERED: Heavy mainstream coverage (CNBC, Yahoo Finance, Business of Fashion, Seeking Alpha) on Elliott $1B+ stake and Jane Nielsen CEO candidacy. Below 200-day MA ($203.91 < $217.96) = DEFENSIVE posture. Weighted sum 1.0 < 2.0 threshold (no exit required). McDonald departure Jan 31 (16 days away). Elliott campaign progressing. No thesis breaks detected. Data sources: IBKR Paper (price), Yahoo Finance (200-MA), web search (media)."
+    },
+    {
+      "date": "2026-01-16",
+      "price": 203.34,
+      "change_from_entry_pct": -0.0396,
+      "unrealized_pnl": -58.66,
+      "info_parity": {
+        "media": 1,
+        "iv": 0,
+        "price": 0.17
+      },
+      "weighted_sum": 1.17,
+      "ma_200": 217.50,
+      "above_200_ma": false,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price ~203.34. Media signal ACTIVE: Elliott $1B stake confirmed, pushing for Jane Nielsen as CEO. Chip Wilson (founder) proxy fight adds to activist pressure. Weighted sum 1.17 < 2.0. Thesis intact. Holding."
     }
-  ],
-  "precedents": [
-    "SBUX (Elliott 2024)",
-    "PINS (Elliott 2022)"
-  ],
-  "tags": ["activist", "tier-1", "retail", "turnaround"]
+  ]
 }

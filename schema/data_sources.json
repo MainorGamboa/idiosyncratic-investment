@@ -1,0 +1,312 @@
+{
+  "version": "1.0",
+  "description": "Event-driven monitoring data source hierarchy and workflow configuration",
+  "tiers": {
+    "tier_1_essential": {
+      "check_frequency": "daily",
+      "description": "Direct catalyst impact - required for position management"
+    },
+    "tier_2_high_value": {
+      "check_frequency": "2-3x_weekly",
+      "description": "Edge refinement and secondary confirmation"
+    },
+    "tier_3_supplementary": {
+      "check_frequency": "weekly",
+      "description": "Background context and idea generation"
+    }
+  },
+  "sources": {
+    "sec_edgar": {
+      "url": "https://www.sec.gov/cgi-bin/browse-edgar",
+      "api": "https://data.sec.gov/submissions/CIK{cik}.json",
+      "forms": ["4", "13D", "8-K", "10", "DEFM14A", "SC TO"],
+      "cost": "free",
+      "note": "Primary source for insider, activist, merger, spinoff filings"
+    },
+    "openinsider": {
+      "url": "http://openinsider.com",
+      "cost": "free",
+      "note": "Form 4 aggregation, cluster detection, real-time alerts"
+    },
+    "biopharmcatalyst": {
+      "url": "https://www.biopharmcatalyst.com/calendars/pdufa-calendar",
+      "cost": "free",
+      "note": "PDUFA dates, AdCom schedules, FDA decision tracking"
+    },
+    "fda_gov": {
+      "url": "https://www.accessdata.fda.gov/scripts/cder/daf",
+      "twitter": "@US_FDA",
+      "cost": "free",
+      "note": "Official CRLs, approvals, AdCom calendar"
+    },
+    "ftc_gov": {
+      "url": "https://www.ftc.gov/news-events/press-releases",
+      "cost": "free",
+      "note": "Merger review press releases, HSR filings"
+    },
+    "doj_gov": {
+      "url": "https://www.justice.gov/atr/press-releases",
+      "cost": "free",
+      "note": "Antitrust division merger reviews"
+    },
+    "congress_gov": {
+      "url": "https://www.congress.gov",
+      "cost": "free",
+      "note": "Bill tracking, vote schedules"
+    },
+    "ballotpedia": {
+      "url": "https://ballotpedia.org",
+      "cost": "free",
+      "note": "State ballot measures, election dates"
+    },
+    "finviz_insider": {
+      "url": "https://finviz.com/insidertrading.ashx",
+      "cost": "free",
+      "note": "Quick insider filtering screener"
+    },
+    "spactrack": {
+      "url": "https://spactrack.io",
+      "cost": "free",
+      "note": "SPAC trust values, discount tracking"
+    },
+    "cefconnect": {
+      "url": "https://www.cefconnect.com",
+      "cost": "free",
+      "note": "Closed-end fund NAV discounts"
+    },
+    "clark_street_value": {
+      "url": "https://clarkstreetvalue.blogspot.com",
+      "cost": "free",
+      "note": "Micro-cap liquidation NAV analysis"
+    },
+    "inside_arbitrage": {
+      "url": "https://www.insidearbitrage.com",
+      "cost": "$299/yr",
+      "priority": 1,
+      "note": "Merger spreads, spin calendar, insider weekends - covers 5 archetypes"
+    },
+    "stat_news": {
+      "url": "https://www.statnews.com",
+      "cost": "$299/yr",
+      "priority": 2,
+      "note": "PDUFA regulatory analysis, clinical coverage"
+    },
+    "barrons": {
+      "url": "https://www.barrons.com",
+      "cost": "$100-200/yr",
+      "priority": 3,
+      "note": "Weekly insider column, general coverage"
+    },
+    "the_fly": {
+      "url": "https://thefly.com",
+      "cost": "free tier available",
+      "note": "Real-time chatter, spread alerts"
+    },
+    "streetinsider": {
+      "url": "https://www.streetinsider.com",
+      "cost": "free tier available",
+      "note": "Deal commentary, M&A news"
+    },
+    "13d_monitor": {
+      "url": "https://www.13dmonitor.com",
+      "cost": "paid",
+      "note": "Faster activist alerts, campaign tracking"
+    },
+    "whalewisdom": {
+      "url": "https://whalewisdom.com",
+      "cost": "free tier available",
+      "note": "13F tracking, position changes"
+    },
+    "seeking_alpha": {
+      "url": "https://seekingalpha.com",
+      "cost": "free tier available",
+      "note": "Analyst commentary, Chris DeMuth Jr merger analysis"
+    },
+    "endpoints_news": {
+      "url": "https://endpts.com",
+      "cost": "free",
+      "note": "Biotech regulatory developments"
+    },
+    "stock_spinoff_investing": {
+      "url": "https://stockspinoffinvesting.com",
+      "author": "Rich Howe",
+      "cost": "free blog",
+      "note": "When-issued analysis, spinoff insider tracking"
+    },
+    "spinoffresearch": {
+      "url": "https://www.spinoffresearch.com",
+      "cost": "free tier available",
+      "note": "Spin-off calendar, Form 10 tracking"
+    },
+    "valueinvestorsclub": {
+      "url": "https://valueinvestorsclub.com",
+      "cost": "free (membership required)",
+      "note": "Liquidation ideas, special sits community"
+    }
+  },
+  "by_archetype": {
+    "pdufa": {
+      "essential": ["biopharmcatalyst", "fda_gov"],
+      "high_value": ["endpoints_news", "stat_news"],
+      "supplementary": ["seeking_alpha"],
+      "scan_frequency": {
+        "essential": "daily",
+        "high_value": "2-3x_weekly",
+        "supplementary": "weekly"
+      }
+    },
+    "merger_arb": {
+      "essential": ["sec_edgar", "ftc_gov", "doj_gov", "inside_arbitrage"],
+      "high_value": ["the_fly", "streetinsider"],
+      "supplementary": ["seeking_alpha"],
+      "scan_frequency": {
+        "essential": "daily",
+        "high_value": "2-3x_weekly",
+        "supplementary": "weekly"
+      }
+    },
+    "activist": {
+      "essential": ["sec_edgar"],
+      "high_value": ["13d_monitor"],
+      "supplementary": ["whalewisdom"],
+      "scan_frequency": {
+        "essential": "daily",
+        "high_value": "2-3x_weekly",
+        "supplementary": "weekly"
+      }
+    },
+    "spinoff": {
+      "essential": ["sec_edgar", "inside_arbitrage"],
+      "high_value": ["stock_spinoff_investing"],
+      "supplementary": ["spinoffresearch"],
+      "scan_frequency": {
+        "essential": "weekly",
+        "high_value": "monthly",
+        "supplementary": "monthly"
+      }
+    },
+    "insider": {
+      "essential": ["openinsider", "sec_edgar"],
+      "high_value": ["inside_arbitrage"],
+      "supplementary": ["finviz_insider"],
+      "scan_frequency": {
+        "essential": "daily",
+        "high_value": "2-3x_weekly",
+        "supplementary": "weekly"
+      }
+    },
+    "liquidation": {
+      "essential": ["sec_edgar", "spactrack"],
+      "high_value": ["clark_street_value", "cefconnect"],
+      "supplementary": ["valueinvestorsclub"],
+      "scan_frequency": {
+        "essential": "weekly",
+        "high_value": "weekly",
+        "supplementary": "monthly"
+      }
+    },
+    "legislative": {
+      "essential": ["congress_gov"],
+      "high_value": ["ballotpedia"],
+      "supplementary": [],
+      "scan_frequency": {
+        "essential": "weekly",
+        "high_value": "monthly",
+        "supplementary": "monthly"
+      }
+    }
+  },
+  "calendar_triggers": {
+    "description": "T-x alerts relative to catalyst date",
+    "by_archetype": {
+      "pdufa": {
+        "t_45": { "action": "pre_positioning_review", "description": "Initial position sizing assessment" },
+        "t_14": { "action": "vol_assessment", "description": "IV assessment vs historical" },
+        "t_7": { "action": "final_sizing", "description": "Final position size confirmation" },
+        "t_1": { "action": "exit_order_review", "description": "Verify exit orders in place" }
+      },
+      "merger_arb": {
+        "t_14": { "action": "spread_review", "description": "Check spread vs expected return" },
+        "t_7": { "action": "regulatory_check", "description": "Verify no new regulatory issues" },
+        "t_1": { "action": "exit_order_review", "description": "Prepare for close date" }
+      },
+      "spinoff": {
+        "t_7": { "action": "when_issued_tracking", "description": "Monitor when-issued trading" },
+        "t_1": { "action": "distribution_prep", "description": "Prepare for distribution" }
+      },
+      "activist": {
+        "t_14": { "action": "proxy_review", "description": "Review proxy materials if applicable" },
+        "t_7": { "action": "campaign_update", "description": "Check for campaign developments" }
+      },
+      "default": {
+        "t_7": { "action": "pre_catalyst_review", "description": "Standard pre-catalyst checklist" },
+        "t_1": { "action": "final_check", "description": "Final position review" }
+      }
+    }
+  },
+  "media_detection": {
+    "description": "Sources for info parity media signal detection",
+    "mainstream_outlets": [
+      { "name": "Wall Street Journal", "domain": "wsj.com" },
+      { "name": "Bloomberg", "domain": "bloomberg.com" },
+      { "name": "Financial Times", "domain": "ft.com" },
+      { "name": "CNBC", "domain": "cnbc.com" },
+      { "name": "Reuters", "domain": "reuters.com" },
+      { "name": "NYT Business", "domain": "nytimes.com/section/business" }
+    ],
+    "threshold": "2+ articles from mainstream outlets = media signal triggered"
+  },
+  "personalities_reference": {
+    "description": "Manual reference only - check these for qualitative signals",
+    "highest_signal": {
+      "asif_suria": {
+        "focus": ["merger_arb", "insider"],
+        "handle": "@AsifSuria",
+        "platform": "Twitter/X",
+        "note": "Deal commentary, weekly analysis, insider tracking"
+      },
+      "adam_feuerstein": {
+        "focus": ["pdufa"],
+        "handle": "@adamfeuerstein",
+        "platform": "Twitter/X",
+        "note": "AdCom live-tweets, PDUFA catalyst execution"
+      },
+      "rich_howe": {
+        "focus": ["spinoff"],
+        "handle": "Stock Spinoff Investing blog",
+        "platform": "Blog",
+        "note": "When-issued analysis, spinoff insider tracking"
+      },
+      "clark_street_value": {
+        "focus": ["liquidation"],
+        "handle": "clarkstreetvalue.blogspot.com",
+        "platform": "Blog",
+        "note": "Micro-cap liquidation NAV analysis"
+      }
+    },
+    "medium_signal": {
+      "julian_klymochko": {
+        "focus": ["merger_arb"],
+        "handle": "@JulianKlymochko",
+        "platform": "Twitter/X",
+        "note": "Risk arb strategy, education"
+      },
+      "brad_loncar": {
+        "focus": ["pdufa"],
+        "handle": "@bradloncar",
+        "platform": "Twitter/X",
+        "note": "Biotech sector sentiment"
+      }
+    },
+    "context_framework": {
+      "joel_greenblatt": {
+        "focus": ["spinoff"],
+        "note": "Spin-off framework (You Can Be a Stock Market Genius)"
+      },
+      "howard_marks": {
+        "focus": ["regime", "credit"],
+        "note": "Credit cycle context, risk assessment (Oaktree memos)"
+      }
+    }
+  }
+}

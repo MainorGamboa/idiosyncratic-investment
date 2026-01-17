@@ -1,0 +1,72 @@
+{
+  "timestamp": "2026-01-15T13:51:00Z",
+  "skill": "monitor",
+  "outcome": "COMPLETE",
+  "trades_monitored": [
+    {
+      "trade_id": "TRD-20260107-LULU-ACTIVIST",
+      "ticker": "LULU",
+      "archetype": "activist",
+      "current_price": 203.91,
+      "entry_price": 211.72,
+      "change_pct": -0.037,
+      "unrealized_pnl": -54.67,
+      "weighted_sum": 1.0,
+      "ma_200": 217.96,
+      "above_200_ma": false,
+      "action": "HOLD",
+      "signals": {
+        "media": true,
+        "iv": false,
+        "price": false
+      }
+    },
+    {
+      "trade_id": "TRD-20260107-SWX-ACTIVIST",
+      "ticker": "SWX",
+      "archetype": "activist",
+      "current_price": 86.01,
+      "entry_price": 80.43,
+      "change_pct": 0.069,
+      "unrealized_pnl": 100.44,
+      "weighted_sum": 0.285,
+      "ma_200": 76.99,
+      "above_200_ma": true,
+      "action": "HOLD",
+      "signals": {
+        "media": false,
+        "iv": false,
+        "price": false
+      }
+    },
+    {
+      "trade_id": "TRD-20260114-LULU-ACTIVIST",
+      "ticker": "LULU",
+      "archetype": "activist",
+      "current_price": 203.91,
+      "entry_price": 212.20,
+      "change_pct": -0.039,
+      "unrealized_pnl": -58.03,
+      "weighted_sum": 1.0,
+      "ma_200": 217.96,
+      "above_200_ma": false,
+      "action": "HOLD",
+      "signals": {
+        "media": true,
+        "iv": false,
+        "price": false
+      }
+    }
+  ],
+  "metrics": {
+    "trades_monitored": 3,
+    "alerts_generated": 0,
+    "actions_required": 0,
+    "total_unrealized_pnl": -12.26,
+    "positions_above_200ma": 1,
+    "positions_below_200ma": 2
+  },
+  "data_sources": ["IBKR Paper", "Stooq", "Yahoo Finance", "web search (media)"],
+  "execution_time_ms": 12000,
+  "notes": "All positions stable. No exit signals triggered. LULU positions below 200-day MA (defensive posture recommended). SWX strong performance +6.9% from entry. McDonald (LULU CEO) departure Jan 31 approaching (16 days)."
+}

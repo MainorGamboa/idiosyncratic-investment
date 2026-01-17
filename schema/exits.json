@@ -99,5 +99,61 @@
       "implementation": "Monitor state WARN Act databases for company. Parse filing text for contract loss language. If detected, trigger immediate exit."
     }
   },
-  "note": "Check hard exits BEFORE info parity. Hard exits override all other considerations."
+  "note": "Check hard exits BEFORE info parity. Hard exits override all other considerations.",
+
+  "options_adjustments": {
+    "overview": "Options positions use LOWER info parity thresholds due to theta decay penalty",
+    "info_parity_thresholds": {
+      "exit_50_percent": 1.5,
+      "full_exit": 2.5,
+      "rationale": "Theta decay makes holding riskier - exit earlier than equity (vs 2.0/3.0)"
+    },
+    "options_specific_exits": {
+      "approaching_expiration": {
+        "dte_threshold": 14,
+        "action": "CLOSE or ROLL",
+        "rationale": "Avoid expiration week gamma risk and accelerating theta"
+      },
+      "expiration_warning": {
+        "dte_threshold": 30,
+        "action": "WARN user",
+        "rationale": "Give advance notice to plan close or roll"
+      },
+      "catalyst_passed": {
+        "trigger": "Catalyst date has occurred and position still open",
+        "action": "FULL EXIT immediately",
+        "rationale": "Binary catalysts are the thesis - exit once resolved, don't speculate on post-catalyst move"
+      },
+      "high_theta_decay": {
+        "threshold": "daily_theta > 5% of remaining premium value",
+        "action": "REVIEW position",
+        "rationale": "Accelerating decay suggests approaching worthlessness"
+      },
+      "iv_crush_post_catalyst": {
+        "trigger": "IV drops >50% after catalyst announcement",
+        "action": "EXIT immediately if not already closed",
+        "rationale": "IV crush eliminates option value even if stock moved favorably"
+      }
+    },
+    "archetype_specific_options_exits": {
+      "pdufa": {
+        "exit_on_catalyst_day": true,
+        "rationale": "FDA decisions cause immediate IV crush - exit same day to capture value",
+        "exception": "If approval + stock hasn't moved yet, consider holding 1-2 hours"
+      },
+      "activist": {
+        "settlement_exit": "Exit 50% on settlement announcement, let remainder run",
+        "leaps_rollout": "Consider rolling LEAPS if 60+ DTE remain and campaign progressing",
+        "standstill_exit": "Full exit if standstill agreement reached (campaign over)"
+      },
+      "merger_arb": {
+        "deal_close_exit": "Exit immediately on deal close announcement (spreads compress)",
+        "deal_break_exit": "Full exit on any cockroach or deal wobble (higher downside risk)"
+      },
+      "insider": {
+        "volume_surge_exit": "If volume surged post-entry and stock moved, take profits",
+        "90_day_rule": "If no volume surge within 90 days of cluster, exit or roll"
+      }
+    }
+  }
 }
