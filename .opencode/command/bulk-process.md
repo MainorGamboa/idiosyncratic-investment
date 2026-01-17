@@ -1,7 +1,7 @@
 ---
 description: Execute bulk screening and scoring of new events without opening positions.
 agent: build
-model: openai/gpt-5.2-codex
+model: google/antigravity-claude-sonnet-4-5-thinking
 ---
 ## Purpose
 

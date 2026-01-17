@@ -42,6 +42,7 @@ schema/              # Authoritative rules (DO NOT modify without user approval)
 ├── kill_screens.json # Binary pass/fail gates (M-Score, Z-Score, etc.)
 ├── scoring.json     # 6 filters (max 11 pts) + archetype adjustments
 ├── exits.json       # Info parity signals + hard exit triggers
+├── data_sources.json # Tiered sources, calendar triggers, personalities
 └── CHANGELOG.md     # Framework version history
 
 universe/            # What you're tracking
@@ -105,6 +106,31 @@ alerts_archive.json  # Acknowledged alerts
 ## Data Management
 
 **See TECHNICAL_SPEC.md §2 for complete data source strategy and validation protocols.**
+
+### Event-Driven Data Sources (Reference: schema/data_sources.json)
+
+The system uses a tiered data source hierarchy for event discovery and monitoring:
+
+**Free stack (enabled by default in CONFIG.json):**
+- SEC EDGAR (Form 4, 13D, 8-K, Form 10)
+- OpenInsider (insider cluster detection)
+- BioPharmCatalyst (PDUFA dates, AdCom)
+- FDA.gov (official approvals/CRLs)
+- FTC/DOJ (merger reviews)
+- Congress.gov (legislative tracking)
+- SPACtrack, CEFConnect (liquidation discounts)
+- Clark Street Value (micro-cap liquidation analysis)
+
+**Paid stack (optional, enable in CONFIG.json):**
+- InsideArbitrage ($299/yr) - covers 5 archetypes
+- STAT News ($299/yr) - PDUFA regulatory analysis
+- Barron's ($100-200/yr) - weekly insider column
+
+**Key personalities (manual reference - see schema/data_sources.json):**
+- @adamfeuerstein (PDUFA)
+- @AsifSuria (merger arb, insider)
+- Stock Spinoff Investing / Rich Howe (spin-offs)
+- Clark Street Value blog (liquidation)
 
 ### Data Source Strategy (Graceful Degradation)
 
@@ -353,6 +379,7 @@ alerts_archive.json   # Acknowledged alerts
 | `CLAUDE.md` | Agent operational guidelines (this file) | Rarely (agent behavior) |
 | `CONFIG.json` | Account size, risk params, regime state | Daily (regime), rarely (config) |
 | `schema/*.json` | Machine-readable rules | Rarely (framework updates) |
+| `schema/data_sources.json` | Tiered data sources, calendar triggers, personalities | Rarely (source updates) |
 | `schema/CHANGELOG.md` | Framework version history | Each version update |
 | `universe/events.json` | Upcoming catalyst calendar | Weekly via `scan` skill |
 | `alerts.json` | Active alerts requiring action | Real-time by skills |

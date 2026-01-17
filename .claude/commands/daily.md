@@ -18,7 +18,36 @@ Execute the complete autonomous daily trading workflow:
    - **Auto-close on hard exits**: If cockroach or thesis break detected → Auto-execute `close` skill
    - **Alert on info parity**: If weighted_sum ≥ 2.0 → Add to alerts.json, proceed to Step 3
 
-3. **Close Positions with Exit Signals** (`close` skill - triggered by monitor)
+3. **Pre-Catalyst Checks** (integrated into daily workflow)
+   - For each active position, check if catalyst date is approaching
+   - Reference `schema/data_sources.json → calendar_triggers` for archetype-specific T-x triggers
+
+   **T-7 or closer → Run pre-catalyst checklist:**
+   1. IV assessment vs historical average (IV spike = info parity signal)
+   2. Media coverage count (mainstream outlets mentioning catalyst)
+   3. Price-to-target calculation (>50% to target = caution)
+   4. Confirm position size still appropriate for regime
+   5. Review exit order setup (stops, targets)
+   6. Verify thesis still valid (no new cockroaches)
+
+   **Display summary:**
+   ```
+   Pre-Catalyst Positions (T-7 or closer):
+   ┌────────┬──────────┬─────────┬───────────┬─────────────────┐
+   │ Ticker │ Catalyst │ Days    │ IV Status │ Action Needed   │
+   ├────────┼──────────┼─────────┼───────────┼─────────────────┤
+   │ SRPT   │ PDUFA    │ T-3     │ 2.1x avg  │ Review sizing   │
+   │ ABBV   │ Activist │ T-14    │ Normal    │ None            │
+   └────────┴──────────┴─────────┴───────────┴─────────────────┘
+   ```
+
+   **Archetype-specific triggers (from schema/data_sources.json):**
+   - PDUFA: T-45 (pre-positioning), T-14 (vol assessment), T-7 (final sizing), T-1 (exit orders)
+   - Merger Arb: T-14 (spread review), T-7 (regulatory check), T-1 (exit orders)
+   - Spin-off: T-7 (when-issued tracking), T-1 (distribution prep)
+   - Activist: T-14 (proxy review), T-7 (campaign update)
+
+4. **Close Positions with Exit Signals** (`close` skill - triggered by monitor)
    - For each alert with exit signal (from Step 2):
      a. Load active trade JSON
      b. Display exit preview (P&L, days held, exit reason)
@@ -26,14 +55,14 @@ Execute the complete autonomous daily trading workflow:
      d. If confirmed → Execute market order, create post-mortem, move to closed/
    - Summary: "{N} positions closed today"
 
-4. **Discover New Events** (`scan` skill)
+5. **Discover New Events** (`scan` skill)
    - Scan FDA PDUFA calendar
    - Scan SEC 13D filings (activists)
    - Find merger announcements
    - Update universe/events.json
    - Identify high-priority events for processing
 
-5. **Process New Events Pipeline** (Batch with Limits)
+6. **Process New Events Pipeline** (Batch with Limits)
    - Filter events WITHOUT watchlist file (unscreened)
    - Apply max_events_per_day limit from CONFIG.json (default: 3)
    - For each event (up to limit):
@@ -43,7 +72,7 @@ Execute the complete autonomous daily trading workflow:
    - **Error handling**: If screen→analyze→score fails for one event, log error and continue to next
    - Accumulate BUY decisions (≥8.25) and CONDITIONAL decisions (6.5-8.24) for batch preview
 
-6. **Batch Position Preview** (if any BUY decisions from Step 5)
+7. **Batch Position Preview** (if any BUY decisions from Step 6)
    - Display all BUY decisions in single table:
      ```
      ═══════════════════════════════════════════════════════
@@ -71,12 +100,12 @@ Execute the complete autonomous daily trading workflow:
    - Respects max_positions limit from CONFIG.json (current: 10)
    - If batch would exceed limit → Show warning, ask to proceed with subset
 
-7. **CONDITIONAL Decisions Handling**
+8. **CONDITIONAL Decisions Handling**
    - Log all CONDITIONAL decisions (6.5-8.24) to trades/conditional/
    - Display summary: "{N} CONDITIONAL decisions logged for manual review"
    - User can manually run `open {TICKER}` after reviewing thesis
 
-8. **Optional: IBKR Reconciliation** (if enabled in config)
+9. **Optional: IBKR Reconciliation** (if enabled in config)
    - Run: `python scripts/ibkr_paper.py positions`
    - Compare IBKR positions vs trades/active/*.json
    - Flag discrepancies:
@@ -85,8 +114,9 @@ Execute the complete autonomous daily trading workflow:
    - Display reconciliation summary
    - **Future**: Auto-create missing trade files from IBKR positions (see CONFIG.json → automation.ibkr_reconciliation.auto_create_from_ibkr)
 
-9. **Daily Summary**
+10. **Daily Summary**
    - Regime state (VIX, credit spreads, alerts)
+   - Pre-catalyst positions: {N} (T-7 or closer)
    - Positions closed today: {N} (with P&L summary)
    - New events discovered: {N}
    - Events processed: {N} (of {max_events_per_day} limit)

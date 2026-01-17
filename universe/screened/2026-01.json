@@ -34,7 +34,7 @@
         "revenue_ttm": "$20.15B",
         "net_income_ttm": "$295M",
         "pe_ratio": 58.43,
-        "forward_pe": 9.60,
+        "forward_pe": 9.6,
         "beta": 1.52
       },
       "spinoff_details": {
@@ -209,7 +209,7 @@
         "revenue_ttm": "$40.67B",
         "net_income_ttm": "$6.13B",
         "pe_ratio": 20.59,
-        "forward_pe": 19.00,
+        "forward_pe": 19.0,
         "dividend_yield": "2.44%",
         "roe": "34.52%",
         "operating_margin": "21%",
@@ -265,7 +265,7 @@
         },
         {
           "screen": "Altman Z-Score",
-          "value": 5.10,
+          "value": 5.1,
           "threshold": 1.81,
           "operator": ">=",
           "result": "PASS - Safe zone (>3.0), excellent financial health",
@@ -289,7 +289,7 @@
         "revenue_ttm": "$15.01B",
         "net_income_ttm": "$4.22B",
         "pe_ratio": 38.03,
-        "forward_pe": 27.10,
+        "forward_pe": 27.1,
         "dividend_yield": "0.73%",
         "analyst_consensus": "Strong Buy with $609.31 target (+16.59%)"
       },
@@ -624,7 +624,7 @@
         },
         {
           "screen": "Altman Z-Score",
-          "value": 0.6580,
+          "value": 0.658,
           "threshold": 1.81,
           "operator": ">=",
           "result": "FAIL - Z-Score below threshold"
@@ -692,6 +692,37 @@
         "current_price": "$24.12"
       },
       "notes": "Re-screened with data_fetcher; Z-Score failed."
+    },
+    {
+      "date": "2026-01-16",
+      "ticker": "YORW",
+      "company": "The York Water Company",
+      "archetype": "insider",
+      "event_id": "EVT-2026-042",
+      "kill_screens_passed": false,
+      "failed_screens": [
+        {
+          "screen": "Beneish M-Score",
+          "value": -1.4474439515369601,
+          "threshold": -1.78,
+          "operator": "<=",
+          "result": "FAIL - M-Score above threshold"
+        },
+        {
+          "screen": "Altman Z-Score",
+          "value": 0.4032544103714186,
+          "threshold": 2.5,
+          "operator": ">=",
+          "result": "FAIL - Z-Score below threshold"
+        }
+      ],
+      "result": "PASS",
+      "reason": "Failed both universal kill screens (M-Score and Z-Score).",
+      "financial_summary": {
+        "market_cap": 489872141.49999994,
+        "current_price": 33.94
+      },
+      "notes": "Data source: Stooq (price) and SEC XBRL (financials)."
     }
   ]
 }

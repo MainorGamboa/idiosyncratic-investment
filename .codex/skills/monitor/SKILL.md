@@ -85,9 +85,32 @@ Calculate and display:
 
 | Signal | Threshold | Check |
 |--------|-----------|-------|
-| Media | 2+ articles | Search news |
+| Media | 2+ articles | Search mainstream outlets |
 | IV | >2x average | Compare current vs historical |
 | Price | >50% to target | (current - entry) / (target - entry) |
+
+##### Media Signal Detection (Reference: schema/data_sources.json)
+
+For info parity "media" signal, check mainstream outlets:
+
+**Mainstream outlets (2+ articles = triggered):**
+- Wall Street Journal (wsj.com)
+- Bloomberg (bloomberg.com)
+- Financial Times (ft.com)
+- CNBC (cnbc.com)
+- Reuters (reuters.com)
+- NYT Business (nytimes.com/section/business)
+
+**Search query:** `"{ticker} {catalyst_type}"` in news (last 7 days)
+
+**Expert mentions (supplements mainstream - manual check):**
+- PDUFA positions: @adamfeuerstein (AdCom live-tweets, FDA analysis)
+- Merger Arb positions: @AsifSuria (deal commentary, spread analysis)
+- Activist positions: Key activist fund accounts
+- Spin-off positions: Stock Spinoff Investing blog (Rich Howe)
+- Liquidation positions: Clark Street Value blog
+
+Reference `schema/data_sources.json → personalities_reference` for full list.
 
 #### C. Calculate Weighted Sum
 ```

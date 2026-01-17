@@ -9,9 +9,25 @@ description: Find new catalyst events from external sources like FDA calendar, S
 Find new catalyst events from external sources. Populates universe/events.json with upcoming PDUFA dates, merger announcements, activist campaigns, etc.
 
 ## When to Use
-- Weekly
 - After major news (M&A wave, regulatory announcements)
 - When exploring new archetype opportunities
+
+## Source Priority (Reference: schema/data_sources.json)
+
+Before scanning, check CONFIG.json → data_sources.event_sources:
+
+1. **If paid source enabled** → Use it first (faster, more reliable)
+2. **Fall back to free sources** in priority order
+3. **Log which source provided each event** in the event's `source` field
+
+### Tiered Source Hierarchy
+
+| Tier | Check Frequency | Purpose |
+|------|-----------------|---------|
+| **Tier 1 (Essential)** | Daily | Direct catalyst impact - required for position management |
+| **Tier 2 (High Value)** | 2-3x Weekly | Edge refinement and secondary confirmation |
+| **Tier 3 (Supplementary)** | Weekly | Background context and idea generation |
+
 
 ## Inputs
 ```json
@@ -279,15 +295,17 @@ Append to `logs/scan/YYYY-MM-DD.log`:
 
 ## Scan Frequency Recommendations
 
-| Archetype | Frequency | Reason |
-|-----------|-----------|--------|
-| PDUFA | Weekly | Dates rarely change once set |
-| Merger Arb | Daily | Deals announced frequently |
-| Activist | Daily | 13D filings can be immediate catalysts |
-| Spin-off | Monthly | Long lead times |
-| Insider | Daily | Form 4 filings continuous; cluster detection requires monitoring |
-| Liquidation | Weekly | SPAC/CEF discounts fluctuate; corporate liquidations less frequent |
-| Legislative | Monthly | Bill schedules months in advance |
+Reference `schema/data_sources.json` for authoritative source list.
+
+| Archetype | Essential (Tier 1) | High Value (Tier 2) | Rationale |
+|-----------|-------------------|---------------------|-----------|
+| PDUFA | Daily (BioPharmCatalyst) | 2-3x Weekly (Endpoints) | Dates rarely change but CRL/approval news is time-sensitive |
+| Merger Arb | Daily (SEC, FTC/DOJ) | 2-3x Weekly (The Fly) | Deals announced frequently, regulatory news critical |
+| Activist | Daily (SEC 13D) | 2-3x Weekly (13D Monitor) | 13D filings can be immediate catalysts |
+| Spin-off | Weekly (SEC Form 10) | Monthly (SpinoffResearch) | Long lead times, Form 10 filing is key trigger |
+| Insider | Daily (OpenInsider) | 2-3x Weekly (InsideArbitrage) | Form 4 continuous; cluster detection requires monitoring |
+| Liquidation | Weekly (SEC 8-K, SPACtrack) | Weekly (Clark Street Value) | SPAC/CEF discounts fluctuate; corporate liquidations less frequent |
+| Legislative | Weekly (Congress.gov) | Monthly (Ballotpedia) | Bill schedules months in advance |
 
 ## Related Skills
 - `analyze` — Run on high-priority events

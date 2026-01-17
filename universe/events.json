@@ -557,6 +557,76 @@
       "linked_idea": null,
       "source": "FDA PDUFA calendar, Sanofi IR",
       "discovered_date": "2026-01-06"
+    },
+    {
+      "id": "EVT-2026-040",
+      "type": "merger",
+      "ticker": "SNCY",
+      "catalyst": "Allegiant Travel Company (ALGT) acquisition of Sun Country Airlines",
+      "date": "2026-06-30",
+      "date_type": "soft",
+      "archetype": "merger_arb",
+      "status": "tracking",
+      "notes": "Cash and stock deal announced Jan 11, 2026.",
+      "linked_idea": null,
+      "source": "InsideArbitrage",
+      "discovered_date": "2026-01-16"
+    },
+    {
+      "id": "EVT-2026-041",
+      "type": "merger",
+      "ticker": "VTYX",
+      "catalyst": "Eli Lilly acquisition of Ventyx Biosciences",
+      "date": "2026-03-31",
+      "date_type": "soft",
+      "archetype": "merger_arb",
+      "status": "tracking",
+      "notes": "$1.2B all-cash deal announced Jan 7, 2026.",
+      "linked_idea": null,
+      "source": "InsideArbitrage",
+      "discovered_date": "2026-01-16"
+    },
+    {
+      "id": "EVT-2026-042",
+      "type": "insider",
+      "ticker": "YORW",
+      "catalyst": "Insider buying cluster for YORW",
+      "date": "2026-01-16",
+      "date_type": "hard",
+      "archetype": "insider",
+      "status": "tracking",
+      "notes": "Insider cluster: 7 insiders buying between 2026-01-16 and 2026-01-16. Total value approx $15010. Insiders: Becker Suzanne M, Chiaruttini Alexandra C, Grimm Ashley M, Hand Joseph Thomas, Poff Matthew E, Scarpato Matthew J, Snyder Mark S. Titles: CAO, GC, CFO, COO, Pres, CEO, VP- Customer Service, VP- Engineering, VP- HR. Source: http://openinsider.com/latest",
+      "linked_idea": null,
+      "source": "OpenInsider",
+      "discovered_date": "2026-01-16"
+    },
+    {
+      "id": "EVT-2026-043",
+      "type": "insider",
+      "ticker": "GABC",
+      "catalyst": "Insider buying cluster for GABC",
+      "date": "2026-01-15",
+      "date_type": "hard",
+      "archetype": "insider",
+      "status": "tracking",
+      "notes": "Insider cluster: 3 insiders buying between 2026-01-15 and 2026-01-15. Total value approx $4000. Insiders: Bawel Zachary W, Ellspermann Susan J, Sheidler Jack. Titles: Dir. Source: http://openinsider.com/latest",
+      "linked_idea": null,
+      "source": "OpenInsider",
+      "discovered_date": "2026-01-16"
+    },
+    {
+      "id": "EVT-2026-044",
+      "type": "insider",
+      "ticker": "NEWT",
+      "catalyst": "Insider buying cluster for NEWT",
+      "date": "2026-01-14",
+      "date_type": "hard",
+      "archetype": "insider",
+      "status": "tracking",
+      "notes": "Insider cluster: 4 insiders buying between 2026-01-14 and 2026-01-14. Total value approx $120405. Insiders: Demaria Frank M, Razon-Feingold Halli, Schwartz Michael Adam, Sloane Barry. Titles: Cheif Financial Officer, GC, Pres, COB, CEO, SVP, HR, CAO. Source: http://openinsider.com/latest",
+      "linked_idea": null,
+      "source": "OpenInsider",
+      "discovered_date": "2026-01-16"
     }
   ]
 }

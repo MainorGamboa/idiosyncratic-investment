@@ -56,22 +56,41 @@
     "note": "Options provide leverage for binary catalysts. See schema/options_*.json for detailed rules."
   },
   "regime": {
-    "vix": 15.07,
+    "vix": 16.18,
     "vix_level": "15-20",
     "vix_action": "Normal operations",
-    "hy_oas_bps": 301,
+    "hy_oas_bps": 276,
     "hy_oas_baseline": 284,
     "credit_condition": "stable",
     "credit_action": "Normal operations",
     "correlation_elevated": false,
     "alerts": [],
-    "last_updated": "2026-01-07T09:00:00Z"
+    "last_updated": "2026-01-16T09:00:00Z"
   },
   "framework_version": "1.0",
   "schema_format_version": "1.0",
   "data_sources": {
     "price_priority": ["ibkr_paper", "stooq", "yahoo_finance"],
     "financials_priority": ["sec_api", "manual_calculation", "third_party"],
+    "event_sources": {
+      "free": {
+        "sec_edgar": { "enabled": true, "forms": ["4", "13D", "8-K", "10"] },
+        "openinsider": { "enabled": true, "note": "Form 4 aggregation, cluster detection" },
+        "biopharmcatalyst": { "enabled": true, "note": "PDUFA dates, AdCom schedules" },
+        "fda_gov": { "enabled": true, "note": "Official approvals/CRLs" },
+        "ftc_doj_gov": { "enabled": true, "note": "Merger review press releases" },
+        "congress_gov": { "enabled": true, "note": "Bill status, vote schedules" },
+        "clark_street_value": { "enabled": true, "note": "Liquidation/micro-cap analysis" },
+        "finviz_insider": { "enabled": true, "note": "Quick insider filtering" },
+        "spactrack": { "enabled": true, "note": "SPAC trust values" },
+        "cefconnect": { "enabled": true, "note": "CEF NAV discounts" }
+      },
+      "paid": {
+        "inside_arbitrage": { "enabled": false, "cost": "$299/yr", "priority": 1, "note": "Covers 5 archetypes" },
+        "stat_news": { "enabled": false, "cost": "$299/yr", "priority": 2, "note": "PDUFA regulatory analysis" },
+        "barrons": { "enabled": false, "cost": "$100-200/yr", "priority": 3, "note": "Weekly insider column" }
+      }
+    },
     "cache_policy": {
       "price_duration_minutes": 60,
       "financials_duration_days": 90
