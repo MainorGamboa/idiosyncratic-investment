@@ -1,0 +1,99 @@
+{
+  "version": "1.0",
+  "description": "Archetype-specific high-value indicators that help refine confidence within passed trades",
+  "archetype_indicators": {
+    "pdufa": {
+      "primary_indicators": [
+        {"name": "iv_percentile", "description": "How expensive vol is vs history", "threshold": ">80 = spreads preferred, <50 = long options viable"},
+        {"name": "implied_vs_historical_move", "description": "Market pricing vs historical PDUFA moves", "threshold": "Historical avg +/-35%"},
+        {"name": "adcom_vote", "description": "Advisory committee vote breakdown", "threshold": "Unanimous positive -> 97%+ approval"},
+        {"name": "crl_resubmission_count", "description": "Complete Response Letter history", "threshold": "First resubmit: 60-70%, second: lower"},
+        {"name": "priority_review_designation", "description": "FDA expedited treatment signal", "threshold": "Priority Review correlates higher approval"},
+        {"name": "short_interest_float", "description": "Squeeze potential on positive outcome", "threshold": "SI >20% + approval = amplified upside"}
+      ],
+      "noise_to_ignore": ["Price action pre-PDUFA", "Support/resistance levels", "Volume patterns"]
+    },
+    "merger_arb": {
+      "primary_indicators": [
+        {"name": "annualized_spread", "description": "True return metric accounting for time", "calculation": "Spread / Days to close * 365"},
+        {"name": "days_since_hsr", "description": "HSR regulatory clock", "threshold": ">30 days no second request = positive"},
+        {"name": "break_fee_pct", "description": "Target commitment level", "threshold": ">3% = serious deal, <2% = watch for superior offers"},
+        {"name": "financing_condition", "description": "Acquirer ability to close", "threshold": "Fully committed vs 'subject to' language"},
+        {"name": "definitive_vs_loi", "description": "Deal stage", "threshold": "Definitive = 94% base rate, LOI = much lower"}
+      ],
+      "kill_screen_note": "VIX >30 -> avoid new merger arb (credit freeze, financing at risk)",
+      "noise_to_ignore": ["Target fundamental valuation", "Technical levels", "Analyst price targets"]
+    },
+    "activist": {
+      "primary_indicators": [
+        {"name": "activist_historical_win_rate", "description": "Not all activists equal", "threshold": "Elliott ~70%, unknown fund = discount"},
+        {"name": "stake_size_pct", "description": "Commitment and influence level", "threshold": ">5% = serious, >9.9% = max pre-disclosure, 10%+ = all-in"},
+        {"name": "board_structure", "description": "Campaign timeline determinant", "threshold": "Staggered board = longer, annual election = faster"},
+        {"name": "stated_intentions_13d", "description": "Specificity predicts action", "threshold": "Vague 'enhance value' vs specific 'sale of company'"},
+        {"name": "days_since_13d", "description": "Campaign maturity", "threshold": "<90 days = early stage, >180 = expect escalation"},
+        {"name": "institutional_ownership_concentration", "description": "Voting power determinant", "threshold": "Top 10 holders >50% = fewer allies needed"},
+        {"name": "iss_glass_lewis", "description": "Proxy fight predictor", "threshold": "Proxy advisor support shifts outcomes"}
+      ],
+      "noise_to_ignore": ["Stock price momentum", "Technical breakouts"]
+    },
+    "spinoff": {
+      "primary_indicators": [
+        {"name": "form_10_status", "description": "Timeline clarity", "threshold": "Form 10 filed = spin is real and dated"},
+        {"name": "spinco_vs_parent_valuation_gap", "description": "Quantifies mispricing", "threshold": "SpinCo 6x EBITDA in 12x sector = revaluation thesis"},
+        {"name": "index_inclusion_exclusion", "description": "Predicts forced flows", "threshold": "SpinCo too small for S&P 500 = forced selling by index funds"},
+        {"name": "debt_allocation", "description": "Balance sheet quality", "threshold": "SpinCo loaded with debt = value trap risk"},
+        {"name": "insider_actions_post_spin", "description": "Management conviction", "threshold": "Insiders buying SpinCo in first 30 days = strong signal"},
+        {"name": "institutional_forced_selling_window", "description": "Entry timing", "threshold": "Days 1-30 = max forced selling, optimal entry 30-90"}
+      ],
+      "timing_note": "Best opportunities 30-90 days post-spin when forced selling ends"
+    },
+    "liquidation": {
+      "primary_indicators": [
+        {"name": "discount_to_stated_nav", "description": "Primary edge metric", "threshold": ">15% discount to conservative NAV = interesting, <10% = insufficient"},
+        {"name": "asset_composition", "description": "Liquidity risk assessment", "threshold": "Cash + marketable securities = reliable NAV, illiquid = discount justified"},
+        {"name": "distribution_timeline", "description": "Time value calculation", "threshold": "3 distributions over 6mo vs 2 years = different annualized"},
+        {"name": "cash_burn_rate", "description": "NAV erosion risk", "threshold": "Monthly G&A / NAV = decay speed"},
+        {"name": "trustee_track_record", "description": "Execution risk", "threshold": "Experienced trustee vs first-time = timeline reliability"},
+        {"name": "contingent_liabilities", "description": "NAV uncertainty", "threshold": "Pending litigation, environmental = discount justified"}
+      ],
+      "return_calculation": "(NAV - Current Price - Expected Costs) / Current Price / Years",
+      "noise_to_ignore": ["Everything else - pure asset math"]
+    },
+    "insider": {
+      "primary_indicators": [
+        {"name": "cluster_size", "description": "Signal strength", "threshold": "3+ insiders in 2 weeks = cluster, single buyer = weaker"},
+        {"name": "dollar_amount_vs_compensation", "description": "Skin in the game", "threshold": "CEO buying $2M when salary $500K = meaningful, $50K = noise"},
+        {"name": "insider_role_hierarchy", "description": "Information quality", "threshold": "CEO/CFO > VP > Director weight accordingly"},
+        {"name": "purchase_vs_option_exercise", "description": "True signal vs mechanical", "threshold": "Open market only, ignore exercises and 10b5-1"},
+        {"name": "historical_insider_accuracy", "description": "Company-specific track record", "threshold": "Some companies' insiders have strong timing"},
+        {"name": "time_since_last_cluster", "description": "Signal freshness", "threshold": "Cluster 2 weeks ago = actionable, 3 months = stale"},
+        {"name": "proximity_to_known_catalyst", "description": "Cluster context", "threshold": "Buying 30 days before event = higher signal"}
+      ],
+      "cluster_strength_scoring": {
+        "strong": "3+ insiders, >$500K total, includes C-suite, within 14 days",
+        "moderate": "2 insiders, >$200K total, within 30 days",
+        "weak": "Single insider or small amounts"
+      }
+    },
+    "legislative": {
+      "primary_indicators": [
+        {"name": "bill_status", "description": "Legislative progress", "threshold": "Introduced < Committee < Floor vote < Conference < Signed"},
+        {"name": "sponsor_count_bipartisanship", "description": "Passage probability", "threshold": "Bipartisan sponsors increase odds dramatically"},
+        {"name": "committee_markup_completed", "description": "Major milestone", "threshold": "Post-markup = serious, pre-markup = speculative"},
+        {"name": "cbo_score", "description": "Political viability", "threshold": "Budget impact affects vote math, unfunded mandates = harder"},
+        {"name": "similar_bill_passage_rate", "description": "Base rate estimation", "threshold": "Infrastructure vs healthcare reform = very different rates"},
+        {"name": "lobbying_spend", "description": "Resistance indicator", "threshold": "Heavy lobbying against = uphill, industry support = tailwind"},
+        {"name": "congressional_calendar", "description": "Timing constraints", "threshold": "Lame duck, election years, recess affect timelines"}
+      ],
+      "honest_truth": "Legislative catalysts have worst Info Half-Life predictability. Size accordingly.",
+      "noise_to_ignore": ["Political pundit predictions", "News cycle momentum"]
+    }
+  },
+  "cross_archetype_indicators": [
+    {"name": "options_unusual_activity", "description": "Smart money positioning", "application": "Confirms Catalyst strength"},
+    {"name": "borrow_rate_short_interest", "description": "Squeeze potential + sentiment", "application": "Affects R/R calculation"},
+    {"name": "credit_default_swaps", "description": "Market bankruptcy probability", "application": "Downside Floor validation"},
+    {"name": "52_week_range_position", "description": "Anchoring context", "application": "Near lows = more reflexive selling risk"},
+    {"name": "float_market_cap", "description": "Liquidity for entry/exit", "application": "Position sizing adjustment"}
+  ]
+}

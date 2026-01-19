@@ -43,6 +43,8 @@ schema/              # Authoritative rules (DO NOT modify without user approval)
 ├── scoring.json     # 6 filters (max 11 pts) + archetype adjustments
 ├── exits.json       # Info parity signals + hard exit triggers
 ├── data_sources.json # Tiered sources, calendar triggers, personalities
+├── indicators.json  # Archetype-specific high-value indicators
+├── options_strategies.json # Options vs equity selection, Greeks relevance
 └── CHANGELOG.md     # Framework version history
 
 universe/            # What you're tracking
@@ -380,6 +382,8 @@ alerts_archive.json   # Acknowledged alerts
 | `CONFIG.json` | Account size, risk params, regime state | Daily (regime), rarely (config) |
 | `schema/*.json` | Machine-readable rules | Rarely (framework updates) |
 | `schema/data_sources.json` | Tiered data sources, calendar triggers, personalities | Rarely (source updates) |
+| `schema/indicators.json` | Archetype-specific high-value indicators | Rarely (indicator updates) |
+| `schema/options_strategies.json` | Options vs equity selection, Greeks relevance summary | Rarely (strategy updates) |
 | `schema/CHANGELOG.md` | Framework version history | Each version update |
 | `universe/events.json` | Upcoming catalyst calendar | Weekly via `scan` skill |
 | `alerts.json` | Active alerts requiring action | Real-time by skills |

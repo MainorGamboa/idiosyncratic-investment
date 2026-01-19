@@ -644,6 +644,10 @@ def main():
     parser_quote = subparsers.add_parser("fetch_quote", help="Fetch simple price quote")
     parser_quote.add_argument("ticker", help="Stock ticker symbol")
 
+    # fetch_price command (alias for fetch_quote)
+    parser_price = subparsers.add_parser("fetch_price", help="Fetch price (alias for fetch_quote)")
+    parser_price.add_argument("ticker", help="Stock ticker symbol")
+
     # fetch_options_data command
     parser_options = subparsers.add_parser("fetch_options_data",
                                            help="Fetch options data for monitor skill")
@@ -679,6 +683,14 @@ def main():
             print(json.dumps(data, indent=2))
         else:
             print(f"ERROR: Could not fetch quote for {args.ticker}", file=sys.stderr)
+            sys.exit(1)
+
+    elif args.command == "fetch_price":
+        data = fetch_quote(args.ticker)
+        if data:
+            print(json.dumps(data, indent=2))
+        else:
+            print(f"ERROR: Could not fetch price for {args.ticker}", file=sys.stderr)
             sys.exit(1)
 
     elif args.command == "fetch_options_data":

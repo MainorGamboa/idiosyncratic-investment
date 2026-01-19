@@ -257,5 +257,80 @@
     "Liquidity is critical - wide spreads eliminate edge",
     "Start with PDUFA and Tier-1 Activist - these have highest success probability",
     "Track options performance separately to validate strategy over time"
-  ]
+  ],
+
+  "greeks_relevance_summary": {
+    "description": "Core tension: Your information edge decays over time (Info Half-Life). Your option position also decays (Theta). If Theta decays faster than your edge, you're paying more for time than your information is worth.",
+    "by_archetype": [
+      {
+        "archetype": "pdufa",
+        "position_cap": "2%",
+        "greek_relevance": "Critical",
+        "primary_greek_concern": "Vega (vol pricing), Gamma (noise)",
+        "preferred_instrument": "Options with spreads",
+        "notes": "Binary outcomes, extreme vol dynamics. IV > 80th percentile -> spreads preferred."
+      },
+      {
+        "archetype": "activist",
+        "position_cap": "6%",
+        "greek_relevance": "Moderate-High",
+        "primary_greek_concern": "Theta (timeline uncertainty)",
+        "preferred_instrument": "Equity or LEAPS",
+        "notes": "Timeline uncertain (6-18 months). Theta bleeds edge before catalyst resolves."
+      },
+      {
+        "archetype": "merger_arb",
+        "position_cap": "3%",
+        "greek_relevance": "Low",
+        "primary_greek_concern": "Vega only if hedging",
+        "preferred_instrument": "Equity",
+        "notes": "Edge is spread capture with high base rates. Options add complexity without edge."
+      },
+      {
+        "archetype": "spinoff",
+        "position_cap": "8%",
+        "greek_relevance": "Low",
+        "primary_greek_concern": "Theta if using options",
+        "preferred_instrument": "Equity",
+        "notes": "Value creation through fundamental revaluation, not volatility dynamics."
+      },
+      {
+        "archetype": "liquidation",
+        "position_cap": "10%",
+        "greek_relevance": "Negligible",
+        "primary_greek_concern": "None",
+        "preferred_instrument": "Equity only",
+        "notes": "Edge is discount to known asset values. Options often illiquid or nonexistent."
+      },
+      {
+        "archetype": "insider",
+        "position_cap": "5%",
+        "greek_relevance": "Situational",
+        "primary_greek_concern": "Theta if timing uncertain",
+        "preferred_instrument": "Equity",
+        "notes": "Options only justified when insider buying clusters near known catalyst date."
+      },
+      {
+        "archetype": "legislative",
+        "position_cap": "Variable",
+        "greek_relevance": "High",
+        "primary_greek_concern": "Theta (timeline risk)",
+        "preferred_instrument": "Equity or LEAPS",
+        "notes": "Timelines notoriously unpredictable. LEAPS only (18+ months) if using options."
+      }
+    ],
+    "info_half_life_theta_guidance": {
+      "short_half_life": {
+        "examples": ["PDUFA decision date", "Merger vote"],
+        "theta_sensitivity": "Low - resolved before decay matters",
+        "recommendation": "Can use near-dated options"
+      },
+      "long_half_life": {
+        "examples": ["Activist campaign", "Legislative catalyst"],
+        "theta_sensitivity": "Very high - Theta consumes edge before resolution",
+        "recommendation": "Avoid short-dated options, prefer equity or LEAPS"
+      }
+    },
+    "gamma_sizing_rule": "As Gamma increases, position size should decrease proportionally. High conviction doesn't change that pre-event noise can destroy poorly-sized positions."
+  }
 }
