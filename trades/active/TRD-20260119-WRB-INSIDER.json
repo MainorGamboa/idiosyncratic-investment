@@ -1,0 +1,70 @@
+{
+  "trade_id": "TRD-20260119-WRB-INSIDER",
+  "ticker": "WRB",
+  "archetype": "insider",
+  "status": "active",
+  "instrument_type": "equity",
+
+  "thesis": {
+    "summary": "Major insider buying cluster led by 10% owner Mitsui Sumitomo Insurance. Strategic stake increase to 15% represents massive vote of confidence from sophisticated institutional insider. Strong fundamentals: ROE 18.8%, D/E 0.29, trading at reasonable P/E ~14x ahead of Q4 earnings.",
+    "catalyst": "Strategic stake increase by Mitsui Sumitomo",
+    "catalyst_date": "2026-01-15",
+    "linked_event": "EVT-2026-051"
+  },
+
+  "scoring": {
+    "catalyst": 1.5,
+    "mispricing": 1.5,
+    "noise_survival": 2.0,
+    "downside_floor": 1.5,
+    "risk_reward": 1.5,
+    "info_half_life": 0.5,
+    "base_score": 8.5,
+    "adjustments": [
+      {
+        "factor": "Strategic Insider Buying (High Conviction)",
+        "value": 1.0,
+        "rationale": "Major institutional peer taking 15% strategic stake is a tier-1 signal"
+      }
+    ],
+    "final_score": 9.5
+  },
+
+  "decision": {
+    "action": "BUY",
+    "date": "2026-01-19",
+    "rationale": "Score 9.5 significantly exceeds threshold 8.25. High conviction insider setup with strong fundamental backing. Strategic stake increase by global insurance peer validates company value."
+  },
+
+  "position": {
+    "entry_date": "2026-01-19",
+    "entry_price": 68.00,
+    "shares": 18,
+    "cost_basis": 1224,
+    "size_percent": 0.049,
+    "stop_price": 62.00,
+    "target_price": 84.00
+  },
+
+  "exit_plan": {
+    "info_parity_weights": {
+      "media": 1.0,
+      "iv": 1.0,
+      "price": 1.0
+    },
+    "thesis_break_triggers": [
+      "Mitsui Sumitomo reverses course or sells shares",
+      "Material earnings miss on Q4 report",
+      "Significant reserve charge or catastrophe loss",
+      "Regulatory issue at company level"
+    ],
+    "volume_surge_exit": "If volume surged post-entry and stock moved, take profits",
+    "90_day_rule": "If no significant price appreciation within 90 days, review position"
+  },
+
+  "monitoring": [],
+  "key_dates": {
+    "q4_earnings": "2026-01-26",
+    "entry_90_day_review": "2026-04-19"
+  }
+}

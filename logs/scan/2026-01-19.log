@@ -1,0 +1,13 @@
+{
+  "timestamp": "2026-01-19T10:00:00Z",
+  "skill": "scan",
+  "outcome": "COMPLETE",
+  "metrics": {
+    "new_events_found": 10,
+    "sources_checked": ["Google Search", "SEC EDGAR", "FDA Calendar", "Congress.gov"],
+    "events_added": 10
+  },
+  "data_sources": ["google_web_search"],
+  "execution_time_ms": 12500,
+  "notes": "Weekly scan completed. Found significant M&A activity (BSX, USB) and a high-conviction insider buy (WRB)."
+}

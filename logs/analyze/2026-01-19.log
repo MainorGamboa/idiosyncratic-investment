@@ -1,0 +1,19 @@
+{
+  "timestamp": "2026-01-19T10:00:00Z",
+  "skill": "bulk-process",
+  "outcome": "COMPLETE",
+  "metrics": {
+    "total_processed": 5,
+    "buy_decisions": 2,
+    "conditional_decisions": 0,
+    "pass_decisions": 1,
+    "failed_screens": 2
+  },
+  "results": [
+    {"ticker": "PHAR", "archetype": "pdufa", "score": 9.5, "decision": "BUY"},
+    {"ticker": "LEN", "archetype": "activist", "score": 9.0, "decision": "BUY"},
+    {"ticker": "FRANQ", "archetype": "liquidation", "score": 4.0, "decision": "PASS"},
+    {"ticker": "VTYX", "archetype": "merger_arb", "decision": "FAILED_SCREEN", "reason": "Narrow spread"},
+    {"ticker": "LVLU", "archetype": "activist", "decision": "FAILED_SCREEN", "reason": "Low Z-Score"}
+  ]
+}

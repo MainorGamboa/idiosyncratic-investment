@@ -1,0 +1,22 @@
+{
+  "timestamp": "2026-01-19T10:00:00Z",
+  "skill": "open",
+  "trade_id": "TRD-20260119-WRB-INSIDER",
+  "ticker": "WRB",
+  "archetype": "insider",
+  "outcome": "SUCCESS",
+  "metrics": {
+    "entry_price": 68.00,
+    "shares": 18,
+    "position_value": 1224,
+    "position_pct": 0.049,
+    "archetype_max_pct": 0.05,
+    "score": 9.5,
+    "binding_constraint": "archetype_cap",
+    "stop_price": 62.00,
+    "target_price": 84.00
+  },
+  "data_sources": ["Web search (current price)", "CONFIG.json", "WRB watchlist"],
+  "execution_time_ms": 3500,
+  "notes": "BUY decision executed. High conviction insider signal from Mitsui Sumitomo strategic stake increase. Score 9.5. Limit order to be placed at bid/ask midpoint (~$68.00). Q4 earnings Jan 26."
+}

@@ -1,0 +1,18 @@
+{
+  "ticker": "FRANQ",
+  "archetype": "liquidation",
+  "date": "2026-01-19",
+  "outcome": "PASS",
+  "reason": "Score 4.0 is below the 6.5 threshold. Despite the liquidation catalyst, the massive $250M vendor debt creates a highly improbable recovery scenario for common shareholders. This is a terminal bankruptcy play rather than an idiosyncratic value liquidation.",
+  "metrics": {
+    "final_score": 4.0,
+    "base_score": 4.0,
+    "adjustments": 0,
+    "catalyst": 2.0,
+    "mispricing": 0.5,
+    "noise_survival": 0.5,
+    "downside_floor": 0.0,
+    "risk_reward": 0.5,
+    "info_half_life": 0.5
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "ticker": "VTYX",
+  "archetype": "merger_arb",
+  "date": "2026-01-19",
+  "outcome": "FAIL",
+  "reason": "Merger spread 0.79% is below the 2.5% minimum threshold for attractive risk/reward in the idiosyncratic framework.",
+  "metrics": {
+    "deal_price": 14.00,
+    "current_price": 13.89,
+    "spread_pct": 0.79,
+    "threshold": 2.5
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "ticker": "LVLU",
+  "archetype": "activist",
+  "date": "2026-01-19",
+  "outcome": "FAIL",
+  "reason": "Altman Z-Score -2.53 is below the 1.81 threshold, indicating high bankruptcy distress. While activist targets often have issues, this level of distress exceeds framework parameters for non-liquidation plays.",
+  "metrics": {
+    "z_score": -2.53,
+    "threshold": 1.81
+  }
+}

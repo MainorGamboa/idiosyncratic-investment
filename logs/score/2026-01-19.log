@@ -1,0 +1,21 @@
+{
+  "timestamp": "2026-01-19T11:50:00Z",
+  "skill": "score",
+  "ticker": "WRB",
+  "archetype": "insider",
+  "outcome": "BUY",
+  "metrics": {
+    "final_score": 9.5,
+    "base_score": 8.5,
+    "adjustments": 1.0,
+    "catalyst": 1.5,
+    "mispricing": 1.5,
+    "noise_survival": 2.0,
+    "downside_floor": 1.5,
+    "risk_reward": 1.5,
+    "info_half_life": 0.5
+  },
+  "data_sources": ["watchlist file", "market data", "SEC Form 4"],
+  "execution_time_ms": 2500,
+  "notes": "Strong BUY decision based on strategic insider buying by Mitsui Sumitomo and robust fundamentals. 9.5 score is high conviction."
+}
