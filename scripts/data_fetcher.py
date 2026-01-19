@@ -28,6 +28,10 @@ from sec_api import (
     get_cik_from_ticker
 )
 
+# Note: Archetype-specific data (Form 483, EMA approval, insider clusters, WARN filings)
+# requires manual lookup by the agent. The utility scripts (regulatory_data.py,
+# insider_analysis.py, warn_act_checker.py) provide helper functions and lookup
+# instructions, but do not have automated data fetching for these sources.
 # Import data quality monitor
 from data_quality_monitor import get_monitor
 
@@ -367,9 +371,40 @@ def fetch_all(ticker: str, industry: str = "general", archetype: str = "general"
         result["z_score"] = None
         result["financial_screens_pass"] = False
 
-    # 3. Summary
-    kill_screens_passed = result.get("financial_screens_pass", False)
+    # 3. Archetype-specific notes (manual lookup required by agent)
+    # See utility scripts for lookup instructions:
+    # - regulatory_data.py: Form 483, EMA approval, CRL classification
+    # - insider_analysis.py: Insider cluster validation
+    # - warn_act_checker.py: WARN Act filings
+    archetype_lower = archetype.lower()
 
+    if archetype_lower == "pdufa":
+        result["manual_checks_required"] = [
+            "Form 483 with OAI status (FDA FOIA Reading Room)",
+            "EMA approval status (ema.europa.eu/medicines)",
+            "CRL classification if applicable"
+        ]
+    elif archetype_lower == "insider":
+        result["manual_checks_required"] = [
+            "Insider cluster validation (OpenInsider.com)",
+            "Routine vs opportunistic classification (3-year Form 4 history)"
+        ]
+    elif archetype_lower in ["activist", "spinoff"]:
+        result["manual_checks_required"] = [
+            "WARN Act filings (state labor department databases)",
+            "Contract loss language analysis if WARN found"
+        ]
+    elif archetype_lower == "merger_arb":
+        result["manual_checks_required"] = [
+            "Second request status (FTC/DOJ)",
+            "CFIUS exposure",
+            "China-connected buyer risk"
+        ]
+
+    # 4. Summary
+    # Note: Archetype-specific kill screens (insider cluster, WARN filings)
+    # require manual validation by the agent
+    kill_screens_passed = result.get("financial_screens_pass", False)
     result["kill_screens_status"] = "PASS" if kill_screens_passed else "FAIL"
 
     return result

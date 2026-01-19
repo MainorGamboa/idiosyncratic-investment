@@ -70,18 +70,29 @@ Score each of the 6 filters (0 to max_points):
 ### Step 2: Apply Adjustments
 Reference: `schema/scoring.json` and `schema/archetypes.json`
 
+**PDUFA Adjustments (v1.1):**
+- Form 483 with OAI: -1.0 (manufacturing site violation)
+- Prior EMA approval: +0.5 (91-98% concordance validates safety/efficacy)
+
 **Activist Adjustments:**
 - Tier-1 (Elliott, Starboard, ValueAct, Pershing): +1.0
 - Tier-2 (Trian, Icahn, Third Point): +0.5
 - Tier-3 (Others): +0
+- **DSO divergence >20% vs peers (v1.1)**: -0.5 (harder operational fix)
 
 **Legislative Adjustments:**
 - Obvious beneficiary: -1.5
 - Macro-sensitive: -1.0
 
-**Merger Adjustments:**
+**Merger Arb Adjustments:**
 - Third-party veto: -1.0
 - DOJ/FTC lawsuit: -2.0
+- **Second request issued (v1.1)**: -1.0 (35-45% abandonment rate)
+- **China-connected buyer (v1.1)**: -1.5 (elevated regulatory risk)
+
+**Spin-off Notes (v1.1):**
+- WARN filing at SpinCo: Reduce position size 50% (not a score penalty)
+- Check during position sizing in `open` skill
 
 ### Step 3: Calculate Final Score
 ```

@@ -90,6 +90,13 @@
       "trigger": "Core thesis invalidated",
       "action": "EXIT regardless of price",
       "rationale": "When reason for holding changes, exit immediately"
+    },
+    "activist_warn_filing": {
+      "trigger": "WARN Act filing with 'loss of contract' language",
+      "action": "EXIT immediately",
+      "rationale": "Loss of major contract invalidates activist thesis (operational fix unlikely)",
+      "applies_to": ["activist"],
+      "implementation": "Monitor state WARN Act databases for company. Parse filing text for contract loss language. If detected, trigger immediate exit."
     }
   },
   "note": "Check hard exits BEFORE info parity. Hard exits override all other considerations.",

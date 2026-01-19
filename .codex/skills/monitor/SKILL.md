@@ -141,6 +141,13 @@ weighted_sum =
 - Check thesis_break_triggers from exit_plan
 - Any triggered?
 
+**Activist WARN Filing (v1.1):**
+- **For activist archetype only**
+- Check state WARN Act databases for company
+- Use: `python scripts/warn_act_checker.py activist_exit {COMPANY_NAME}`
+- If WARN filing contains "loss of contract" language → **IMMEDIATE EXIT**
+- Rationale: Major contract loss invalidates activist operational fix thesis
+
 #### E. Determine Action
 
 **For Equity:**
@@ -151,6 +158,7 @@ weighted_sum =
 | weighted_sum >= 2.0 | EXIT 50% |
 | Cockroach observed | FULL EXIT |
 | Thesis break | FULL EXIT |
+| **Activist WARN filing (v1.1)** | **FULL EXIT** |
 | Below 200-day MA | DEFENSIVE (tighten stop) |
 | weighted_sum < 2.0 | HOLD (continue monitoring) |
 
