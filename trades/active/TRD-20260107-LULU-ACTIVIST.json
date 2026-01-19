@@ -150,6 +150,24 @@
       "thesis_breaks": [],
       "action": "HOLD",
       "notes": "Price $202.20 (-4.5% from entry). Below 200-day MA ($202.20 < $217.57) = DEFENSIVE posture. Media signal not checked (manual search required). IV data unavailable. No thesis breaks or cockroaches detected. Data sources: IBKR Paper (price), Yahoo Finance (200-MA)."
+    },
+    {
+      "date": "2026-01-19",
+      "price": 202.20,
+      "change_from_entry_pct": -0.045,
+      "unrealized_pnl": -66.64,
+      "info_parity": {
+        "media": 1,
+        "iv": 0,
+        "price": 0
+      },
+      "weighted_sum": 1.0,
+      "ma_200": 217.57,
+      "above_200_ma": false,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price $202.20 (-4.5% from entry), stable from Friday. Media signal TRIGGERED: Continued mainstream coverage (CNBC, Yahoo Finance, Business of Fashion, Retail Dive) on Elliott $1B+ stake and Jane Nielsen CEO candidacy. Below 200-day MA ($202.20 < $217.57) = DEFENSIVE posture. Weighted sum 1.0 < 2.0 threshold (no exit required). McDonald departure Jan 31 (12 days away). Elliott campaign progressing. No thesis breaks or cockroaches detected. Data sources: IBKR Paper (price), Yahoo Finance (200-MA), web search (media)."
     }
   ]
 }
