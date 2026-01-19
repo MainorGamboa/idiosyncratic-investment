@@ -132,6 +132,24 @@
       "thesis_breaks": [],
       "action": "HOLD",
       "notes": "Price ~203.34. Media signal ACTIVE: Elliott $1B stake confirmed, pushing for Jane Nielsen as CEO. Chip Wilson (founder) proxy fight adds to activist pressure. Weighted sum 1.17 < 2.0. Thesis intact. Holding."
+    },
+    {
+      "date": "2026-01-17",
+      "price": 202.20,
+      "change_from_entry_pct": -0.045,
+      "unrealized_pnl": -66.64,
+      "info_parity": {
+        "media": 0,
+        "iv": 0,
+        "price": 0
+      },
+      "weighted_sum": 0.0,
+      "ma_200": 217.57,
+      "above_200_ma": false,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price $202.20 (-4.5% from entry). Below 200-day MA ($202.20 < $217.57) = DEFENSIVE posture. Media signal not checked (manual search required). IV data unavailable. No thesis breaks or cockroaches detected. Data sources: IBKR Paper (price), Yahoo Finance (200-MA)."
     }
   ]
 }

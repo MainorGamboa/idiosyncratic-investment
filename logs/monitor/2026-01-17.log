@@ -1,0 +1,72 @@
+{
+  "timestamp": "2026-01-17T13:12:00Z",
+  "skill": "monitor",
+  "outcome": "COMPLETE",
+  "trades_monitored": [
+    {
+      "trade_id": "TRD-20260107-LULU-ACTIVIST",
+      "ticker": "LULU",
+      "archetype": "activist",
+      "current_price": 202.20,
+      "entry_price": 211.72,
+      "change_pct": -0.045,
+      "unrealized_pnl": -66.64,
+      "weighted_sum": 0.0,
+      "ma_200": 217.57,
+      "above_200_ma": false,
+      "action": "HOLD",
+      "signals": {
+        "media": false,
+        "iv": false,
+        "price": false
+      }
+    },
+    {
+      "trade_id": "TRD-20260107-SWX-ACTIVIST",
+      "ticker": "SWX",
+      "archetype": "activist",
+      "current_price": 86.27,
+      "entry_price": 80.43,
+      "change_pct": 0.0726,
+      "unrealized_pnl": 105.12,
+      "weighted_sum": 0.298,
+      "ma_200": 77.07,
+      "above_200_ma": true,
+      "action": "HOLD",
+      "signals": {
+        "media": false,
+        "iv": false,
+        "price": false
+      }
+    },
+    {
+      "trade_id": "TRD-20260114-LULU-ACTIVIST",
+      "ticker": "LULU",
+      "archetype": "activist",
+      "current_price": 202.20,
+      "entry_price": 212.20,
+      "change_pct": -0.0471,
+      "unrealized_pnl": -70.00,
+      "weighted_sum": 0.0,
+      "ma_200": 217.57,
+      "above_200_ma": false,
+      "action": "HOLD",
+      "signals": {
+        "media": false,
+        "iv": false,
+        "price": false
+      }
+    }
+  ],
+  "metrics": {
+    "trades_monitored": 3,
+    "alerts_generated": 0,
+    "actions_required": 0,
+    "total_unrealized_pnl": -31.52,
+    "positions_above_200ma": 1,
+    "positions_below_200ma": 2
+  },
+  "data_sources": ["IBKR Paper", "Yahoo Finance"],
+  "execution_time_ms": 23000,
+  "notes": "All positions stable. No exit signals triggered. LULU positions below 200-day MA (defensive posture recommended). SWX up +7.3% from entry and remains above 200-day MA. Media check not performed (manual search required)."
+}

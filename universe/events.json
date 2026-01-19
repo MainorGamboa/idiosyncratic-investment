@@ -19,11 +19,11 @@
       "type": "pdufa",
       "ticker": "TVTX",
       "catalyst": "FDA decision on sparsentan for focal segmental glomerulosclerosis (FSGS)",
-      "date": "2026-01-13",
+      "date": "2026-04-13",
       "date_type": "hard",
       "archetype": "pdufa",
       "status": "tracking",
-      "notes": "Priority review, sNDA filing for FSGS indication. IgA nephropathy already approved.",
+      "notes": "Priority review, sNDA filing for FSGS indication. IgA nephropathy already approved. FDA extended review to April 13, 2026 (Major Amendment).",
       "linked_idea": null,
       "source": "CatalystAlert PDUFA calendar, BPIQ",
       "discovered_date": "2025-12-30"

@@ -169,6 +169,24 @@
       "thesis_breaks": [],
       "action": "HOLD",
       "notes": "Price continues strength at 86.38 (+7.4%). Icahn cooperation agreement ensures 4 board seats, securing influence. No new exit signals."
+    },
+    {
+      "date": "2026-01-17",
+      "price": 86.27,
+      "change_from_entry_pct": 0.0726,
+      "unrealized_pnl": 105.12,
+      "info_parity": {
+        "media": 0,
+        "iv": 0,
+        "price": 0.298
+      },
+      "weighted_sum": 0.298,
+      "ma_200": 77.07,
+      "above_200_ma": true,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price $86.27 (+7.3% from entry), ~29.8% progress to target. Above 200-day MA ($86.27 > $77.07) = strong technical positioning. Media signal not checked (manual search required). IV data unavailable. No thesis breaks or cockroaches detected. Data sources: IBKR Paper (price), Yahoo Finance (200-MA)."
     }
   ]
 }
