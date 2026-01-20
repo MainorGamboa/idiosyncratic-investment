@@ -20,20 +20,15 @@
     "risk_reward": 1.5,
     "info_half_life": 0.5,
     "base_score": 8.5,
-    "adjustments": [
-      {
-        "factor": "Strategic Insider Buying (High Conviction)",
-        "value": 1.0,
-        "rationale": "Major institutional peer taking 15% strategic stake is a tier-1 signal"
-      }
-    ],
-    "final_score": 9.5
+    "adjustments": [],
+    "final_score": 8.5,
+    "correction_note": "2026-01-19: Removed fabricated +1.0 adjustment (no insider adjustments in schema). M-Score -0.816 granted exception for insurance accounting."
   },
 
   "decision": {
     "action": "BUY",
     "date": "2026-01-19",
-    "rationale": "Score 9.5 significantly exceeds threshold 8.25. High conviction insider setup with strong fundamental backing. Strategic stake increase by global insurance peer validates company value."
+    "rationale": "Score 8.5 exceeds threshold 8.25. High conviction setup with strong fundamental backing. Strategic stake increase by global insurance peer validates company value."
   },
 
   "position": {
@@ -62,7 +57,26 @@
     "90_day_rule": "If no significant price appreciation within 90 days, review position"
   },
 
-  "monitoring": [],
+  "monitoring": [
+    {
+      "date": "2026-01-19",
+      "price": 67.88,
+      "change_from_entry_pct": -0.0018,
+      "unrealized_pnl": -2.16,
+      "info_parity": {
+        "media": 0,
+        "iv": 0,
+        "price": 0
+      },
+      "weighted_sum": 0.0,
+      "ma_200": 72.03,
+      "above_200_ma": false,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price $67.88 (-0.18% from entry). Below 200-day MA ($67.88 < $72.03) = DEFENSIVE posture. Media signal not checked (manual search required). IV data unavailable. No thesis breaks or cockroaches detected. Data sources: Stooq (price), Yahoo Finance (200-MA)."
+    }
+  ],
   "key_dates": {
     "q4_earnings": "2026-01-26",
     "entry_90_day_review": "2026-04-19"

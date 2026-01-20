@@ -200,6 +200,24 @@
       "thesis_breaks": [],
       "action": "HOLD",
       "notes": "Price $202.20 (-4.7% from entry), stable from Friday. Media signal TRIGGERED: Continued mainstream coverage (CNBC, Yahoo Finance, Business of Fashion, Retail Dive) on Elliott $1B+ stake and Jane Nielsen CEO candidacy. Founder Chip Wilson also nominated 3 directors for 2026 annual meeting (Marc Maurer ex-On CEO, Laura Gentile ex-ESPN CMO, Eric Hirshberg ex-Activision CEO), adding activist pressure. Below 200-day MA ($202.20 < $217.57) = DEFENSIVE posture. Weighted sum 1.0 < 2.0 threshold (no exit required). McDonald departure Jan 31 (12 days away). Dual activist pressure (Elliott + Chip Wilson) increases pressure on board. No thesis breaks or cockroaches detected. Data sources: IBKR Paper (price), Yahoo Finance (200-MA), web search (media)."
+    },
+    {
+      "date": "2026-01-19",
+      "price": 201.87,
+      "change_from_entry_pct": -0.0487,
+      "unrealized_pnl": -72.31,
+      "info_parity": {
+        "media": 0,
+        "iv": 0,
+        "price": 0
+      },
+      "weighted_sum": 0.0,
+      "ma_200": 217.57,
+      "above_200_ma": false,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price $201.87 (-4.87% from entry). Below 200-day MA ($201.87 < $217.57) = DEFENSIVE posture. Media signal not checked (manual search required). IV data unavailable. No thesis breaks or cockroaches detected. WARN Act check unavailable (script command missing). Data sources: Stooq (price), Yahoo Finance (200-MA)."
     }
   ],
 

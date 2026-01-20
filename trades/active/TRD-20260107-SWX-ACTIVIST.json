@@ -205,6 +205,24 @@
       "thesis_breaks": [],
       "action": "HOLD",
       "notes": "Price $86.27 (+7.3% from entry), stable from Friday. Above 200-day MA ($86.27 > $77.07) = strong technical positioning. No new January 2026 mainstream media coverage (info parity NOT triggered). Icahn cooperation agreement extended through 2026 with 4 board seats secured. 29.8% progress to target (below 50% threshold). Weighted sum 0.298 < 2.0 threshold (no exit required). Pure-play utility value thesis intact. Data sources: Stooq (price), Yahoo Finance (200-MA), web search (media)."
+    },
+    {
+      "date": "2026-01-19",
+      "price": 86.27,
+      "change_from_entry_pct": 0.0726,
+      "unrealized_pnl": 105.12,
+      "info_parity": {
+        "media": 0,
+        "iv": 0,
+        "price": 0.298
+      },
+      "weighted_sum": 0.298,
+      "ma_200": 77.07,
+      "above_200_ma": true,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price $86.27 (+7.26% from entry). Above 200-day MA ($86.27 > $77.07) = strong technical positioning. Media signal not checked (manual search required). IV data unavailable. No thesis breaks or cockroaches detected. WARN Act check unavailable (script command missing). Data sources: IBKR Paper (price), Yahoo Finance (200-MA)."
     }
   ]
 }

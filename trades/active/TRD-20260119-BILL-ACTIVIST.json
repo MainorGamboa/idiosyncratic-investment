@@ -1,0 +1,89 @@
+{
+  "trade_id": "TRD-20260119-BILL-ACTIVIST",
+  "ticker": "BILL",
+  "archetype": "activist",
+  "status": "active",
+  "instrument_type": "equity",
+
+  "thesis": {
+    "summary": "Dual Tier-1 activists (Starboard 8.5%, Elliott 5%+) with cooperation agreement. Company exploring strategic alternatives/sale. Stock down 40% YTD, 85% from peak. Peers being acquired by strategics/PE.",
+    "catalyst": "Strategic alternatives / potential sale",
+    "catalyst_date": null,
+    "linked_event": "EVT-2026-032"
+  },
+
+  "scoring": {
+    "catalyst": 1.5,
+    "mispricing": 2.0,
+    "noise_survival": 1.5,
+    "downside_floor": 1.5,
+    "risk_reward": 1.5,
+    "info_half_life": 0.5,
+    "base_score": 8.5,
+    "adjustments": [
+      {
+        "factor": "Activist Tier-1 (Starboard)",
+        "value": 1.0,
+        "rationale": "Starboard Value is Tier-1 activist with 83% historical success rate"
+      }
+    ],
+    "final_score": 9.5
+  },
+
+  "decision": {
+    "action": "BUY",
+    "date": "2026-01-19",
+    "rationale": "Score 9.5 exceeds threshold 8.25. Dual Tier-1 activist setup with strategic alternatives in motion. Significant value gap (40% off highs) creates asymmetric opportunity."
+  },
+
+  "position": {
+    "entry_date": "2026-01-19",
+    "entry_price": 48.25,
+    "shares": 31,
+    "cost_basis": 1495.75,
+    "size_percent": 0.0598,
+    "stop_price": 40.00,
+    "target_price": 61.00
+  },
+
+  "exit_plan": {
+    "info_parity_weights": {
+      "media": 1.0,
+      "iv": 0.5,
+      "price": 1.0
+    },
+    "thesis_break_triggers": [
+      "Both activists exit positions (<5% stake)",
+      "Strategic review concludes with no action",
+      "Major earnings miss with guidance cut >20%",
+      "Key customer losses or competitive displacement"
+    ]
+  },
+
+  "monitoring": [
+    {
+      "date": "2026-01-19",
+      "price": 48.25,
+      "change_from_entry_pct": 0.0,
+      "unrealized_pnl": 0.0,
+      "info_parity": {
+        "media": 0,
+        "iv": 0,
+        "price": 0
+      },
+      "weighted_sum": 0.0,
+      "ma_200": 47.65,
+      "above_200_ma": true,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "OPEN",
+      "notes": "Position opened. Dual Tier-1 activist campaign active. Cooperation agreement in place. Strategic alternatives under review. Investor day expected H1 2026."
+    }
+  ],
+
+  "key_dates": {
+    "investor_day": "H1 2026",
+    "next_earnings": "TBD",
+    "entry_90_day_review": "2026-04-19"
+  }
+}

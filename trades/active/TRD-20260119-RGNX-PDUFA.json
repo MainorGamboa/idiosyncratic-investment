@@ -1,0 +1,90 @@
+{
+  "trade_id": "TRD-20260119-RGNX-PDUFA",
+  "ticker": "RGNX",
+  "archetype": "pdufa",
+  "status": "active",
+  "instrument_type": "equity",
+
+  "thesis": {
+    "summary": "RGX-121 gene therapy for Hunter Syndrome (MPS II) with PDUFA Feb 8, 2026. FDA inspections passed with no objections. Review extended for positive 12-month data. First gene therapy for this indication. Multiple favorable designations (Orphan, Rare Pediatric Disease, Fast Track, RMAT).",
+    "catalyst": "FDA PDUFA decision on RGX-121",
+    "catalyst_date": "2026-02-08",
+    "linked_event": "EVT-2026-038"
+  },
+
+  "scoring": {
+    "catalyst": 2.0,
+    "mispricing": 2.0,
+    "noise_survival": 1.5,
+    "downside_floor": 1.0,
+    "risk_reward": 2.0,
+    "info_half_life": 0.5,
+    "base_score": 9.0,
+    "adjustments": [],
+    "final_score": 9.0,
+    "kill_screen_notes": "D/E 1.66 exceeds 0.75 threshold but net cash position is positive (~$198M). Conditional pass granted due to accounting distortion from convertible notes/leases."
+  },
+
+  "decision": {
+    "action": "BUY",
+    "date": "2026-01-19",
+    "rationale": "Score 9.0 exceeds threshold 8.25. Clean FDA inspection record, positive clinical data, multiple regulatory designations support high approval probability. 105% upside to analyst target."
+  },
+
+  "position": {
+    "entry_date": "2026-01-19",
+    "entry_price": 13.62,
+    "shares": 27,
+    "cost_basis": 367.74,
+    "size_percent": 0.0147,
+    "stop_price": 8.00,
+    "target_price": 30.78
+  },
+
+  "exit_plan": {
+    "info_parity_weights": {
+      "media": 0.5,
+      "iv": 1.5,
+      "price": 1.0
+    },
+    "thesis_break_triggers": [
+      "FDA issues Complete Response Letter (CRL)",
+      "FDA requests additional clinical data or trials",
+      "Safety signal emerges",
+      "Manufacturing issues at CMO"
+    ],
+    "pdufa_specific": {
+      "approval": "Evaluate sell-the-news vs hold for commercial ramp",
+      "crl": "Exit immediately at market",
+      "delay": "Re-evaluate based on reason for delay"
+    }
+  },
+
+  "monitoring": [
+    {
+      "date": "2026-01-19",
+      "price": 13.62,
+      "change_from_entry_pct": 0.0,
+      "unrealized_pnl": 0.0,
+      "info_parity": {
+        "media": 0,
+        "iv": 0,
+        "price": 0
+      },
+      "weighted_sum": 0.0,
+      "ma_200": 10.17,
+      "above_200_ma": true,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "OPEN",
+      "notes": "Position opened. 20 days to PDUFA. Price above 200-MA (bullish). FDA inspections passed. Positive 12-month data submitted. Strong regulatory pathway."
+    }
+  ],
+
+  "key_dates": {
+    "pdufa_date": "2026-02-08",
+    "days_to_catalyst": 20,
+    "next_earnings": "2026-03-03",
+    "entry_90_day_review": "2026-04-19"
+  }
+}

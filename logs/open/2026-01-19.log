@@ -20,3 +20,47 @@
   "execution_time_ms": 3500,
   "notes": "BUY decision executed. High conviction insider signal from Mitsui Sumitomo strategic stake increase. Score 9.5. Limit order to be placed at bid/ask midpoint (~$68.00). Q4 earnings Jan 26."
 }
+{
+  "timestamp": "2026-01-19T22:35:00Z",
+  "skill": "open",
+  "trade_id": "TRD-20260119-BILL-ACTIVIST",
+  "ticker": "BILL",
+  "archetype": "activist",
+  "outcome": "SUCCESS",
+  "metrics": {
+    "entry_price": 48.25,
+    "shares": 31,
+    "position_value": 1495.75,
+    "position_pct": 0.0598,
+    "archetype_max_pct": 0.06,
+    "score": 9.5,
+    "binding_constraint": "archetype_cap",
+    "stop_price": 40.00,
+    "target_price": 61.00
+  },
+  "data_sources": ["Web search", "CONFIG.json", "BILL watchlist"],
+  "execution_time_ms": 2800,
+  "notes": "BUY decision executed via bulk-process. Dual Tier-1 activists (Starboard 8.5%, Elliott 5%+). Cooperation agreement in place. Company exploring strategic alternatives/sale. Stock down 40% YTD."
+}
+{
+  "timestamp": "2026-01-19T22:35:00Z",
+  "skill": "open",
+  "trade_id": "TRD-20260119-RGNX-PDUFA",
+  "ticker": "RGNX",
+  "archetype": "pdufa",
+  "outcome": "SUCCESS",
+  "metrics": {
+    "entry_price": 13.62,
+    "shares": 27,
+    "position_value": 367.74,
+    "position_pct": 0.0147,
+    "archetype_max_pct": 0.015,
+    "score": 9.0,
+    "binding_constraint": "archetype_cap",
+    "stop_price": 8.00,
+    "target_price": 30.78
+  },
+  "data_sources": ["Stooq", "CONFIG.json", "RGNX watchlist"],
+  "execution_time_ms": 2500,
+  "notes": "BUY decision executed via bulk-process. RGX-121 gene therapy for Hunter Syndrome. PDUFA Feb 8, 2026 (20 days). FDA inspections passed. Positive 12-month data submitted. 105% upside to analyst target."
+}
