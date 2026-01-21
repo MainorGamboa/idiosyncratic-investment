@@ -1,0 +1,85 @@
+{
+  "timestamp": "2026-01-20T16:15:00Z",
+  "skill": "monitor",
+  "outcome": "COMPLETE",
+  "metrics": {
+    "trades_monitored": 6,
+    "alerts_generated": 1,
+    "actions_required": 1
+  },
+  "positions_summary": [
+    {
+      "trade_id": "TRD-20260107-LULU-ACTIVIST",
+      "ticker": "LULU",
+      "entry_price": 211.72,
+      "current_price": 188.86,
+      "change_pct": -0.108,
+      "unrealized_pnl": -160.02,
+      "above_200_ma": false,
+      "weighted_sum": 1.0,
+      "action": "ALERT - STOP LOSS BREACHED",
+      "stop_price": 190.00
+    },
+    {
+      "trade_id": "TRD-20260114-LULU-ACTIVIST",
+      "ticker": "LULU",
+      "entry_price": 212.20,
+      "current_price": 188.86,
+      "change_pct": -0.110,
+      "unrealized_pnl": -163.38,
+      "above_200_ma": false,
+      "weighted_sum": 1.0,
+      "action": "HOLD",
+      "stop_price": 140.77
+    },
+    {
+      "trade_id": "TRD-20260107-SWX-ACTIVIST",
+      "ticker": "SWX",
+      "entry_price": 80.43,
+      "current_price": 84.82,
+      "change_pct": 0.055,
+      "unrealized_pnl": 79.02,
+      "above_200_ma": true,
+      "weighted_sum": 0.224,
+      "action": "HOLD"
+    },
+    {
+      "trade_id": "TRD-20260119-WRB-INSIDER",
+      "ticker": "WRB",
+      "entry_price": 68.00,
+      "current_price": 67.73,
+      "change_pct": -0.004,
+      "unrealized_pnl": -4.86,
+      "above_200_ma": false,
+      "weighted_sum": 1.0,
+      "action": "HOLD"
+    },
+    {
+      "trade_id": "TRD-20260119-BILL-ACTIVIST",
+      "ticker": "BILL",
+      "entry_price": 48.25,
+      "current_price": 45.00,
+      "change_pct": -0.067,
+      "unrealized_pnl": -100.75,
+      "above_200_ma": false,
+      "weighted_sum": 1.0,
+      "action": "HOLD"
+    },
+    {
+      "trade_id": "TRD-20260119-RGNX-PDUFA",
+      "ticker": "RGNX",
+      "entry_price": 13.62,
+      "current_price": 14.13,
+      "change_pct": 0.037,
+      "unrealized_pnl": 13.77,
+      "above_200_ma": true,
+      "weighted_sum": 0.030,
+      "action": "HOLD"
+    }
+  ],
+  "total_unrealized_pnl": -336.22,
+  "portfolio_impact_pct": -0.0134,
+  "data_sources": ["Stooq (price)", "Yahoo Finance (200-MA)", "web search (media)"],
+  "execution_time_ms": 45000,
+  "notes": "1 IMMEDIATE alert generated: TRD-20260107-LULU-ACTIVIST breached $190 stop loss (price $188.86). LULU positions down significantly on market selloff. SWX and RGNX performing well. 4 positions below 200-day MA (defensive posture). No info parity exit signals triggered (all weighted_sum < 2.0). No thesis breaks or cockroaches detected."
+}

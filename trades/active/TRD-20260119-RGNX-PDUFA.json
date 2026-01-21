@@ -78,12 +78,48 @@
       "thesis_breaks": [],
       "action": "OPEN",
       "notes": "Position opened. 20 days to PDUFA. Price above 200-MA (bullish). FDA inspections passed. Positive 12-month data submitted. Strong regulatory pathway."
+    },
+    {
+      "date": "2026-01-20",
+      "price": 14.13,
+      "change_from_entry_pct": 0.0374,
+      "unrealized_pnl": 13.77,
+      "info_parity": {
+        "media": 0,
+        "iv": 0,
+        "price": 0.030
+      },
+      "weighted_sum": 0.030,
+      "ma_200": 10.21,
+      "above_200_ma": true,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price $14.13 (+3.7% from entry), strong start. Above 200-day MA ($14.13 > $10.21) = strong technical positioning. PDUFA Feb 8, 2026 (19 days away). FDA completed pre-license and bioresearch inspections with NO observations. Review extension was to incorporate positive 12-month CAMPSIITE trial data. Pivotal trial (n=13) showed 82% median reduction in CSF heparan sulfate. Multiple favorable designations (Orphan, RMAT, Fast Track). Nippon Shinyaku partnership for US/Asia commercialization. No mainstream media coverage yet (info parity NOT triggered). Weighted sum 0.030 < 2.0 threshold. Thesis intact. Data sources: Stooq (price), Yahoo Finance (200-MA), web search (media)."
+    },
+    {
+      "date": "2026-01-21",
+      "price": 14.94,
+      "change_from_entry_pct": 0.0969,
+      "unrealized_pnl": 35.64,
+      "info_parity": {
+        "media": 0,
+        "iv": 0,
+        "price": 0.077
+      },
+      "weighted_sum": 0.077,
+      "ma_200": 10.25,
+      "above_200_ma": true,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price $14.94 (+9.7% from entry), very strong performance. Above 200-day MA ($14.94 > $10.25) = strong technical positioning. PDUFA Feb 8, 2026 (18 days away). FDA completed pre-license and bioresearch monitoring inspections with NO observations - strong approval signal. Review extension was to incorporate positive 12-month CAMPSIITE pivotal data (n=13, 82% median CSF heparan sulfate reduction). Multiple favorable designations: Orphan Drug, Rare Pediatric Disease, Fast Track, RMAT. Nippon Shinyaku partnership for US/Asia commercialization. Potential Priority Review Voucher (PRV) on approval. No mainstream media coverage (info parity NOT triggered). Weighted sum 0.08 < 2.0 threshold. Thesis strongly intact. Data sources: Stooq (price), Yahoo Finance (200-MA), web search (media)."
     }
   ],
 
   "key_dates": {
     "pdufa_date": "2026-02-08",
-    "days_to_catalyst": 20,
+    "days_to_catalyst": 18,
     "next_earnings": "2026-03-03",
     "entry_90_day_review": "2026-04-19"
   }

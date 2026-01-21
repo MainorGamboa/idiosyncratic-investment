@@ -223,6 +223,42 @@
       "thesis_breaks": [],
       "action": "HOLD",
       "notes": "Price $86.27 (+7.26% from entry). Above 200-day MA ($86.27 > $77.07) = strong technical positioning. Media signal not checked (manual search required). IV data unavailable. No thesis breaks or cockroaches detected. WARN Act check unavailable (script command missing). Data sources: IBKR Paper (price), Yahoo Finance (200-MA)."
+    },
+    {
+      "date": "2026-01-20",
+      "price": 84.82,
+      "change_from_entry_pct": 0.0546,
+      "unrealized_pnl": 79.02,
+      "info_parity": {
+        "media": 0,
+        "iv": 0,
+        "price": 0.224
+      },
+      "weighted_sum": 0.224,
+      "ma_200": 77.12,
+      "above_200_ma": true,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price $84.82 (+5.5% from entry), slight pullback from Friday. Above 200-day MA ($84.82 > $77.12) = strong technical positioning. No new January 2026 mainstream media coverage (info parity NOT triggered). Yellow flag: Icahn reduced position -21.8% in Q1 2025, but maintains significant stake with 4 board seats via cooperation agreement through 2026. 22.4% progress to target (below 50% threshold). Weighted sum 0.224 < 2.0 threshold (no exit required). Pure-play utility value thesis intact. Data sources: Stooq (price), Yahoo Finance (200-MA), web search (media)."
+    },
+    {
+      "date": "2026-01-21",
+      "price": 84.57,
+      "change_from_entry_pct": 0.0515,
+      "unrealized_pnl": 74.52,
+      "info_parity": {
+        "media": 0,
+        "iv": 0,
+        "price": 0.212
+      },
+      "weighted_sum": 0.212,
+      "ma_200": 77.19,
+      "above_200_ma": true,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price $84.57 (+5.1% from entry), stable. Above 200-day MA ($84.57 > $77.19) = strong technical positioning. No new January 2026 mainstream media coverage (info parity NOT triggered). Icahn cooperation agreement extended through 2026 with 4 board seats secured (Andrew Evans, Henry Linginfelter, Ruby Sharma, Andrew Teno). 21.2% progress to target (below 50% threshold). Weighted sum 0.21 < 2.0 threshold. Pure-play utility value thesis intact following Centuri separation. Data sources: Stooq (price), Yahoo Finance (200-MA), web search (media)."
     }
   ]
 }

@@ -75,6 +75,42 @@
       "thesis_breaks": [],
       "action": "HOLD",
       "notes": "Price $67.88 (-0.18% from entry). Below 200-day MA ($67.88 < $72.03) = DEFENSIVE posture. Media signal not checked (manual search required). IV data unavailable. No thesis breaks or cockroaches detected. Data sources: Stooq (price), Yahoo Finance (200-MA)."
+    },
+    {
+      "date": "2026-01-20",
+      "price": 67.73,
+      "change_from_entry_pct": -0.0040,
+      "unrealized_pnl": -4.86,
+      "info_parity": {
+        "media": 1,
+        "iv": 0,
+        "price": 0
+      },
+      "weighted_sum": 1.0,
+      "ma_200": 72.02,
+      "above_200_ma": false,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price $67.73 (-0.4% from entry). Below 200-day MA ($67.73 < $72.02) = DEFENSIVE posture. Media signal TRIGGERED: Heavy coverage of Mitsui Sumitomo's continued buying - $55.6M purchased Jan 12-14 (800K+ shares), plus 300K shares on Jan 16, 235K on Jan 18. Now holds 52.7M shares (~15% stake). Rule 10b5-1 plan execution continuing as expected. Q4 earnings Jan 26 (6 days away). Weighted sum 1.0 < 2.0 threshold (no exit required). Thesis intact - strategic partner building position ahead of earnings. Data sources: Stooq (price), Yahoo Finance (200-MA), web search (media)."
+    },
+    {
+      "date": "2026-01-21",
+      "price": 67.70,
+      "change_from_entry_pct": -0.0044,
+      "unrealized_pnl": -5.40,
+      "info_parity": {
+        "media": 1,
+        "iv": 0,
+        "price": 0
+      },
+      "weighted_sum": 1.0,
+      "ma_200": 72.01,
+      "above_200_ma": false,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price $67.70 (-0.4% from entry), flat. Below 200-day MA ($67.70 < $72.01) = DEFENSIVE posture. Media signal TRIGGERED: Extensive coverage of Mitsui Sumitomo's massive buying spree - $55.6M purchased Jan 12-14, plus additional purchases Jan 15-18 totaling 835K+ shares (325K, 230K, 235K, 300K). Now holds ~53M shares (~15% stake) via Rule 10b5-1 plan. Q4 earnings Jan 26 (5 days away). Weighted sum 1.0 < 2.0 threshold. Thesis strongly intact - global insurance peer building strategic position is powerful validation. Data sources: Stooq (price), Yahoo Finance (200-MA), web search (media)."
     }
   ],
   "key_dates": {

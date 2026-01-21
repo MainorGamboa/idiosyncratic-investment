@@ -186,6 +186,42 @@
       "thesis_breaks": [],
       "action": "HOLD",
       "notes": "Price $201.87 (-4.65% from entry). Below 200-day MA ($201.87 < $217.57) = DEFENSIVE posture. Media signal not checked (manual search required). IV data unavailable. No thesis breaks or cockroaches detected. WARN Act check unavailable (script command missing). Data sources: Stooq (price), Yahoo Finance (200-MA)."
+    },
+    {
+      "date": "2026-01-20",
+      "price": 188.86,
+      "change_from_entry_pct": -0.1080,
+      "unrealized_pnl": -160.02,
+      "info_parity": {
+        "media": 1,
+        "iv": 0,
+        "price": 0
+      },
+      "weighted_sum": 1.0,
+      "ma_200": 217.10,
+      "above_200_ma": false,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "SIGNIFICANT DROP: Price $188.86 (-10.8% from entry), now BELOW $190 stop price. Below 200-day MA ($188.86 < $217.10) = DEFENSIVE posture. Media signal TRIGGERED: Heavy mainstream coverage (CNBC, Yahoo Finance, Business of Fashion, GlobalNews) on Elliott $1B+ stake and Jane Nielsen CEO candidacy. Chip Wilson nominated 3 directors (Marc Maurer ex-On CEO, Laura Gentile ex-ESPN CMO, Eric Hirshberg ex-Activision CEO) adding dual activist pressure. Weighted sum 1.0 < 2.0 threshold. McDonald departure Jan 31 (11 days away). STOP LOSS BREACHED - requires user decision on exit or hold. Data sources: Stooq (price), Yahoo Finance (200-MA), web search (media)."
+    },
+    {
+      "date": "2026-01-21",
+      "price": 190.36,
+      "change_from_entry_pct": -0.1010,
+      "unrealized_pnl": -149.52,
+      "info_parity": {
+        "media": 1,
+        "iv": 0,
+        "price": 0
+      },
+      "weighted_sum": 1.0,
+      "ma_200": 216.78,
+      "above_200_ma": false,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD - STOP BREACH PENDING",
+      "notes": "Price $190.36 (+0.8% from yesterday, -10.1% from entry). JUST ABOVE $190 stop - marginal recovery from yesterday's breach. Below 200-day MA ($190.36 < $216.78) = DEFENSIVE posture. Media signal TRIGGERED: Extensive mainstream coverage (CNBC, Retail Dive, Yahoo Finance, WWD, Seeking Alpha) on Elliott $1B+ stake and Jane Nielsen CEO candidacy. Chip Wilson nominated 3 directors for 2026 annual meeting adding dual activist pressure. McDonald stepping down Jan 31 (10 days away). Weighted sum 1.0 < 2.0 threshold. PRIOR STOP BREACH ALERT STILL ACTIVE - user decision pending. Data sources: Stooq (price), Yahoo Finance (200-MA), web search (media)."
     }
   ]
 }

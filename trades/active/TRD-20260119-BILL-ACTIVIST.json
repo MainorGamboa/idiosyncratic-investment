@@ -78,6 +78,42 @@
       "thesis_breaks": [],
       "action": "OPEN",
       "notes": "Position opened. Dual Tier-1 activist campaign active. Cooperation agreement in place. Strategic alternatives under review. Investor day expected H1 2026."
+    },
+    {
+      "date": "2026-01-20",
+      "price": 45.00,
+      "change_from_entry_pct": -0.0674,
+      "unrealized_pnl": -100.75,
+      "info_parity": {
+        "media": 1,
+        "iv": 0,
+        "price": 0
+      },
+      "weighted_sum": 1.0,
+      "ma_200": 47.64,
+      "above_200_ma": false,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price $45.00 (-6.7% from entry), now BELOW 200-day MA ($45.00 < $47.64) = DEFENSIVE posture. Media signal TRIGGERED: Coverage of dual activist situation (Starboard 8.5%, Elliott 5%+) with cooperation agreement. Barington Capital also took stake pushing for sale (Dec 2025). Company added 2 Starboard-proposed directors, cut workforce 6% (140 employees). Weighted sum 1.0 < 2.0 threshold. Thesis intact - activist pressure mounting with strategic alternatives under review. Data sources: Stooq (price), Yahoo Finance (200-MA), web search (media)."
+    },
+    {
+      "date": "2026-01-21",
+      "price": 44.18,
+      "change_from_entry_pct": -0.0843,
+      "unrealized_pnl": -126.17,
+      "info_parity": {
+        "media": 1,
+        "iv": 0,
+        "price": 0
+      },
+      "weighted_sum": 1.0,
+      "ma_200": 47.65,
+      "above_200_ma": false,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price $44.18 (-8.4% from entry), above $40 stop. Below 200-day MA ($44.18 < $47.65) = DEFENSIVE posture. Media signal TRIGGERED: Coverage of triple activist situation - Starboard Value (8.5%), Elliott Management (5%+), and Barington Capital (~$25M stake). All three pushing for strategic alternatives/sale. Company reportedly considering sale per Reuters. Valuation ~$5.2B, stock down 44% YoY creates attractive M&A target. Company added 2 Starboard directors, cut 6% workforce. Weighted sum 1.0 < 2.0 threshold. Thesis intact - mounting activist pressure with three funds aligned on sale push. Data sources: Stooq (price), Yahoo Finance (200-MA), web search (media)."
     }
   ],
 

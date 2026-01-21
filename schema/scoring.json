@@ -29,6 +29,18 @@
     "pdufa": {
       "form_483_with_oai": -1.0,
       "prior_ema_approval": 0.5,
+      "capitalization_drag": {
+        "market_cap_threshold": 750000000,
+        "probability_proxy_note": "Configurable indicators of >80% approval probability (e.g., CMC-only CRL resubmission, clearly positive AdCom vote, prior EMA approval).",
+        "runup_threshold_pct": 30,
+        "penalties": {
+          "cap_lt_250m_and_high_prob": -1.5,
+          "cap_250m_to_750m_and_high_prob": -1.0,
+          "runup_gt_threshold": -0.5
+        },
+        "max_total_penalty": -2.5,
+        "note": "Apply only to PDUFA. Use when market cap < $750M AND approval probability proxy indicates >80%. Apply run-up penalty if T-90 return exceeds threshold."
+      },
       "note": "Form 483 with OAI at manufacturing site reduces confidence. EMA approval shows regulatory precedent (91-98% concordance)."
     },
     "activist": {

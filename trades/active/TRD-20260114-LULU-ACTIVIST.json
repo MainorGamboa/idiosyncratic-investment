@@ -218,6 +218,42 @@
       "thesis_breaks": [],
       "action": "HOLD",
       "notes": "Price $201.87 (-4.87% from entry). Below 200-day MA ($201.87 < $217.57) = DEFENSIVE posture. Media signal not checked (manual search required). IV data unavailable. No thesis breaks or cockroaches detected. WARN Act check unavailable (script command missing). Data sources: Stooq (price), Yahoo Finance (200-MA)."
+    },
+    {
+      "date": "2026-01-20",
+      "price": 188.86,
+      "change_from_entry_pct": -0.1101,
+      "unrealized_pnl": -163.38,
+      "info_parity": {
+        "media": 1,
+        "iv": 0,
+        "price": 0
+      },
+      "weighted_sum": 1.0,
+      "ma_200": 217.10,
+      "above_200_ma": false,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price $188.86 (-11.0% from entry), well above $140.77 stop. Below 200-day MA ($188.86 < $217.10) = DEFENSIVE posture. Media signal TRIGGERED: Heavy mainstream coverage (CNBC, Yahoo Finance, Business of Fashion, GlobalNews) on Elliott $1B+ stake and Jane Nielsen CEO candidacy. Chip Wilson nominated 3 directors (Marc Maurer, Laura Gentile, Eric Hirshberg) adding dual activist pressure. Weighted sum 1.0 < 2.0 threshold. McDonald departure Jan 31 (11 days away). Thesis intact - dual activist pressure (Elliott + Wilson) increasing. Data sources: Stooq (price), Yahoo Finance (200-MA), web search (media)."
+    },
+    {
+      "date": "2026-01-21",
+      "price": 190.36,
+      "change_from_entry_pct": -0.1030,
+      "unrealized_pnl": -152.88,
+      "info_parity": {
+        "media": 1,
+        "iv": 0,
+        "price": 0
+      },
+      "weighted_sum": 1.0,
+      "ma_200": 216.78,
+      "above_200_ma": false,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price $190.36 (+0.8% from yesterday, -10.3% from entry), well above $140.77 stop. Below 200-day MA ($190.36 < $216.78) = DEFENSIVE posture. Media signal TRIGGERED: Extensive mainstream coverage (CNBC, Retail Dive, Yahoo Finance, WWD, Seeking Alpha) on Elliott $1B+ stake and Jane Nielsen CEO candidacy. Chip Wilson nominated 3 directors for 2026 annual meeting adding dual activist pressure. McDonald stepping down Jan 31 (10 days away). Weighted sum 1.0 < 2.0 threshold. Thesis intact - dual Tier-1 activist pressure (Elliott + Wilson) on board continues to build. Data sources: Stooq (price), Yahoo Finance (200-MA), web search (media)."
     }
   ],
 
