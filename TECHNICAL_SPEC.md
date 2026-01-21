@@ -405,7 +405,7 @@ def calculate_stop_loss(archetype, entry_price, position_value, account_size):
 **Media coverage timing varies by archetype:**
 
 ```python
-def check_media_trigger(ticker, archetype, catalyst_date):
+def check_media_trigger(ticker, archetype, catalyst_date, campaign_start_date=None):
     """
     Time-aware media trigger to avoid false positives.
     """
@@ -425,9 +425,17 @@ def check_media_trigger(ticker, archetype, catalyst_date):
         articles = filter_articles(articles, only_material_developments=True)
 
     elif archetype == "activist":
-        # 13D filing coverage expected
+        # 13D filing coverage expected; edge decays after day 20
         # Trigger on OUTCOME coverage (board seats, CEO change)
-        articles = filter_articles(articles, outcome_only=True)
+        days_since_13d = None
+        if campaign_start_date:
+            days_since_13d = (today - campaign_start_date).days
+
+        if days_since_13d is None or 5 <= days_since_13d <= 20:
+            articles = filter_articles(articles, outcome_only=True)
+        else:
+            # After day 20, repeated mainstream cycles imply parity
+            articles = filter_articles(articles, outcome_only=True)
 
     mainstream_count = len([a for a in articles if a.source in MAINSTREAM_OUTLETS])
 
@@ -484,7 +492,22 @@ def get_exit_thresholds(archetype, position_state):
 - **If complex:** Use graduated exits (25% at 1.5, 50% at 2.0, 75% at 2.5, 100% at 3.0)
 
 **Exit signal at exact threshold (weighted_sum = 2.0):**
-- **Ask user:** "TRD-2025-001 info parity exactly 2.0. Exit 50%?"
+- **Ask user:** "TRD-2025-001 parity risk proxy exactly 2.0. Exit 50%?"
+
+**Framing note:** Communicate exits as probability-decay (parity risk rising), not deterministic
+signal counts.
+
+### 7.3 PDUFA IV Multiple Guidance
+
+**IV multiple is the strongest pre-event parity signal for PDUFA.** Use guidance as a probabilistic
+edge-decay marker, not a standalone auto-exit.
+
+- **Monitor:** IV ~2.0x average (parity risk rising; tighten monitoring)
+- **Partial exit:** IV ~2.5x average (consider 50% exit, especially if media/price also trigger)
+- **Full exit:** IV ~3.0x average (parity likely; exit unless catalyst is imminent and thesis intact)
+
+**Options note:** For PDUFA options, treat IV multiple guidance as leading indicators alongside
+theta/IV crush rules in `schema/exits.json`.
 
 ---
 
@@ -975,7 +998,7 @@ Per-skill logs with dates for easy navigation:
 ### 14.1 Alert Priority Levels
 
 **Immediate alerts (must act now):**
-- Exit signal triggered (weighted_sum ≥ 2.0)
+- Exit signal triggered (parity risk rising; weighted_sum ≥ 2.0)
 - Cockroach observed
 - Stop loss hit
 - Regime change (VIX crossed threshold)
@@ -1002,7 +1025,7 @@ Per-skill logs with dates for easy navigation:
       "type": "exit_signal",
       "trade_id": "TRD-2025-001",
       "ticker": "SRPT",
-      "message": "Info parity weighted sum = 2.1. Exit 50% recommended.",
+      "message": "Parity risk rising (weighted_sum = 2.1). Recommend 50% exit.",
       "action_required": true,
       "acknowledged": false
     },
@@ -1588,14 +1611,14 @@ Next step: Review thesis and confirm if opening position.
 **Good: Asks at exact threshold**
 
 ```
-TRD-2025-001 (SRPT) info parity = 2.0 (exact threshold)
+TRD-2025-001 (SRPT) parity risk proxy = 2.0 (exact threshold)
 
 Signals triggered:
 - Media: 2 mainstream articles (WSJ, Bloomberg)
 - IV: Options IV 2.1x average
 - Price: 48% to target ($177 current, $180 target)
 
-Weighted sum: 2.0 (50% exit threshold)
+Weighted sum: 2.0 (parity risk rising; 50% exit threshold)
 
 Current position:
 - Entry: $125.50 (7 days ago)
@@ -1717,7 +1740,8 @@ Manual review needed: Check 10-Q manually or wait for data source recovery
 
 **Soft Thesis Break:** Thesis weakens but doesn't fully break (suggests 50% exit)
 
-**Weighted Sum:** Info parity calculation: (media × weight) + (IV × weight) + (price × weight)
+**Weighted Sum:** Info parity calculation: (media × weight) + (IV × weight) + (price × weight); use
+as a proxy for parity risk (probability-decay framing).
 
 ### 24.2 Archetype Abbreviations
 

@@ -28,6 +28,21 @@
         "action": "Exit full position, edge has dissipated"
       }
     },
+    "framing": {
+      "summary": "Probability-decay framing: weighted_sum is a proxy for parity risk, not a deterministic signal count.",
+      "interpretation": "As weighted_sum rises, odds increase that the market has learned the thesis and edge decays."
+    },
+    "pdufa_iv_multiples": {
+      "monitor": "2.0x average IV",
+      "exit_50_percent": "2.5x average IV",
+      "full_exit": "3.0x average IV",
+      "note": "Use as guidance alongside media/price signals; do not auto-exit on IV alone."
+    },
+    "activist_media_timing": {
+      "window_days": "5-20",
+      "decay_after_days": 20,
+      "note": "Treat multiple mainstream cycles after day 20 as parity; outcome coverage carries the most weight."
+    },
     "weights_by_archetype": {
       "merger_arb": {
         "media": 1.0,
@@ -139,7 +154,8 @@
       "pdufa": {
         "exit_on_catalyst_day": true,
         "rationale": "FDA decisions cause immediate IV crush - exit same day to capture value",
-        "exception": "If approval + stock hasn't moved yet, consider holding 1-2 hours"
+        "exception": "If approval + stock hasn't moved yet, consider holding 1-2 hours",
+        "iv_multiple_guidance": "Monitor 2.0x, partial 2.5x, full near 3.0x; use with time-to-catalyst context."
       },
       "activist": {
         "settlement_exit": "Exit 50% on settlement announcement, let remainder run",

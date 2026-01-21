@@ -58,9 +58,21 @@ The Altman Z-Score was designed for manufacturing companies. Adjust thresholds b
 
 ### Adjustments
 
-**Activist:** +1.0 Tier-1, +0.5 Tier-2  
+**Activist (updated tiers):**  
+- Tier-1 (Elliott, Starboard, ValueAct): +1.0  
+- Tier-1.5 (Pershing Square, Ancora): +0.75  
+- Tier-2 (Trian, Icahn, Third Point): +0.25  
+- Tier-3 Specialists (Irenic, Land & Buildings, Legion): +0.25 (apply only with sector fit)  
+- Mid-cap kill zone bonus: +0.5 when market cap $2B-$10B and activist tier ≥1.5  
+- Mega-cap penalty: -0.5 when market cap >$20B and activist tier ≤2  
+- Wolf pack bonus: +0.5 when 2+ activist signals occur within 60 days (13D or public letters)  
 **Legislative:** -1.5 obvious beneficiary, -1.0 macro-sensitive  
-**Merger:** -1 third-party veto, -2 DOJ/FTC lawsuit
+**Merger:** -1 third-party veto, -2 DOJ/FTC lawsuit  
+**PDUFA:** Capitalization drag (PDUFA only)
+- If market cap < $250M and approval probability >80% → -1.5
+- If market cap $250M-$750M and approval probability >80% → -1.0
+- If T-90 run-up >30% → -0.5
+- Max combined PDUFA drag: -2.5
 
 ---
 
@@ -107,7 +119,14 @@ Volume does NOT affect scoring but optimizes entry execution for 2 archetypes:
 - **IV:** Options IV > 2x average  
 - **Price:** >50% move toward target
 
-**Logic:** weighted_sum < 2 → Watch | ≥ 2 → Exit 50% | ≥ 3 → Full exit
+**PDUFA IV guidance:** Monitor 2.0x, partial exit 2.5x, full exit near 3.0x (contextual, not
+standalone).
+
+**Activist timing:** Treat multiple mainstream cycles within days 5-20 as parity; after day 20,
+assume edge decay accelerates.
+
+**Logic (probability-decay framing):** weighted_sum is a proxy for parity risk. < 2 → Watch |
+2-2.99 → Exit 50% | ≥ 3 → Full exit
 
 ### Hard Exits
 - **Cockroach Rule:** First regulatory delay, financing wobble, or board dissent → EXIT

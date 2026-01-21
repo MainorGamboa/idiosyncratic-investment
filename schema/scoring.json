@@ -45,9 +45,26 @@
     },
     "activist": {
       "tier_1": 1.0,
-      "tier_2": 0.5,
+      "tier_1_5": 0.75,
+      "tier_2": 0.25,
+      "tier_3_specialist": 0.25,
+      "mid_cap_kill_zone": {
+        "market_cap_min": 2000000000,
+        "market_cap_max": 10000000000,
+        "bonus": 0.5,
+        "applies_when": "activist_tier >= 1.5"
+      },
+      "mega_cap_penalty": {
+        "market_cap_min": 20000000000,
+        "penalty": -0.5,
+        "applies_when": "activist_tier <= 2"
+      },
+      "wolf_pack": {
+        "bonus": 0.5,
+        "definition": "Two or more activist signals within 60 days (e.g., 13D filings or public letters)."
+      },
       "dso_divergence_gt_20pct": -0.5,
-      "note": "DSO divergence >20% vs peers indicates harder operational fix, reduces activist success probability."
+      "note": "Tiering updated for 2020-2025 data. DSO divergence >20% vs peers indicates harder operational fix, reduces activist success probability."
     },
     "legislative": {
       "obvious_beneficiary": -1.5,
