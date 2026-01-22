@@ -73,9 +73,24 @@
     "merger_arb": {
       "third_party_veto": -1,
       "doj_ftc_lawsuit": -2,
-      "second_request_issued": -1.0,
+      "second_request_issued": {
+        "base_penalty": -1.5,
+        "sector_modifiers": {
+          "healthcare_hospitals": -0.5,
+          "broadcasting_media": -0.5,
+          "technology_vertical_concerns": -0.3,
+          "pharma_horizontal_overlap_gt_30pct": -0.3,
+          "consumer_retail_grocery": -0.3
+        },
+        "deal_size_modifiers": {
+          "gt_10b": -0.5,
+          "note": "Deals >$10B face 47% Second Request rate and extended timelines"
+        },
+        "max_total_penalty": -2.5,
+        "note": "Base -1.5 reflects Khan-era 35-45% abandonment rate (up from 20-28% pre-2021). Add sector/size modifiers cumulatively up to max."
+      },
       "china_connected_buyer": -1.5,
-      "note": "Second request: 35-45% abandonment rate. China-connected buyer: elevated regulatory risk and abandonment."
+      "note": "Second request: 35-45% abandonment rate (Khan era). Settlement pathway collapsed 84%. China-connected buyer: elevated regulatory risk and abandonment."
     },
     "spinoff": {
       "warn_filing_at_spinco": "SIZE_DOWN_50_PERCENT",

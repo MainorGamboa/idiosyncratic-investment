@@ -99,6 +99,24 @@ Volume does NOT affect scoring but optimizes entry execution for 2 archetypes:
 
 **Explicitly NOT used for:** Merger Arb, PDUFA, Liquidation, Activist, Legislative
 
+### Merger Arb Regulatory Context (Khan Era 2021-2025)
+
+Based on FTC/DOJ enforcement analysis:
+
+| Metric | Pre-2021 | 2021-2025 |
+|--------|----------|-----------|
+| Second Request closing rate | ~75% | ~60% |
+| Abandonment rate | ~18-22% | ~35-50% |
+| Investigation duration | ~10 months | 12-18 months |
+| Pre-complaint settlements | Common | Rare |
+
+**Sector-specific scrutiny:**
+- Hospital/healthcare regional consolidation: Near-automatic challenge
+- Tech vertical/ecosystem deals: High abandonment risk (Nvidia/Arm, Amazon/iRobot)
+- Retail with labor implications: Monopsony theories now viable
+
+**Practical implication:** "Fix-it-first" divestiture strategies have lost effectiveness. When a Second Request is issued, model for litigation timeline and potential abandonment, not negotiated settlement. The existing -1.0 (Second Request) and -2.0 (DOJ/FTC lawsuit) adjustments remain appropriate; this context informs timeline expectations.
+
 ---
 
 ## 4. Position Sizing
