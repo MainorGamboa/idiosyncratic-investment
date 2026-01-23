@@ -111,6 +111,24 @@
       "thesis_breaks": [],
       "action": "HOLD",
       "notes": "Price $67.70 (-0.4% from entry), flat. Below 200-day MA ($67.70 < $72.01) = DEFENSIVE posture. Media signal TRIGGERED: Extensive coverage of Mitsui Sumitomo's massive buying spree - $55.6M purchased Jan 12-14, plus additional purchases Jan 15-18 totaling 835K+ shares (325K, 230K, 235K, 300K). Now holds ~53M shares (~15% stake) via Rule 10b5-1 plan. Q4 earnings Jan 26 (5 days away). Weighted sum 1.0 < 2.0 threshold. Thesis strongly intact - global insurance peer building strategic position is powerful validation. Data sources: Stooq (price), Yahoo Finance (200-MA), web search (media)."
+    },
+    {
+      "date": "2026-01-23",
+      "price": 66.89,
+      "change_from_entry_pct": -0.0164,
+      "unrealized_pnl": -20.07,
+      "info_parity": {
+        "media": 0,
+        "iv": 0,
+        "price": 0
+      },
+      "weighted_sum": 0.0,
+      "ma_200": 72.03,
+      "above_200_ma": false,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price $66.89 (-1.6% from entry), still below 200-day MA ($66.89 < $72.03) = DEFENSIVE posture. Media signal not checked (manual search required). IV data unavailable. Q4 earnings Jan 26 (3 days away). No thesis breaks or cockroaches detected. Data sources: Stooq (price), Yahoo Finance (200-MA)."
     }
   ],
   "key_dates": {

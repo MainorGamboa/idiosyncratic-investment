@@ -114,6 +114,24 @@
       "thesis_breaks": [],
       "action": "HOLD",
       "notes": "Price $44.18 (-8.4% from entry), above $40 stop. Below 200-day MA ($44.18 < $47.65) = DEFENSIVE posture. Media signal TRIGGERED: Coverage of triple activist situation - Starboard Value (8.5%), Elliott Management (5%+), and Barington Capital (~$25M stake). All three pushing for strategic alternatives/sale. Company reportedly considering sale per Reuters. Valuation ~$5.2B, stock down 44% YoY creates attractive M&A target. Company added 2 Starboard directors, cut 6% workforce. Weighted sum 1.0 < 2.0 threshold. Thesis intact - mounting activist pressure with three funds aligned on sale push. Data sources: Stooq (price), Yahoo Finance (200-MA), web search (media)."
+    },
+    {
+      "date": "2026-01-23",
+      "price": 48.39,
+      "change_from_entry_pct": 0.0029,
+      "unrealized_pnl": 4.34,
+      "info_parity": {
+        "media": 0,
+        "iv": 0,
+        "price": 0.011
+      },
+      "weighted_sum": 0.011,
+      "ma_200": 47.73,
+      "above_200_ma": true,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price $48.39 (+0.3% from entry), back above 200-day MA ($48.39 > $47.73) = improved technical posture. Media signal not checked (manual search required). IV data unavailable. 1.1% progress to target (well below 50% threshold). No thesis breaks or cockroaches detected. Data sources: Stooq (price), Yahoo Finance (200-MA)."
     }
   ],
 

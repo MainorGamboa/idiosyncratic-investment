@@ -1,6 +1,6 @@
 ---
 description: Execute bulk screening and scoring of new events without opening positions.
-agent: build
+agent: trader
 model: google/antigravity-claude-sonnet-4-5-thinking
 ---
 ## Purpose

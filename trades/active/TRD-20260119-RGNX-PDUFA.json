@@ -114,6 +114,24 @@
       "thesis_breaks": [],
       "action": "HOLD",
       "notes": "Price $14.94 (+9.7% from entry), very strong performance. Above 200-day MA ($14.94 > $10.25) = strong technical positioning. PDUFA Feb 8, 2026 (18 days away). FDA completed pre-license and bioresearch monitoring inspections with NO observations - strong approval signal. Review extension was to incorporate positive 12-month CAMPSIITE pivotal data (n=13, 82% median CSF heparan sulfate reduction). Multiple favorable designations: Orphan Drug, Rare Pediatric Disease, Fast Track, RMAT. Nippon Shinyaku partnership for US/Asia commercialization. Potential Priority Review Voucher (PRV) on approval. No mainstream media coverage (info parity NOT triggered). Weighted sum 0.08 < 2.0 threshold. Thesis strongly intact. Data sources: Stooq (price), Yahoo Finance (200-MA), web search (media)."
+    },
+    {
+      "date": "2026-01-23",
+      "price": 14.00,
+      "change_from_entry_pct": 0.0279,
+      "unrealized_pnl": 10.26,
+      "info_parity": {
+        "media": 0,
+        "iv": 0,
+        "price": 0.022
+      },
+      "weighted_sum": 0.022,
+      "ma_200": 10.34,
+      "above_200_ma": true,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price $14.00 (+2.8% from entry), still above 200-day MA ($14.00 > $10.34). PDUFA Feb 8, 2026 (16 days away). Media signal not checked (manual search required). IV data unavailable. 2.2% progress to target (below 50% threshold). Thesis intact. Data sources: Stooq (price), Yahoo Finance (200-MA)."
     }
   ],
 

@@ -1,28 +1,5 @@
 {
-  "alerts": [
-    {
-      "id": "ALERT-20260120161500",
-      "timestamp": "2026-01-20T16:15:00Z",
-      "priority": "immediate",
-      "type": "stop_loss_breach",
-      "trade_id": "TRD-20260107-LULU-ACTIVIST",
-      "ticker": "LULU",
-      "message": "STOP LOSS BREACH: LULU crossed $190 stop on Jan 20. Now at $190.36 (marginal recovery). Position down -10.1% from entry.",
-      "details": {
-        "current_price": 190.36,
-        "entry_price": 211.72,
-        "stop_price": 190.00,
-        "unrealized_loss_pct": -0.101,
-        "unrealized_loss_dollars": -149.52,
-        "shares": 7,
-        "cost_basis": 1482.04,
-        "updated": "2026-01-21"
-      },
-      "action_required": true,
-      "acknowledged": false,
-      "recommendation": "Per framework rules, stop loss breach requires EXIT. However, thesis remains intact (Elliott $1B+ stake, Jane Nielsen CEO candidacy, dual activist pressure from Chip Wilson). Price marginally recovered above stop. McDonald departure Jan 31 (10 days away). User decision required: EXIT to limit loss or HOLD given thesis strength."
-    }
-  ],
+  "alerts": [],
   "metadata": {
     "created": "2025-01-05",
     "version": "1.0",

@@ -254,6 +254,24 @@
       "thesis_breaks": [],
       "action": "HOLD",
       "notes": "Price $190.36 (+0.8% from yesterday, -10.3% from entry), well above $140.77 stop. Below 200-day MA ($190.36 < $216.78) = DEFENSIVE posture. Media signal TRIGGERED: Extensive mainstream coverage (CNBC, Retail Dive, Yahoo Finance, WWD, Seeking Alpha) on Elliott $1B+ stake and Jane Nielsen CEO candidacy. Chip Wilson nominated 3 directors for 2026 annual meeting adding dual activist pressure. McDonald stepping down Jan 31 (10 days away). Weighted sum 1.0 < 2.0 threshold. Thesis intact - dual Tier-1 activist pressure (Elliott + Wilson) on board continues to build. Data sources: Stooq (price), Yahoo Finance (200-MA), web search (media)."
+    },
+    {
+      "date": "2026-01-23",
+      "price": 191.90,
+      "change_from_entry_pct": -0.0957,
+      "unrealized_pnl": -142.10,
+      "info_parity": {
+        "media": 0,
+        "iv": 0,
+        "price": 0
+      },
+      "weighted_sum": 0.0,
+      "ma_200": 216.07,
+      "above_200_ma": false,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price $191.90 (-9.6% from entry), well above $140.77 stop. Below 200-day MA ($191.90 < $216.07) = DEFENSIVE posture. Media signal not checked (manual search required). IV data unavailable. No thesis breaks or cockroaches detected. Data sources: IBKR Paper (price), Yahoo Finance (200-MA)."
     }
   ],
 

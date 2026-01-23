@@ -259,6 +259,24 @@
       "thesis_breaks": [],
       "action": "HOLD",
       "notes": "Price $84.57 (+5.1% from entry), stable. Above 200-day MA ($84.57 > $77.19) = strong technical positioning. No new January 2026 mainstream media coverage (info parity NOT triggered). Icahn cooperation agreement extended through 2026 with 4 board seats secured (Andrew Evans, Henry Linginfelter, Ruby Sharma, Andrew Teno). 21.2% progress to target (below 50% threshold). Weighted sum 0.21 < 2.0 threshold. Pure-play utility value thesis intact following Centuri separation. Data sources: Stooq (price), Yahoo Finance (200-MA), web search (media)."
+    },
+    {
+      "date": "2026-01-23",
+      "price": 82.84,
+      "change_from_entry_pct": 0.0299,
+      "unrealized_pnl": 43.29,
+      "info_parity": {
+        "media": 0,
+        "iv": 0,
+        "price": 0.123
+      },
+      "weighted_sum": 0.123,
+      "ma_200": 77.34,
+      "above_200_ma": true,
+      "cockroaches": [],
+      "thesis_breaks": [],
+      "action": "HOLD",
+      "notes": "Price $82.84 (+3.0% from entry), pullback from recent highs but still above $73 stop. Above 200-day MA ($82.84 > $77.34) = strong technical positioning. Media signal not checked (manual search required). IV data unavailable. 12.3% progress to target (below 50% threshold). No thesis breaks or cockroaches detected. Data sources: Stooq (price), Yahoo Finance (200-MA)."
     }
   ]
 }

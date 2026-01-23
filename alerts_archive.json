@@ -1,6 +1,29 @@
 {
   "archived_alerts": [
     {
+      "id": "ALERT-20260120161500",
+      "timestamp": "2026-01-20T16:15:00Z",
+      "priority": "immediate",
+      "type": "stop_loss_breach",
+      "trade_id": "TRD-20260107-LULU-ACTIVIST",
+      "ticker": "LULU",
+      "message": "STOP LOSS BREACH: LULU crossed $190 stop on Jan 20. Now at $191.90 (modest recovery). Position down -9.4% from entry.",
+      "details": {
+        "current_price": 191.90,
+        "entry_price": 211.72,
+        "stop_price": 190.00,
+        "unrealized_loss_pct": -0.0936,
+        "unrealized_loss_dollars": -138.74,
+        "shares": 7,
+        "cost_basis": 1482.04,
+        "updated": "2026-01-23"
+      },
+      "action_required": true,
+      "acknowledged": true,
+      "acknowledged_date": "2026-01-23T14:25:00Z",
+      "resolution": "User confirmed HOLD despite stop breach; continue tight monitoring until catalyst or thesis breaks."
+    },
+    {
       "id": "ALERT-20260113142700",
       "timestamp": "2026-01-13T14:27:00Z",
       "priority": "immediate",

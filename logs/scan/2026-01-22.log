@@ -1,0 +1,13 @@
+{
+  "timestamp": "2026-01-22T10:00:00Z",
+  "skill": "scan",
+  "outcome": "COMPLETE",
+  "metrics": {
+    "new_events_found": 13,
+    "sources_checked": ["Google Search", "InsideArbitrage", "StockTitan", "Zacks", "OpenInsider", "CatalystAlert"],
+    "events_added": 13
+  },
+  "data_sources": ["insidearbitrage.com", "stocktitan.net", "zacks.com", "openinsider.com", "catalystalert.io"],
+  "execution_time_ms": 15600,
+  "notes": "Weekly scan completed. Identified 4 significant mergers (NATH, RAPT, CVGW, PEN), 2 major activist campaigns (HCAT, MIGI), 5 upcoming PDUFA dates (CRNX, ASND, PGEN, LLY, JAZZ), and 3 high-conviction insider buying clusters (MU, MSTR, SPT)."
+}
